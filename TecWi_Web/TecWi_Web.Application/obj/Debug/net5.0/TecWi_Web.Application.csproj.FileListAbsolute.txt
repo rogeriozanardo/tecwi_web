@@ -1,5 +1,0 @@
-D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\bin\Debug\net5.0\TecWi_Web.Shared.dll
-D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.csprojAssemblyReference.cache
-D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.GeneratedMSBuildEditorConfig.editorconfig
-D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.AssemblyInfoInputs.cache
-D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.AssemblyInfo.cs

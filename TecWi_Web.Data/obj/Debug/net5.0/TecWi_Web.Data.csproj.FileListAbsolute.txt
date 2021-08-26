@@ -1,0 +1,12 @@
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\TecWi_Web.Data.deps.json
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\TecWi_Web.Data.dll
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\ref\TecWi_Web.Data.dll
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\TecWi_Web.Data.pdb
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.csprojAssemblyReference.cache
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.AssemblyInfoInputs.cache
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.AssemblyInfo.cs
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.csproj.CoreCompileInputs.cache
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.dll
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\ref\TecWi_Web.Data.dll
+D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.pdb

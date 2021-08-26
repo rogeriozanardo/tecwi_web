@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "TecWi_Web.Data/1.0.0": {
+        "runtime": {
+          "TecWi_Web.Data.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TecWi_Web.Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
