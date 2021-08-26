@@ -1,0 +1,4 @@
+D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\bin\Debug\netcoreapp3.1\TecWi_Web.Shared.dll
+D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\netcoreapp3.1\TecWi_Web.Application.csprojAssemblyReference.cache
+D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\netcoreapp3.1\TecWi_Web.Application.AssemblyInfoInputs.cache
+D:\GIT\tecwi_web\TecWi_Web\TecWi_Web.Application\obj\Debug\netcoreapp3.1\TecWi_Web.Application.AssemblyInfo.cs
