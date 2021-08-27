@@ -18,3 +18,7 @@ D:\GIT\tecwi_web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.cs
 D:\GIT\tecwi_web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.dll
 D:\GIT\tecwi_web\TecWi_Web.Application\obj\Debug\net5.0\ref\TecWi_Web.Application.dll
 D:\GIT\tecwi_web\TecWi_Web.Application\obj\Debug\net5.0\TecWi_Web.Application.pdb
+D:\GIT\tecwi_web\TecWi_Web.Application\bin\Debug\net5.0\TecWi_Web.Data.dll
+D:\GIT\tecwi_web\TecWi_Web.Application\bin\Debug\net5.0\TecWi_Web.Domain.dll
+D:\GIT\tecwi_web\TecWi_Web.Application\bin\Debug\net5.0\TecWi_Web.Data.pdb
+D:\GIT\tecwi_web\TecWi_Web.Application\bin\Debug\net5.0\TecWi_Web.Domain.pdb

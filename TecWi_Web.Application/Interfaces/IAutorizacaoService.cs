@@ -5,7 +5,7 @@ namespace TecWi_Web.Application.Interfaces
 {
     public interface IAutorizacaoService
     {
-        Task<ServiceResponse<UsuarioDTO>> Registrar(UsuarioDTO usuarioDTO);
+        Task<ServiceResponse<UsuarioDTO>> Register(UsuarioDTO usuarioDTO);
 
         Task<ServiceResponse<string>> Login(UsuarioDTO usuarioDTO);
     }
