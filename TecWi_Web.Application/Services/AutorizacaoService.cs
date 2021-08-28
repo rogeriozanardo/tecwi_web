@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,17 @@ namespace TecWi_Web.Application.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _iUnitOfWork;
+        private readonly IMapper _iMapper;
         private readonly IUsuarioRepository _iUsuarioRepository;
+        private readonly IUsuarioAplicacaoRepository _iUsuarioAplicacaoRepository;
 
-        public AutorizacaoService(IConfiguration configuration, IUnitOfWork iUnitOfWork, IUsuarioRepository iUsuarioRepository)
+        public AutorizacaoService(IConfiguration configuration, IUnitOfWork iUnitOfWork, IMapper iMapper, IUsuarioRepository iUsuarioRepository, IUsuarioAplicacaoRepository iUsuarioAplicacaoRepository)
         {
             _configuration = configuration;
             _iUnitOfWork = iUnitOfWork;
+            _iMapper = iMapper;
             _iUsuarioRepository = iUsuarioRepository;
+            _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
         public async Task<ServiceResponse<string>> Login(UsuarioDTO usuarioDTO)
@@ -74,6 +79,7 @@ namespace TecWi_Web.Application.Services
                 }
 
                 PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
+
                 Usuario usuario = new Usuario
                 {
                     IdUsuario = new Guid(),
@@ -84,7 +90,12 @@ namespace TecWi_Web.Application.Services
                     SenhaSalt = senhaSalt
                 };
 
-                _iUsuarioRepository.Insert(usuario);
+                await _iUsuarioRepository.Insert(usuario);
+
+                List<UsuarioAplicacao> usuarioAplicacao = _iMapper.Map<List<UsuarioAplicacao>>(usuarioDTO.UsuarioAplicacaoDTO);
+                usuarioAplicacao.ForEach(x => x.IdUsuario = usuario.IdUsuario);
+                await _iUsuarioAplicacaoRepository.BulkInsert(usuarioAplicacao);
+
                 await _iUnitOfWork.CommitAsync();
 
                 serviceResponse.Data = usuarioDTO;

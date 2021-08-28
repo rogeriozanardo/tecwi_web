@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TecWi_Web.Domain.Entities
 {
@@ -10,5 +11,7 @@ namespace TecWi_Web.Domain.Entities
         public string Email { get; set; }
         public byte[] SenhaSalt { get; set; }
         public byte[] SenhaHash { get; set; }
+
+        public List<UsuarioAplicacao> UsuarioAplicacao { get;set; }
     }
 }

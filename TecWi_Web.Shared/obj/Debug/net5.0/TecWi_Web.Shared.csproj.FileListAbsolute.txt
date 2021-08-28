@@ -10,3 +10,6 @@ D:\GIT\tecwi_web\TecWi_Web.Shared\obj\Debug\net5.0\TecWi_Web.Shared.csproj.CoreC
 D:\GIT\tecwi_web\TecWi_Web.Shared\obj\Debug\net5.0\TecWi_Web.Shared.dll
 D:\GIT\tecwi_web\TecWi_Web.Shared\obj\Debug\net5.0\ref\TecWi_Web.Shared.dll
 D:\GIT\tecwi_web\TecWi_Web.Shared\obj\Debug\net5.0\TecWi_Web.Shared.pdb
+D:\GIT\tecwi_web\TecWi_Web.Shared\bin\Debug\net5.0\TecWi_Web.Domain.dll
+D:\GIT\tecwi_web\TecWi_Web.Shared\bin\Debug\net5.0\TecWi_Web.Domain.pdb
+D:\GIT\tecwi_web\TecWi_Web.Shared\obj\Debug\net5.0\TecWi_Web.Shared.csproj.CopyComplete

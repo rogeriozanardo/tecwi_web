@@ -10,7 +10,7 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210827014437_InitialCreate")]
+    [Migration("20210828011422_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,23 +28,60 @@ namespace TecWi_Web.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Login")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("SenhaHash")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("SenhaSalt")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("IdUsuario");
 
                     b.ToTable("Usuario");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.UsuarioAplicacao", b =>
+                {
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("IdAplicacao")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPerfil")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdUsuario", "IdAplicacao", "IdPerfil");
+
+                    b.ToTable("UsuarioAplicacao");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.UsuarioAplicacao", b =>
+                {
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("UsuarioAplicacao")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.Usuario", b =>
+                {
+                    b.Navigation("UsuarioAplicacao");
                 });
 #pragma warning restore 612, 618
         }

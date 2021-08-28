@@ -9,6 +9,7 @@ namespace TecWi_Web.Application.MappingProfiles
         public MappingProfile()
         {
             CreateMap<UsuarioDTO, Usuario>().ReverseMap();
+            CreateMap<UsuarioAplicacaoDTO, UsuarioAplicacao>().ReverseMap();
         }
     }
 }

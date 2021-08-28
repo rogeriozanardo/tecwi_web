@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.API", "TecWi_Web.API\TecWi_Web.API.csproj", "{EA942292-9270-4217-BDCF-F92A4B62F8C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.API", "TecWi_Web.API\TecWi_Web.API.csproj", "{EA942292-9270-4217-BDCF-F92A4B62F8C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Application", "TecWi_Web.Application\TecWi_Web.Application.csproj", "{E228FFF4-F73D-4103-8798-D048E7F8E27A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Application", "TecWi_Web.Application\TecWi_Web.Application.csproj", "{E228FFF4-F73D-4103-8798-D048E7F8E27A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Domain", "TecWi_Web.Domain\TecWi_Web.Domain.csproj", "{C6E91D1D-84AE-45F0-816F-2F450F192EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Domain", "TecWi_Web.Domain\TecWi_Web.Domain.csproj", "{C6E91D1D-84AE-45F0-816F-2F450F192EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Data", "TecWi_Web.Data\TecWi_Web.Data.csproj", "{00A03A30-4822-4B0A-9846-523FE7594799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Data", "TecWi_Web.Data\TecWi_Web.Data.csproj", "{00A03A30-4822-4B0A-9846-523FE7594799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Shared", "TecWi_Web.Shared\TecWi_Web.Shared.csproj", "{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Shared", "TecWi_Web.Shared\TecWi_Web.Shared.csproj", "{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Tests", "TecWi_Web.Tests\TecWi_Web.Tests.csproj", "{3CF741C5-C618-441A-A874-C4CE73F31F1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

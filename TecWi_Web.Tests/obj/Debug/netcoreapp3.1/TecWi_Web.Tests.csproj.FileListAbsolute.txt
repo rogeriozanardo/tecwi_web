@@ -1,0 +1,9 @@
+D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\netcoreapp3.1\TecWi_Web.Tests.deps.json
+D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\netcoreapp3.1\TecWi_Web.Tests.dll
+D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\netcoreapp3.1\TecWi_Web.Tests.pdb
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.csprojAssemblyReference.cache
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.AssemblyInfoInputs.cache
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.AssemblyInfo.cs
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.csproj.CoreCompileInputs.cache
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.dll
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\netcoreapp3.1\TecWi_Web.Tests.pdb

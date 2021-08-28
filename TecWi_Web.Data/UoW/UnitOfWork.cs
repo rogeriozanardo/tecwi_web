@@ -6,10 +6,12 @@ namespace TecWi_Web.Data.UoW
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext _dataContext;
+
         public UnitOfWork(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
+
         public async Task CommitAsync()
         {
             await _dataContext.SaveChangesAsync();
@@ -17,7 +19,7 @@ namespace TecWi_Web.Data.UoW
 
         public void Rollback()
         {
-
+            
         }
     }
 }

@@ -26,12 +26,14 @@ namespace TecWi_Web.API
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioAplicacaoRepository, UsuarioAplicacaoRepository>();
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IAutorizacaoService, AutorizacaoService>();
+            services.AddScoped<IUsuarioAplicacaoService, UsuarioAplicacaoService>();
             return services;
         }
 

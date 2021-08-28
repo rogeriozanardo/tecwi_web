@@ -20,9 +20,9 @@ namespace TecWi_Web.Data.Repositories
             return usuario;
         }
 
-        public Guid Insert(Usuario usuario)
+        public async Task<Guid> Insert(Usuario usuario)
         {
-            _dataContext.Set<Usuario>().Add(usuario);
+            await _dataContext.Set<Usuario>().AddAsync(usuario);
             return usuario.IdUsuario;
         }
 
