@@ -1421,6 +1421,9 @@
       "TecWi_Web.Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "TecWi_Web.Domain": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/TecWi_Web.Shared.dll": {}
         },

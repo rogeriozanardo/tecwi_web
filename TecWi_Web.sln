@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Data", "TecWi_Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Shared", "TecWi_Web.Shared\TecWi_Web.Shared.csproj", "{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Tests", "TecWi_Web.Tests\TecWi_Web.Tests.csproj", "{3CF741C5-C618-441A-A874-C4CE73F31F1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.Tests", "TecWi_Web.Tests\TecWi_Web.Tests.csproj", "{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CF741C5-C618-441A-A874-C4CE73F31F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -341,7 +341,11 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
+                "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

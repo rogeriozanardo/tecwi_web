@@ -890,6 +890,9 @@
         }
       },
       "TecWi_Web.Shared/1.0.0": {
+        "dependencies": {
+          "TecWi_Web.Domain": "1.0.0"
+        },
         "runtime": {
           "TecWi_Web.Shared.dll": {}
         }

@@ -80,20 +80,12 @@ namespace TecWi_Web.Application.Services
 
                 PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
 
-                Usuario usuario = new Usuario
-                {
-                    IdUsuario = new Guid(),
-                    Login = usuarioDTO.Login,
-                    Nome = usuarioDTO.Nome,
-                    Email = usuarioDTO.Email,
-                    SenhaHash = senhaHash,
-                    SenhaSalt = senhaSalt
-                };
+                Usuario usuario = new Usuario(new Guid(), usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
 
                 await _iUsuarioRepository.Insert(usuario);
 
+                usuarioDTO.UsuarioAplicacaoDTO.ForEach(x => { x.IdUsuario = usuario.IdUsuario; });
                 List<UsuarioAplicacao> usuarioAplicacao = _iMapper.Map<List<UsuarioAplicacao>>(usuarioDTO.UsuarioAplicacaoDTO);
-                usuarioAplicacao.ForEach(x => x.IdUsuario = usuario.IdUsuario);
                 await _iUsuarioAplicacaoRepository.BulkInsert(usuarioAplicacao);
 
                 await _iUnitOfWork.CommitAsync();
