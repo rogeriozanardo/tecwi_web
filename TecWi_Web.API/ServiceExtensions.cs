@@ -8,6 +8,7 @@ using System.Text;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Application.Services;
 using TecWi_Web.Data.Context;
+using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.Repositories;
 using TecWi_Web.Data.UoW;
@@ -19,6 +20,7 @@ namespace TecWi_Web.API
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration iConfiguration)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(iConfiguration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IDapper, Data.Dapper.Dapper>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
@@ -27,6 +29,7 @@ namespace TecWi_Web.API
         {
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioAplicacaoRepository, UsuarioAplicacaoRepository>();
+            services.AddScoped<IPagarReceberRepository, PagarReceberRepository>();
             return services;
         }
 
@@ -34,6 +37,7 @@ namespace TecWi_Web.API
         {
             services.AddScoped<IAutorizacaoService, AutorizacaoService>();
             services.AddScoped<IUsuarioAplicacaoService, UsuarioAplicacaoService>();
+            services.AddScoped<IPagarReceberService, PagarReceberService>();
             return services;
         }
 

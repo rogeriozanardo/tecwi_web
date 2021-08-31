@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v5.0": {
       "TecWi_Web.Data/1.0.0": {
         "dependencies": {
+          "Dapper": "2.0.90",
           "Microsoft.EntityFrameworkCore": "5.0.9",
           "Microsoft.EntityFrameworkCore.Design": "5.0.9",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.9",
@@ -16,6 +17,14 @@
         },
         "runtime": {
           "TecWi_Web.Data.dll": {}
+        }
+      },
+      "Dapper/2.0.90": {
+        "runtime": {
+          "lib/net5.0/Dapper.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.90.36046"
+          }
         }
       },
       "Humanizer.Core/2.8.26": {
@@ -1081,6 +1090,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Dapper/2.0.90": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e4YjOLJptnpwHIbP8HxjaYf7So9lhUC43rvvGMEkH4Q4CiVlm4rOxYDo0HyuHlMQKj0U5Ob/nCMm52TUhTaZQg==",
+      "path": "dapper/2.0.90",
+      "hashPath": "dapper.2.0.90.nupkg.sha512"
     },
     "Humanizer.Core/2.8.26": {
       "type": "package",

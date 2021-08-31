@@ -17,7 +17,7 @@ namespace TecWi_Web.Data.Context
         }
 
         public DbSet<Usuario> Usuario { get; set; }
-
         public DbSet<UsuarioAplicacao> UsuarioAplicacao { get; set; }
+        public DbSet<PagarReceber> PagarReceber { get; set; }
     }
 }
