@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TecWi_Web.Domain\TecWi_Web.Domain.csproj" />
+    <ProjectReference Include="..\TecWi_Web.Shared\TecWi_Web.Shared.csproj" />
   </ItemGroup>
 
 </Project>

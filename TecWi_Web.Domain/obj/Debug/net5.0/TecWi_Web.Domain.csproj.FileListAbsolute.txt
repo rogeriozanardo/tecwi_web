@@ -9,3 +9,4 @@ D:\GIT\tecwi_web\TecWi_Web.Domain\obj\Debug\net5.0\TecWi_Web.Domain.csproj.CoreC
 D:\GIT\tecwi_web\TecWi_Web.Domain\obj\Debug\net5.0\TecWi_Web.Domain.dll
 D:\GIT\tecwi_web\TecWi_Web.Domain\obj\Debug\net5.0\ref\TecWi_Web.Domain.dll
 D:\GIT\tecwi_web\TecWi_Web.Domain\obj\Debug\net5.0\TecWi_Web.Domain.pdb
+D:\GIT\tecwi_web\TecWi_Web.Domain\obj\Debug\net5.0\TecWi_Web.Domain.csprojAssemblyReference.cache

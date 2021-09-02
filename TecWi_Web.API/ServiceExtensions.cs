@@ -30,6 +30,7 @@ namespace TecWi_Web.API
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioAplicacaoRepository, UsuarioAplicacaoRepository>();
             services.AddScoped<IPagarReceberRepository, PagarReceberRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
             return services;
         }
 
@@ -38,6 +39,7 @@ namespace TecWi_Web.API
             services.AddScoped<IAutorizacaoService, AutorizacaoService>();
             services.AddScoped<IUsuarioAplicacaoService, UsuarioAplicacaoService>();
             services.AddScoped<IPagarReceberService, PagarReceberService>();
+            services.AddScoped<IClienteService, ClienteService>();
             return services;
         }
 

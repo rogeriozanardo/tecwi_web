@@ -1,11 +1,9 @@
-﻿
-using AutoMapper;
-using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
-using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
@@ -17,19 +15,17 @@ namespace TecWi_Web.Application.Services
     {
         private readonly IMapper _iMapper;
         private readonly IUnitOfWork _iUnitOfWork;
-        private readonly IDapper _iDapper;
         private readonly IPagarReceberRepository _iPagarReceberRepository;
-        private readonly IConfiguration _iConfiguration;
-        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IDapper iDapper, IPagarReceberRepository iPagarReceberRepository, IConfiguration iConfiguration)
+        private readonly IClienteRepository _iClienteRepository;
+        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
-            _iDapper = iDapper;
             _iPagarReceberRepository = iPagarReceberRepository;
-            _iConfiguration = iConfiguration;
+            _iClienteRepository = iClienteRepository;
         }
 
-        public async Task<ServiceResponse<bool>> BulkInsertEfCore(List<PagarReceberDTO> pagarReceberDTO)
+        public async Task<ServiceResponse<bool>> BulkInsertEfCoreAsync(List<PagarReceberDTO> pagarReceberDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -46,7 +42,7 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> BulkUpdateEfCore(List<PagarReceberDTO> pagarReceberDTO)
+        public async Task<ServiceResponse<bool>> BulkUpdateEfCoreAsync(List<PagarReceberDTO> pagarReceberDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -80,12 +76,18 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<PagarReceberDTO>>> GetAllEfCore()
+        public async Task<ServiceResponse<bool>> PopulateData()
         {
-            ServiceResponse<List<PagarReceberDTO>> serviceResponse = new ServiceResponse<List<PagarReceberDTO>>();
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                await Task.Delay(1);
+                List<PagarReceber> pagarReceber = _iPagarReceberRepository.GetAllDapper();
+                List<Cliente> cliente = GetUniqueClients(pagarReceber);
+                await _iClienteRepository.BulkInsertAsync(cliente);
+                await _iPagarReceberRepository.BulkInsertEfCore(pagarReceber);
+                await _iUnitOfWork.CommitAsync();
+
+                serviceResponse.Data = true;
             }
             catch (Exception ex)
             {
@@ -93,6 +95,28 @@ namespace TecWi_Web.Application.Services
                 serviceResponse.Success = false;
             }
             return serviceResponse;
+        }
+
+        private List<Cliente> GetUniqueClients(List<PagarReceber> pagarReceber)
+        {
+            List<Cliente> cliente = new List<Cliente>();
+            foreach (PagarReceber _pagarReceber in pagarReceber.GroupBy(x => x.cdclifor).Select(x => x.First()).ToList())
+            {
+                cliente.Add(new Cliente
+                    (
+                        _pagarReceber.cdclifor,
+                        _pagarReceber.inscrifed,
+                        _pagarReceber.fantasia,
+                        _pagarReceber.razao,
+                        _pagarReceber.ddd,
+                        _pagarReceber.fone1,
+                        _pagarReceber.fone2,
+                        _pagarReceber.email,
+                        _pagarReceber.cidade
+                    ));
+            }
+
+            return cliente;
         }
     }
 }

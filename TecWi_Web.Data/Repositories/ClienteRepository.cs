@@ -1,26 +1,57 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using TecWi_Web.Data.Context;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.Data.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {
-        public Task<bool> BulkInsert(List<Cliente> cliente)
+        private readonly DataContext _dataContext;
+
+        public ClienteRepository(DataContext dataContext)
         {
-            throw new NotImplementedException();
+            _dataContext = dataContext;
         }
 
-        public Task<List<Cliente>> ListAll()
+        public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
         {
-            throw new NotImplementedException();
+            await _dataContext.Set<Cliente>().AddRangeAsync(cliente);
+            return true;
         }
 
-        public Task<bool> Update(Cliente cliente)
+        public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
-            throw new NotImplementedException();
+            IQueryable<Cliente> cliente = _dataContext.Cliente
+                .Include(x => x.PagarReceber)
+                .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? x.Fantasia.Contains(clientePagarReceberFilter.razao) : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.numlancto) ? x.PagarReceber.Where(y => y.numlancto.Contains(clientePagarReceberFilter.numlancto)).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.cdfilial.Contains(clientePagarReceberFilter.cdfilial)).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart && y.dtemissao <= (DateTime)clientePagarReceberFilter.dtemissaoEnd).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart && y.dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
+
+                List<Cliente> _cliente = await cliente
+                .AsNoTracking()
+                .Skip(clientePagarReceberFilter.PageNumber * clientePagarReceberFilter.PageSize)
+                .Take(clientePagarReceberFilter.PageSize)
+                .ToListAsync();
+
+            return _cliente;
+        }
+
+        public bool BulkUpdate(List<Cliente> cliente)
+        {
+            _dataContext.Set<Cliente>().UpdateRange(cliente);
+            return true;
         }
     }
 }

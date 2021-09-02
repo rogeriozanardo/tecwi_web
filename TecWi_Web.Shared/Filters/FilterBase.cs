@@ -1,6 +1,6 @@
 ﻿namespace TecWi_Web.Shared.Filters
 {
-    class FilterBase
+    public class FilterBase
     {
         public int Page { get; set; }
         public int PageSize { get; set; } = 100;

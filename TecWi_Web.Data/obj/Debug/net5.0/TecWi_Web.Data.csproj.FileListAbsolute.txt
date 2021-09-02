@@ -16,3 +16,5 @@ D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.dll
 D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\ref\TecWi_Web.Data.dll
 D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.pdb
 D:\GIT\tecwi_web\TecWi_Web.Data\obj\Debug\net5.0\TecWi_Web.Data.genruntimeconfig.cache
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\TecWi_Web.Shared.dll
+D:\GIT\tecwi_web\TecWi_Web.Data\bin\Debug\net5.0\TecWi_Web.Shared.pdb

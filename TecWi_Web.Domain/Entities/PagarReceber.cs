@@ -8,6 +8,13 @@ namespace TecWi_Web.Domain.Entities
 {
     public class PagarReceber
     {
+        public PagarReceber()
+        {
+
+        }
+
+        public Cliente cliente { get; set; }
+
         public int SeqID { get; private set; }
         public string numlancto { get; private set; }
         public int sq { get; set; }
@@ -26,9 +33,6 @@ namespace TecWi_Web.Domain.Entities
         public string email { get; private set; }
         public string cidade { get; private set; }
 
-        public PagarReceber()
-        {
 
-        }
     }
 }

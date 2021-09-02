@@ -14,18 +14,20 @@ namespace TecWi_Web.API.Controllers
     public class PagarReceberController : ControllerBase
     {
         private readonly IPagarReceberService _iPagarReceberService;
+        private readonly IClienteService _iClienteService;
 
-        public PagarReceberController(IPagarReceberService iPagarReceberService)
+        public PagarReceberController(IPagarReceberService iPagarReceberService, IClienteService iClienteService)
         {
             _iPagarReceberService = iPagarReceberService;
+            _iClienteService = iClienteService;
         }
 
         [HttpGet]
         [Route(nameof(PopulateData))]
         public async Task<IActionResult> PopulateData()
         {
-            await Task.Delay(1);
-            ServiceResponse<List<PagarReceberDTO>> serviceResponse = _iPagarReceberService.GetAllDapper();
+            ServiceResponse<bool> serviceResponse =  await _iPagarReceberService.PopulateData();
+
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);

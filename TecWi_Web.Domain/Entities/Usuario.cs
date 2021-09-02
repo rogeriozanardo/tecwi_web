@@ -7,6 +7,7 @@ namespace TecWi_Web.Domain.Entities
     public class Usuario
     {
         public Guid IdUsuario { get; private set; }
+        public bool Ativo { get; set; } = true;
         public string Login { get; private  set; }
         public string Nome { get; private  set; }
         public string Email { get; private set; }
