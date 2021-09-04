@@ -47,26 +47,26 @@ namespace TecWi_Web.Data.Migrations
                 name: "PagarReceber",
                 columns: table => new
                 {
-                    numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    sq = table.Column<int>(type: "int", nullable: false),
-                    cdfilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    clienteCdclifor = table.Column<int>(type: "int", nullable: true),
+                    Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Sq = table.Column<int>(type: "int", nullable: false),
+                    Cdfilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SeqID = table.Column<int>(type: "int", nullable: false),
-                    dtemissao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    dtvencto = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    valorr = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Stcobranca = table.Column<bool>(type: "bit", nullable: false),
+                    Dtemissao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Dtvencto = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Dtpagto = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Valorr = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     NotasFiscais = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    cdclifor = table.Column<int>(type: "int", nullable: false)
+                    Cdclifor = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PagarReceber", x => new { x.numlancto, x.sq, x.cdfilial });
+                    table.PrimaryKey("PK_PagarReceber", x => new { x.Numlancto, x.Sq, x.Cdfilial });
                     table.ForeignKey(
-                        name: "FK_PagarReceber_Cliente_clienteCdclifor",
-                        column: x => x.clienteCdclifor,
+                        name: "FK_PagarReceber_Cliente_Cdclifor",
+                        column: x => x.Cdclifor,
                         principalTable: "Cliente",
-                        principalColumn: "Cdclifor",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Cdclifor");
                 });
 
             migrationBuilder.CreateTable(
@@ -88,9 +88,9 @@ namespace TecWi_Web.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PagarReceber_clienteCdclifor",
+                name: "IX_PagarReceber_Cdclifor",
                 table: "PagarReceber",
-                column: "clienteCdclifor");
+                column: "Cdclifor");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

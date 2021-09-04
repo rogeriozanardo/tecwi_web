@@ -34,25 +34,33 @@ namespace TecWi_Web.Data.Repositories
             return true;
         }
 
-        public List<PagarReceber> GetAllDapper()
+        public async Task<List<PagarReceber>> GetPenddingPagarReceber()
         {
             List<PagarReceber> pagarReceber = new List<PagarReceber>();
             DynamicParameters dynamicParameters = new DynamicParameters();
 
-            string sql = GetSQLPagarReceber();
+            string sql = GetPendingPagarReceber();
             List<string> connectionString = GetConnectionString();
+            List<Task<List<PagarReceber>>> tasks = new List<Task<List<PagarReceber>>>();
 
             foreach (string _connectionString in connectionString)
             {
-                pagarReceber.AddRange(_iDapper.GetAll<PagarReceber>(sql, dynamicParameters, _connectionString));
+                tasks.Add(_iDapper.GetAll<PagarReceber>(sql, dynamicParameters, _connectionString));
+            }
+
+            await Task.WhenAll(tasks);
+
+            foreach (Task<List<PagarReceber>> _task in tasks)
+            {
+                pagarReceber.AddRange(_task.Result);
             }
 
             return pagarReceber;
         }
 
-        private string GetSQLPagarReceber()
+        private string GetPendingPagarReceber()
         {
-            return @"select p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.valorr, string_agg(nf.NumNota, ', ') as NotasFiscais,  
+            return @"select top 5 p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.valorr, string_agg(nf.NumNota, ', ') as NotasFiscais,  
             p.cdclifor, e.inscrifed,  e.fantasia, e.razao, e.ddd, e.fone1, e.fone2, e.email, trim(e.cidade)+ ' - ' + e.uf as cidade from 
 
             PagarReceber p with(nolock)

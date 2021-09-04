@@ -55,14 +55,26 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
                 {
-                    b.Property<string>("numlancto")
+                    b.Property<string>("Numlancto")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("sq")
+                    b.Property<int>("Sq")
                         .HasColumnType("int");
 
-                    b.Property<string>("cdfilial")
+                    b.Property<string>("Cdfilial")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Cdclifor")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Dtemissao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Dtpagto")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Dtvencto")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NotasFiscais")
                         .HasColumnType("nvarchar(max)");
@@ -70,25 +82,16 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<int>("SeqID")
                         .HasColumnType("int");
 
-                    b.Property<int>("cdclifor")
-                        .HasColumnType("int");
+                    b.Property<bool>("Stcobranca")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("clienteCdclifor")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("dtemissao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("dtvencto")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("valorr")
+                    b.Property<decimal>("Valorr")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("numlancto", "sq", "cdfilial");
+                    b.HasKey("Numlancto", "Sq", "Cdfilial");
 
-                    b.HasIndex("clienteCdclifor");
+                    b.HasIndex("Cdclifor");
 
                     b.ToTable("PagarReceber");
                 });
@@ -145,12 +148,13 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
                 {
-                    b.HasOne("TecWi_Web.Domain.Entities.Cliente", "cliente")
+                    b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
                         .WithMany("PagarReceber")
-                        .HasForeignKey("clienteCdclifor")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Cdclifor")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Navigation("cliente");
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.UsuarioAplicacao", b =>

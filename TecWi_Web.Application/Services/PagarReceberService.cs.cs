@@ -59,12 +59,12 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public ServiceResponse<List<PagarReceberDTO>> GetAllDapper()
+        public async Task<ServiceResponse<List<PagarReceberDTO>>> GetAllDapper()
         {
             ServiceResponse<List<PagarReceberDTO>> serviceResponse = new ServiceResponse<List<PagarReceberDTO>>();
             try
             {
-                List<PagarReceber> pagarReceber = _iPagarReceberRepository.GetAllDapper();
+                List<PagarReceber> pagarReceber = await _iPagarReceberRepository.GetPenddingPagarReceber();
                 List<PagarReceberDTO> pagarReceberDTO = _iMapper.Map<List<PagarReceberDTO>>(pagarReceber);
                 serviceResponse.Data = pagarReceberDTO;
             }
@@ -81,10 +81,15 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                List<PagarReceber> pagarReceber = _iPagarReceberRepository.GetAllDapper();
-                List<Cliente> cliente = GetUniqueClients(pagarReceber);
+                List<PagarReceber> pagarReceberDapper = await _iPagarReceberRepository.GetPenddingPagarReceber();
+                List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore();
+                List<PagarReceber> PagarReceberDifference = pagarReceberEfCore.Where(x => !pagarReceberDapper.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
+                PagarReceberDifference.ForEach(x => { x.Stcobranca = false; });
+                _iPagarReceberRepository.BulkUpdateEfCore(PagarReceberDifference);
+
+                List<Cliente> cliente = GetUniqueClients(pagarReceberDapper);
                 await _iClienteRepository.BulkInsertAsync(cliente);
-                await _iPagarReceberRepository.BulkInsertEfCore(pagarReceber);
+                await _iPagarReceberRepository.BulkInsertEfCore(pagarReceberDapper);
                 await _iUnitOfWork.CommitAsync();
 
                 serviceResponse.Data = true;
@@ -100,19 +105,19 @@ namespace TecWi_Web.Application.Services
         private List<Cliente> GetUniqueClients(List<PagarReceber> pagarReceber)
         {
             List<Cliente> cliente = new List<Cliente>();
-            foreach (PagarReceber _pagarReceber in pagarReceber.GroupBy(x => x.cdclifor).Select(x => x.First()).ToList())
+            foreach (PagarReceber _pagarReceber in pagarReceber.GroupBy(x => x.Cdclifor).Select(x => x.First()).ToList())
             {
                 cliente.Add(new Cliente
                     (
-                        _pagarReceber.cdclifor,
-                        _pagarReceber.inscrifed,
-                        _pagarReceber.fantasia,
-                        _pagarReceber.razao,
-                        _pagarReceber.ddd,
-                        _pagarReceber.fone1,
-                        _pagarReceber.fone2,
-                        _pagarReceber.email,
-                        _pagarReceber.cidade
+                        _pagarReceber.Cdclifor,
+                        _pagarReceber.Inscrifed,
+                        _pagarReceber.Fantasia,
+                        _pagarReceber.Razao,
+                        _pagarReceber.DDD,
+                        _pagarReceber.Fone1,
+                        _pagarReceber.Fone2,
+                        _pagarReceber.Email,
+                        _pagarReceber.Cidade
                     ));
             }
 

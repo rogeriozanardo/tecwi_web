@@ -8,20 +8,23 @@ namespace TecWi_Web.Data.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<PagarReceber> entityTypeBuilder)
         {
-            entityTypeBuilder.HasKey(x => new { numlancto = x.numlancto, sq = x.sq, cdfilial = x.cdfilial });
-            entityTypeBuilder.HasOne(x => x.cliente)
+            entityTypeBuilder.HasKey(x => new { numlancto = x.Numlancto, sq = x.Sq, cdfilial = x.Cdfilial });
+            entityTypeBuilder.HasOne(x => x.Cliente)
                 .WithMany(x => x.PagarReceber)
-                .OnDelete(DeleteBehavior.Restrict);
-            entityTypeBuilder.Property(x => x.valorr)
+                .HasForeignKey(x => x.Cdclifor)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired(true);
+            entityTypeBuilder.Property(x => x.Valorr)
                 .HasPrecision(18, 2);
-            entityTypeBuilder.Ignore(x => x.inscrifed);
-            entityTypeBuilder.Ignore(x => x.fantasia);
-            entityTypeBuilder.Ignore(x => x.razao);
-            entityTypeBuilder.Ignore(x => x.ddd);
-            entityTypeBuilder.Ignore(x => x.fone1);
-            entityTypeBuilder.Ignore(x => x.fone2);
-            entityTypeBuilder.Ignore(x => x.email);
-            entityTypeBuilder.Ignore(x => x.cidade);
+            entityTypeBuilder.Ignore(x => x.Inscrifed);
+            entityTypeBuilder.Ignore(x => x.Fantasia);
+            entityTypeBuilder.Ignore(x => x.Razao);
+            entityTypeBuilder.Ignore(x => x.DDD);
+            entityTypeBuilder.Ignore(x => x.Fone1);
+            entityTypeBuilder.Ignore(x => x.Fone2);
+            entityTypeBuilder.Ignore(x => x.Email);
+            entityTypeBuilder.Ignore(x => x.Cidade);
+            entityTypeBuilder.Ignore(x => x.Cdclifor);
         }
     }
 }

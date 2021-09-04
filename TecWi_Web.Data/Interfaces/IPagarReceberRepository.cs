@@ -6,7 +6,7 @@ namespace TecWi_Web.Data.Interfaces
 {
     public interface IPagarReceberRepository
     {
-        List<PagarReceber> GetAllDapper();
+        Task<List<PagarReceber>> GetPenddingPagarReceber();
         Task<List<PagarReceber>> GetAllEfCore();
         bool BulkUpdateEfCore(List<PagarReceber> pagarReceber);
         Task<bool> BulkInsertEfCore(List<PagarReceber> pagarReceber);

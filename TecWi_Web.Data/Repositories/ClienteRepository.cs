@@ -33,10 +33,10 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? x.Fantasia.Contains(clientePagarReceberFilter.razao) : true)
-                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.numlancto) ? x.PagarReceber.Where(y => y.numlancto.Contains(clientePagarReceberFilter.numlancto)).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.cdfilial.Contains(clientePagarReceberFilter.cdfilial)).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart && y.dtemissao <= (DateTime)clientePagarReceberFilter.dtemissaoEnd).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart && y.dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.numlancto) ? x.PagarReceber.Where(y => y.Numlancto.Contains(clientePagarReceberFilter.numlancto)).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Cdfilial.Contains(clientePagarReceberFilter.cdfilial)).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart && y.Dtemissao <= (DateTime)clientePagarReceberFilter.dtemissaoEnd).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart && y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
                 .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
 
                 List<Cliente> _cliente = await cliente
