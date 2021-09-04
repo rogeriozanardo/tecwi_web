@@ -7,8 +7,7 @@ namespace TecWi_Web.Application.Interfaces
 {
     public interface IClienteService
     {
-        Task<ServiceResponse<bool>> BulkInsertAsync(List<ClienteDTO> clienteDTO);
-        Task<ServiceResponse<bool>> BulkUpdateAsync(List<ClienteDTO> clienteDTO);
+        Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO);
         Task<ServiceResponse<List<ClienteDTO>>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter);
     }
 }

@@ -8,7 +8,6 @@ namespace TecWi_Web.Data.Interfaces
     public interface IClienteRepository
     {
         Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter);
-        Task<bool> BulkInsertAsync(List<Cliente> cliente);
-        bool BulkUpdate(List<Cliente> cliente);
+        Task<bool> BulkInsertOrUpdateAsync(List<Cliente> cliente);
     }
 }

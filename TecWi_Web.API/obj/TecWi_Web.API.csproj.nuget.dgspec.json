@@ -204,6 +204,9 @@
             "projectReferences": {
               "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
                 "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj"
+              },
+              "D:\\GIT\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj": {
+                "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj"
               }
             }
           }
@@ -221,6 +224,10 @@
             "Dapper": {
               "target": "Package",
               "version": "[2.0.90, )"
+            },
+            "EFCore.BulkExtensions": {
+              "target": "Package",
+              "version": "[5.3.8, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

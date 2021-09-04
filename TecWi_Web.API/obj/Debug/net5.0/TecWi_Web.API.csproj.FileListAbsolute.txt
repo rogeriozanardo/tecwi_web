@@ -32,13 +32,9 @@ D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\System.Security.Cryptography.Pro
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
-D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
-D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
-D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\TecWi_Web.Application.dll
@@ -65,3 +61,11 @@ D:\GIT\tecwi_web\TecWi_Web.API\obj\Debug\net5.0\ref\TecWi_Web.API.dll
 D:\GIT\tecwi_web\TecWi_Web.API\obj\Debug\net5.0\TecWi_Web.API.pdb
 D:\GIT\tecwi_web\TecWi_Web.API\obj\Debug\net5.0\TecWi_Web.API.genruntimeconfig.cache
 D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\Dapper.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\EFCore.BulkExtensions.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\Microsoft.Data.Sqlite.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\Microsoft.DotNet.PlatformAbstractions.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\Microsoft.Extensions.DependencyModel.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\NetTopologySuite.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\NetTopologySuite.IO.SqlServerBytes.dll
+D:\GIT\tecwi_web\TecWi_Web.API\bin\Debug\net5.0\SQLitePCLRaw.core.dll

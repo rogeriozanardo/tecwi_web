@@ -24,30 +24,13 @@ namespace TecWi_Web.Application.Services
             _iClienteRepository = iClienteRepository;
         }
 
-        public async Task<ServiceResponse<bool>> BulkInsertAsync(List<ClienteDTO> clienteDTO)
+        public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
                 List<Cliente> cliente = _iMapper.Map<List<Cliente>>(clienteDTO);
-                await _iClienteRepository.BulkInsertAsync(cliente);
-                await _iUnitOfWork.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Message = ex.GetBaseException().Message;
-                serviceResponse.Success = false;
-            }
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<bool>> BulkUpdateAsync(List<ClienteDTO> clienteDTO)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                List<Cliente> cliente = _iMapper.Map<List<Cliente>>(clienteDTO);
-                _iClienteRepository.BulkUpdate(cliente);
+                await _iClienteRepository.BulkInsertOrUpdateAsync(cliente);
                 await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)

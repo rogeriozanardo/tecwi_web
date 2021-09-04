@@ -8,6 +8,7 @@ using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.Application.Services
 {
@@ -48,7 +49,7 @@ namespace TecWi_Web.Application.Services
             try
             {
                 List<PagarReceber> pagarReceber = _iMapper.Map<List<PagarReceber>>(pagarReceberDTO);
-                serviceResponse.Data = _iPagarReceberRepository.BulkUpdateEfCore(pagarReceber);
+                serviceResponse.Data = await _iPagarReceberRepository.BulkUpdateEfCore(pagarReceber);
                 await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
@@ -64,7 +65,7 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<List<PagarReceberDTO>> serviceResponse = new ServiceResponse<List<PagarReceberDTO>>();
             try
             {
-                List<PagarReceber> pagarReceber = await _iPagarReceberRepository.GetPenddingPagarReceber();
+                List<PagarReceber> pagarReceber = await _iPagarReceberRepository.GetPendingPagarReceber();
                 List<PagarReceberDTO> pagarReceberDTO = _iMapper.Map<List<PagarReceberDTO>>(pagarReceber);
                 serviceResponse.Data = pagarReceberDTO;
             }
@@ -81,17 +82,22 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                List<PagarReceber> pagarReceberDapper = await _iPagarReceberRepository.GetPenddingPagarReceber();
-                List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore();
-                List<PagarReceber> PagarReceberDifference = pagarReceberEfCore.Where(x => !pagarReceberDapper.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
-                PagarReceberDifference.ForEach(x => { x.Stcobranca = false; });
-                _iPagarReceberRepository.BulkUpdateEfCore(PagarReceberDifference);
+                Task<List<PagarReceber>> TaskPagarReceberPending = _iPagarReceberRepository.GetPendingPagarReceber();
+                Task<List<PagarReceber>> TaskPagarReceberPaid = _iPagarReceberRepository.GetPaidPagarReceber();
+                Task<List<PagarReceber>> TaskPagarReceberEfCore = _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
 
-                List<Cliente> cliente = GetUniqueClients(pagarReceberDapper);
-                await _iClienteRepository.BulkInsertAsync(cliente);
-                await _iPagarReceberRepository.BulkInsertEfCore(pagarReceberDapper);
+                await Task.WhenAll(TaskPagarReceberPending, TaskPagarReceberPaid, TaskPagarReceberEfCore);
+
+                List<PagarReceber> pagarReceberPending = TaskPagarReceberPending.Result;
+                List<PagarReceber> pagarReceberPaid = TaskPagarReceberPaid.Result;
+                List<PagarReceber> pagarReceberEfCore = TaskPagarReceberEfCore.Result;
+
+                await InsertOrUpdateCliente(pagarReceberPending);
+                await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
+                await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
+                await UpdatePagarReceberPaid(pagarReceberPaid);
+
                 await _iUnitOfWork.CommitAsync();
-
                 serviceResponse.Data = true;
             }
             catch (Exception ex)
@@ -100,6 +106,58 @@ namespace TecWi_Web.Application.Services
                 serviceResponse.Success = false;
             }
             return serviceResponse;
+        }
+
+        private async Task InsertOrUpdateCliente(List<PagarReceber> pagarReceberPending)
+        {
+            List<Cliente> cliente = GetUniqueClients(pagarReceberPending);
+            if (cliente.Count > 0)
+            {
+                await _iClienteRepository.BulkInsertOrUpdateAsync(cliente);
+            }
+        }
+
+        private async Task InsertPagarReceber(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)
+        {
+            List<PagarReceber> PagarReceberToInsert = pagarReceberPending.Where(x => !pagarReceberEfCore.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
+            if (PagarReceberToInsert.Count > 0)
+            {
+                await _iPagarReceberRepository.BulkInsertEfCore(PagarReceberToInsert);
+            }
+        }
+
+        private async Task UpdatePagarReceberDifferent(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)
+        {
+            List<PagarReceber> PagarReceberToUpdate = pagarReceberEfCore.Where(x => !pagarReceberPending.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
+            PagarReceberToUpdate.ForEach(x =>
+             {
+                 x.Stcobranca = false;
+             });
+
+            if (PagarReceberToUpdate.Count > 0)
+            {
+                await _iPagarReceberRepository.BulkUpdateEfCore(PagarReceberToUpdate);
+            }
+        }
+
+        private async Task UpdatePagarReceberPaid(List<PagarReceber> pagarReceberPaid)
+        {
+            List<PagarReceber> pagarReceberUpdate = new List<PagarReceber>();
+            foreach (PagarReceber _pagarReceber in pagarReceberPaid)
+            {
+                PagarReceberFilter pagarReceberFilter = new PagarReceberFilter { SeqID = _pagarReceber.SeqID, Numlancto = _pagarReceber.Numlancto, Sq = _pagarReceber.Sq };
+                PagarReceber pagarReceberToUpdate = await _iPagarReceberRepository.GetPagarReceber(pagarReceberFilter);
+                if (pagarReceberToUpdate != null)
+                {
+                    pagarReceberToUpdate.Update(false, _pagarReceber.Dtpagto.Value);
+                    pagarReceberUpdate.Add(await _iPagarReceberRepository.GetPagarReceber(pagarReceberFilter));
+                }
+            }
+
+            if (pagarReceberUpdate.Count > 0)
+            {
+                await _iPagarReceberRepository.BulkUpdateEfCore(pagarReceberUpdate);
+            }
         }
 
         private List<Cliente> GetUniqueClients(List<PagarReceber> pagarReceber)

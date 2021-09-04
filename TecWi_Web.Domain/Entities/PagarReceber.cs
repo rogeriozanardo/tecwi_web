@@ -11,9 +11,9 @@ namespace TecWi_Web.Domain.Entities
 
         public Cliente Cliente { get; set; }
         public int SeqID { get; private set; }
-        public bool Stcobranca { get; set; } = true;
         public string Numlancto { get; private set; }
         public int Sq { get; set; }
+        public bool Stcobranca { get; set; } = true;
         public string Cdfilial { get; private set; }
         public DateTime Dtemissao { get; private set; }
         public DateTime Dtvencto { get; private set; }
@@ -29,5 +29,11 @@ namespace TecWi_Web.Domain.Entities
         public string Fone2 { get; private set; }
         public string Email { get; private set; }
         public string Cidade { get; private set; }
+
+        public void Update(bool stcobranca, DateTime dtpagto)
+        {
+            Stcobranca = stcobranca;
+            Dtpagto = dtpagto;
+        }
     }
 }

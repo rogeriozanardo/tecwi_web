@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,15 @@ namespace TecWi_Web.Data.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
+        public async Task<bool> BulkInsertOrUpdateAsync(List<Cliente> cliente)
         {
-            await _dataContext.Set<Cliente>().AddRangeAsync(cliente);
+            await _dataContext.BulkInsertOrUpdateAsync(cliente);
             return true;
         }
 
         public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
-            IQueryable<Cliente> cliente = _dataContext.Cliente
+            IQueryable<Cliente> _cliente = _dataContext.Cliente
                 .Include(x => x.PagarReceber)
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
@@ -39,19 +40,13 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart && y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
                 .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
 
-                List<Cliente> _cliente = await cliente
+                List<Cliente> cliente = await _cliente
                 .AsNoTracking()
                 .Skip(clientePagarReceberFilter.PageNumber * clientePagarReceberFilter.PageSize)
                 .Take(clientePagarReceberFilter.PageSize)
                 .ToListAsync();
 
-            return _cliente;
-        }
-
-        public bool BulkUpdate(List<Cliente> cliente)
-        {
-            _dataContext.Set<Cliente>().UpdateRange(cliente);
-            return true;
+            return cliente;
         }
     }
 }
