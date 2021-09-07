@@ -13,12 +13,12 @@ namespace TecWi_Web.Domain.Entities
         public string Email { get; private set; }
         public byte[] SenhaSalt { get; private set; }
         public byte[] SenhaHash { get; private set; }
-
         public List<UsuarioAplicacao> UsuarioAplicacao { get;set; }
+        public List<Cliente> Cliente { get; set; }
 
-        public Usuario(Guid idUsuario, string login, string Nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
+        public Usuario(Guid idUsuario, string login, string nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
         {
-            ValidateDomain(idUsuario, login, Nome, eMail, senhaHash, senhaSalt);
+            ValidateDomain(idUsuario, login, nome, eMail, senhaHash, senhaSalt);
         }
 
         public Usuario()

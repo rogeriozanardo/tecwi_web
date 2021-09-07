@@ -10,6 +10,10 @@ namespace TecWi_Web.Data.EntityConfiguration
         {
             entityTypeBuilder.HasKey(x => x.Cdclifor);
             entityTypeBuilder.Property(x => x.Cdclifor).ValueGeneratedNever();
+            entityTypeBuilder.HasOne(x => x.Usuario)
+                .WithMany(x => x.Cliente)
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

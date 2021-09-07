@@ -181,5 +181,23 @@ namespace TecWi_Web.Application.Services
 
             return cliente;
         }
+
+        public void AssingUsuarioToClienteRandonly(List<Cliente> cliente, List<Usuario> usuario)
+        {
+            Random random = new Random();
+            List<Usuario> usuarioTemp = new List<Usuario>();
+
+            foreach (Cliente _cliente in cliente)
+            {
+                if (usuarioTemp.Count == 0)
+                {
+                    usuarioTemp.AddRange(usuario);
+                }
+
+                Usuario _usuarioTemp = usuarioTemp.OrderBy(x => random.Next()).FirstOrDefault();
+                _cliente.IdUsuario = _usuarioTemp.IdUsuario;
+                usuarioTemp.Remove(_usuarioTemp);
+            }
+        }
     }
 }

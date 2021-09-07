@@ -96,7 +96,7 @@ namespace TecWi_Web.Data.Repositories
 
             List<PagarReceber> pagarReceber = await _pagarReceber
                 .AsNoTracking()
-                . ToListAsync();
+                .ToListAsync();
 
             return pagarReceber;
         }

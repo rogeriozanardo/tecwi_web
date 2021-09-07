@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TecWi_Web.Domain.Validators;
 
 namespace TecWi_Web.Domain.Entities
@@ -24,6 +25,8 @@ namespace TecWi_Web.Domain.Entities
         public string Fone2 { get; private set; }
         public string Email { get; private set; }
         public string Cidade { get; private set; }
+        public Guid IdUsuario { get; set; }
+        public Usuario Usuario { get; set; }
         public List<PagarReceber> PagarReceber { get; set; }
 
         private string CdcliforInvalido = "Campo 'Cdclifor' inválido!";

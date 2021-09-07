@@ -27,24 +27,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Adilson\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Adilson.Alves\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Progress\\ToolboxNuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GIT\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj",
+      "projectUniqueName": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj",
       "projectName": "TecWi_Web.Shared",
-      "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj",
-      "packagesPath": "C:\\Users\\Adilson\\.nuget\\packages\\",
-      "outputPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Shared\\obj\\",
+      "projectPath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Shared\\TecWi_Web.Shared.csproj",
+      "packagesPath": "C:\\Users\\Adilson.Alves\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Progress\\ToolboxNuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Adilson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Adilson.Alves\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Telerik UI for WPF.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -57,8 +58,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
-              "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj"
+            "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
+              "projectPath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj"
             }
           }
         }
@@ -87,7 +88,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.206\\RuntimeIdentifierGraph.json"
       }
     }
   }

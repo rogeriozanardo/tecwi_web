@@ -15,8 +15,8 @@ namespace TecWi_Web.Tests.UnitTests.Domain
         }
 
         [Test]
-        [TestCase(IdAplicacao.Cobranca,IdPerfil.Gestor)]
-        public void CreateUsuarioAplicacaoWithValidParameters(IdAplicacao idAplicacao, IdPerfil idPerfil)
+        [TestCase(IdAplicacao.Cobranca, IdPerfil.Gestor)]
+        public void CreateUsuarioAplicacao_WithValidParameters_ShouldCreateUsuarioAplicacao(IdAplicacao idAplicacao, IdPerfil idPerfil)
         {
             Action action = () => new UsuarioAplicacao(new Guid(), idAplicacao, idPerfil);
             action.Should().NotThrow<DomainValidadorException>();
