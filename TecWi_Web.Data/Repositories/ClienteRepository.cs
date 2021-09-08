@@ -1,5 +1,4 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<bool> BulkInsertOrUpdateAsync(List<Cliente> cliente)
         {
-            await _dataContext.BulkInsertOrUpdateAsync(cliente);
+            await _dataContext.AddRangeAsync(cliente);
             return true;
         }
 

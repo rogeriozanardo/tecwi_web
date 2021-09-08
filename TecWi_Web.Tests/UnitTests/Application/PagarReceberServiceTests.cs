@@ -8,7 +8,6 @@ using TecWi_Web.Application.Services;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
-using TecWi_Web.Domain.Enums;
 
 namespace TecWi_Web.Tests.UnitTests.Application
 {

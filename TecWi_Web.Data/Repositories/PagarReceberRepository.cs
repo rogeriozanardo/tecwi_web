@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -33,7 +32,10 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<bool> BulkUpdateEfCore(List<PagarReceber> pagarReceber)
         {
-            await _dataContext.BulkUpdateAsync(pagarReceber);
+            await Task.Run(() =>
+           {
+               _dataContext.UpdateRange(pagarReceber);
+           });
             return true;
         }
 

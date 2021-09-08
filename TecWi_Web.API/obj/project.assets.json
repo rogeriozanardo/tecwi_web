@@ -775,7 +775,10 @@
         },
         "runtime": {
           "bin/placeholder/TecWi_Web.Application.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "TecWi_Web.Data/1.0.0": {
         "type": "project",
