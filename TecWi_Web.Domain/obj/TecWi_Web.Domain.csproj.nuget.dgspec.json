@@ -1,25 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {}
+    "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
+    "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
+        "projectUniqueName": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
         "projectName": "TecWi_Web.Domain",
-        "projectPath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
-        "packagesPath": "C:\\Users\\Adilson.Alves\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\obj\\",
+        "projectPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
+        "packagesPath": "C:\\Users\\Adilson\\.nuget\\packages\\",
+        "outputPath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Progress\\ToolboxNuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Adilson.Alves\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Telerik UI for WPF.config"
+          "C:\\Users\\Adilson\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -58,7 +57,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.206\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
         }
       }
     }

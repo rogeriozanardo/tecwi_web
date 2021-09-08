@@ -42,6 +42,9 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("Fone2")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Inscrifed")
                         .HasColumnType("nvarchar(max)");
 
@@ -49,6 +52,8 @@ namespace TecWi_Web.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Cdclifor");
+
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Cliente");
                 });
@@ -146,6 +151,17 @@ namespace TecWi_Web.Data.Migrations
                     b.ToTable("UsuarioAplicacao");
                 });
 
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.Cliente", b =>
+                {
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("Cliente")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
@@ -175,6 +191,8 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Usuario", b =>
                 {
+                    b.Navigation("Cliente");
+
                     b.Navigation("UsuarioAplicacao");
                 });
 #pragma warning restore 612, 618

@@ -35,14 +35,15 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? x.Fantasia.Contains(clientePagarReceberFilter.razao) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.numlancto) ? x.PagarReceber.Where(y => y.Numlancto.Contains(clientePagarReceberFilter.numlancto)).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Cdfilial.Contains(clientePagarReceberFilter.cdfilial)).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart && y.Dtemissao <= (DateTime)clientePagarReceberFilter.dtemissaoEnd).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart && y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
-                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
+                .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtemissaoEnd != null ? x.PagarReceber.Where(y => y.Dtemissao <= (DateTime)clientePagarReceberFilter.dtemissaoEnd).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtvenctoStart != null ? x.PagarReceber.Where(y => y.Dtvencto >= (DateTime)clientePagarReceberFilter.dtvenctoStart).ToList().Count > 0 : true)
+                .Where(x => clientePagarReceberFilter.dtvenctoEnd != null ? x.PagarReceber.Where(y => y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.NotasFiscais) ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
 
                 List<Cliente> cliente = await _cliente
                 .AsNoTracking()
-                .Skip(clientePagarReceberFilter.PageNumber * clientePagarReceberFilter.PageSize)
+                .Skip((clientePagarReceberFilter.PageNumber - 1) * clientePagarReceberFilter.PageSize)
                 .Take(clientePagarReceberFilter.PageSize)
                 .ToListAsync();
 

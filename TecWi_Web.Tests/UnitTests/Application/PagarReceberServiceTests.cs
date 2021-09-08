@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Application.Services;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
-using TecWi_Web.Domain.Validators;
 
 namespace TecWi_Web.Tests.UnitTests.Application
 {
-    
-    class PagarReceberServiceTests
+    public class PagarReceberServiceTests
     {
         private PagarReceberService _pagarReceberService;
 
@@ -27,21 +23,26 @@ namespace TecWi_Web.Tests.UnitTests.Application
             Mock<IUnitOfWork> _iUnitOfWork = new Mock<IUnitOfWork>();
             Mock<IPagarReceberRepository> _iPagarReceberRepository = new Mock<IPagarReceberRepository>();
             Mock<IClienteRepository> _iClienteRepository = new Mock<IClienteRepository>();
-            _pagarReceberService = new PagarReceberService(_iMapper.Object, _iUnitOfWork.Object, _iPagarReceberRepository.Object, _iClienteRepository.Object);
+            Mock<IUsuarioRepository> _iUsuarioRepository = new Mock<IUsuarioRepository>();
+            _pagarReceberService = new PagarReceberService(_iMapper.Object, _iUnitOfWork.Object, _iPagarReceberRepository.Object, _iClienteRepository.Object, _iUsuarioRepository.Object);
         }
 
         [Test]
-        public void RandonlyAssingUsuarioToCliente_WithValidParameters_ReturnsEqualyDistributed(IdAplicacao idAplicacao, IdPerfil idPerfil)
+        [TestCase(12, 4)]
+        public void RandonlyAssingUsuarioToCliente_WithValidParameters_ReturnsEqualyDistributed(int quantityCliente, int quantityUsuario)
         {
-            List<Cliente> cliente = CreateClient();
-            List<Usuario> usuario = CreateUsuario();
+            List<Cliente> cliente = CreateClient(quantityCliente);
+            List<Usuario> usuario = CreateUsuario(quantityUsuario);
             _pagarReceberService.AssingUsuarioToClienteRandonly(cliente, usuario);
-            Assert.IsTrue(cliente.Any(x => x.IdUsuario != Guid.Empty));
+            int clienteGroupPerUsuario = cliente.GroupBy(x => new { x.IdUsuario }).ToList().Count;
+            
+            Assert.IsTrue(clienteGroupPerUsuario == quantityUsuario);
         }
-        private List<Cliente> CreateClient()
+
+        private List<Cliente> CreateClient(int quantity)
         {
             List<Cliente> cliente = new List<Cliente>();
-            for(int i = 1; i > 10; i++)
+            for (int i = 1; i <= quantity; i++)
             {
                 cliente.Add(new Cliente(
                      i,
@@ -59,13 +60,13 @@ namespace TecWi_Web.Tests.UnitTests.Application
             return cliente;
         }
 
-        private List<Usuario> CreateUsuario()
+        private List<Usuario> CreateUsuario(int quantity)
         {
             List<Usuario> usuario = new List<Usuario>();
-            for (int i = 1; i > 10; i++)
+            for (int i = 1; i <= quantity; i++)
             {
                 usuario.Add(new Usuario(
-                     new Guid(),
+                     Guid.NewGuid(),
                      $"Login - {i}",
                      $"Nome - {i}",
                      $"Email{i}@email.com",

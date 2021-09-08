@@ -18,12 +18,14 @@ namespace TecWi_Web.Application.Services
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IPagarReceberRepository _iPagarReceberRepository;
         private readonly IClienteRepository _iClienteRepository;
-        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository)
+        private readonly IUsuarioRepository _iUsuarioRepository;
+        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iPagarReceberRepository = iPagarReceberRepository;
             _iClienteRepository = iClienteRepository;
+            _iUsuarioRepository = iUsuarioRepository;
         }
 
         public async Task<ServiceResponse<bool>> BulkInsertEfCoreAsync(List<PagarReceberDTO> pagarReceberDTO)
@@ -85,14 +87,16 @@ namespace TecWi_Web.Application.Services
                 Task<List<PagarReceber>> TaskPagarReceberPending = _iPagarReceberRepository.GetPendingPagarReceber();
                 Task<List<PagarReceber>> TaskPagarReceberPaid = _iPagarReceberRepository.GetPaidPagarReceber();
                 Task<List<PagarReceber>> TaskPagarReceberEfCore = _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
+                Task<List<Cliente>> TaskClienteEfCore = _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { });
 
-                await Task.WhenAll(TaskPagarReceberPending, TaskPagarReceberPaid, TaskPagarReceberEfCore);
+                await Task.WhenAll(TaskPagarReceberPending, TaskPagarReceberPaid, TaskPagarReceberEfCore, TaskClienteEfCore);
 
                 List<PagarReceber> pagarReceberPending = TaskPagarReceberPending.Result;
                 List<PagarReceber> pagarReceberPaid = TaskPagarReceberPaid.Result;
                 List<PagarReceber> pagarReceberEfCore = TaskPagarReceberEfCore.Result;
+                List<Cliente> clienteEFCore = TaskClienteEfCore.Result;
 
-                await InsertOrUpdateCliente(pagarReceberPending);
+                await InsertOrUpdateCliente(pagarReceberPending, clienteEFCore);
                 await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberPaid(pagarReceberPaid);
@@ -108,9 +112,13 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        private async Task InsertOrUpdateCliente(List<PagarReceber> pagarReceberPending)
+        private async Task InsertOrUpdateCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)
         {
             List<Cliente> cliente = GetUniqueClients(pagarReceberPending);
+            List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter());
+
+            AssingUsuarioToClienteRandonly(cliente.Where(x => !clienteEFCore.Any(y => y.Cdclifor == x.Cdclifor)).ToList(), usuario);
+
             if (cliente.Count > 0)
             {
                 await _iClienteRepository.BulkInsertOrUpdateAsync(cliente);

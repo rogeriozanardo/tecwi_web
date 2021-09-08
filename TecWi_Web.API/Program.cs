@@ -27,6 +27,7 @@ namespace TecWi_Web.API
                     DataContext dataContext = iServiceProvider.GetRequiredService<DataContext>();
                     await dataContext.Database.EnsureCreatedAsync();
                     await dataContext.Database.MigrateAsync();
+                    await DataContextSeed.SeedAsync(dataContext);
                 }
                 catch (Exception ex)
                 {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QhYTbugkhaCb6BGjPctoaj5fL4mvKf33kqj9imL2LG++fKknqP/jvRXvRdYqnNyVBQmues6nbfVnHobg2qMpZw==",
+  "dgSpecHash": "IkoSIqeo4gehD63+KgVYaFhu4j+70OuDHIhYhWUhdDigUnmruqRiHyQltAzxZzT7K+mFf4jxOYhzvTqMq+7Srg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adilson.Alves\\source\\repos\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
+  "projectFilePath": "D:\\GIT\\tecwi_web\\TecWi_Web.Domain\\TecWi_Web.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

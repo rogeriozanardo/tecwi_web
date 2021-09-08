@@ -8,25 +8,6 @@ namespace TecWi_Web.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Cliente",
-                columns: table => new
-                {
-                    Cdclifor = table.Column<int>(type: "int", nullable: false),
-                    Inscrifed = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Fantasia = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Razao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DDD = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Fone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Fone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cliente", x => x.Cdclifor);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Usuario",
                 columns: table => new
                 {
@@ -41,6 +22,49 @@ namespace TecWi_Web.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuario", x => x.IdUsuario);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cliente",
+                columns: table => new
+                {
+                    Cdclifor = table.Column<int>(type: "int", nullable: false),
+                    Inscrifed = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fantasia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Razao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DDD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cliente", x => x.Cdclifor);
+                    table.ForeignKey(
+                        name: "FK_Cliente_Usuario_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "Usuario",
+                        principalColumn: "IdUsuario");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsuarioAplicacao",
+                columns: table => new
+                {
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdAplicacao = table.Column<int>(type: "int", nullable: false),
+                    IdPerfil = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsuarioAplicacao", x => new { x.IdUsuario, x.IdAplicacao, x.IdPerfil });
+                    table.ForeignKey(
+                        name: "FK_UsuarioAplicacao_Usuario_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "Usuario",
+                        principalColumn: "IdUsuario");
                 });
 
             migrationBuilder.CreateTable(
@@ -69,23 +93,10 @@ namespace TecWi_Web.Data.Migrations
                         principalColumn: "Cdclifor");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UsuarioAplicacao",
-                columns: table => new
-                {
-                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdAplicacao = table.Column<int>(type: "int", nullable: false),
-                    IdPerfil = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsuarioAplicacao", x => new { x.IdUsuario, x.IdAplicacao, x.IdPerfil });
-                    table.ForeignKey(
-                        name: "FK_UsuarioAplicacao_Usuario_IdUsuario",
-                        column: x => x.IdUsuario,
-                        principalTable: "Usuario",
-                        principalColumn: "IdUsuario");
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_IdUsuario",
+                table: "Cliente",
+                column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PagarReceber_Cdclifor",
