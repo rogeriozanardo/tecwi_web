@@ -8,6 +8,24 @@ namespace TecWi_Web.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ContatoCobranca",
+                columns: table => new
+                {
+                    IdContato = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DtContato = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Anotacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TipoContato = table.Column<int>(type: "int", nullable: false),
+                    DtAgenda = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContatoCobranca", x => x.IdContato);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuario",
                 columns: table => new
                 {
@@ -75,13 +93,13 @@ namespace TecWi_Web.Data.Migrations
                     Sq = table.Column<int>(type: "int", nullable: false),
                     Cdfilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SeqID = table.Column<int>(type: "int", nullable: false),
+                    Cdclifor = table.Column<int>(type: "int", nullable: false),
                     Stcobranca = table.Column<bool>(type: "bit", nullable: false),
                     Dtemissao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Dtvencto = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Dtpagto = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Valorr = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    NotasFiscais = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cdclifor = table.Column<int>(type: "int", nullable: false)
+                    NotasFiscais = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,10 +111,39 @@ namespace TecWi_Web.Data.Migrations
                         principalColumn: "Cdclifor");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ContatoCobrancaLancamento",
+                columns: table => new
+                {
+                    IdContato = table.Column<int>(type: "int", nullable: false),
+                    Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Sq = table.Column<int>(type: "int", nullable: false),
+                    Cdfilial = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContatoCobrancaLancamento", x => new { x.IdContato, x.Numlancto, x.Sq, x.Cdfilial });
+                    table.ForeignKey(
+                        name: "FK_ContatoCobrancaLancamento_ContatoCobranca_IdContato",
+                        column: x => x.IdContato,
+                        principalTable: "ContatoCobranca",
+                        principalColumn: "IdContato");
+                    table.ForeignKey(
+                        name: "FK_ContatoCobrancaLancamento_PagarReceber_Numlancto_Sq_Cdfilial",
+                        columns: x => new { x.Numlancto, x.Sq, x.Cdfilial },
+                        principalTable: "PagarReceber",
+                        principalColumns: new[] { "Numlancto", "Sq", "Cdfilial" });
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cliente_IdUsuario",
                 table: "Cliente",
                 column: "IdUsuario");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContatoCobrancaLancamento_Numlancto_Sq_Cdfilial",
+                table: "ContatoCobrancaLancamento",
+                columns: new[] { "Numlancto", "Sq", "Cdfilial" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PagarReceber_Cdclifor",
@@ -107,10 +154,16 @@ namespace TecWi_Web.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PagarReceber");
+                name: "ContatoCobrancaLancamento");
 
             migrationBuilder.DropTable(
                 name: "UsuarioAplicacao");
+
+            migrationBuilder.DropTable(
+                name: "ContatoCobranca");
+
+            migrationBuilder.DropTable(
+                name: "PagarReceber");
 
             migrationBuilder.DropTable(
                 name: "Cliente");

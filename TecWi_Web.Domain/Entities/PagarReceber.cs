@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TecWi_Web.Domain.Entities
 {
@@ -9,18 +10,17 @@ namespace TecWi_Web.Domain.Entities
 
         }
 
-        public Cliente Cliente { get; set; }
         public int SeqID { get; private set; }
         public string Numlancto { get; private set; }
         public int Sq { get; set; }
-        public bool Stcobranca { get; set; } = true;
         public string Cdfilial { get; private set; }
+        public int Cdclifor { get; private set; }
+        public bool Stcobranca { get; set; } = true;
         public DateTime Dtemissao { get; private set; }
         public DateTime Dtvencto { get; private set; }
         public DateTime? Dtpagto { get; private set; }
         public decimal Valorr { get; private set; }
         public string NotasFiscais { get; private set; }
-        public int Cdclifor { get; private set; }
         public string Inscrifed { get; private set; }
         public string Fantasia { get; private set; }
         public string Razao { get; private set; }
@@ -29,6 +29,8 @@ namespace TecWi_Web.Domain.Entities
         public string Fone2 { get; private set; }
         public string Email { get; private set; }
         public string Cidade { get; private set; }
+        public Cliente Cliente { get; set; }
+        public List<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
 
         public void Update(bool stcobranca, DateTime dtpagto)
         {

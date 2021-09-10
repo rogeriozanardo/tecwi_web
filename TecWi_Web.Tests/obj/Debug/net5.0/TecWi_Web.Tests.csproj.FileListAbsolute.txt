@@ -1,4 +1,3 @@
-D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\net5.0\TecWi_Web.Tests.csprojAssemblyReference.cache
 C:\Users\Adilson.Alves\source\repos\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\NUnit3.TestAdapter.dll
 C:\Users\Adilson.Alves\source\repos\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\NUnit3.TestAdapter.pdb
 C:\Users\Adilson.Alves\source\repos\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\nunit.engine.dll
@@ -283,6 +282,7 @@ D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\TecWi_Web.Application.pdb
 D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\TecWi_Web.Data.pdb
 D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\TecWi_Web.Domain.pdb
 D:\GIT\tecwi_web\TecWi_Web.Tests\bin\Debug\net5.0\TecWi_Web.Shared.pdb
+D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\net5.0\TecWi_Web.Tests.csprojAssemblyReference.cache
 D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\net5.0\TecWi_Web.Tests.GeneratedMSBuildEditorConfig.editorconfig
 D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\net5.0\TecWi_Web.Tests.AssemblyInfoInputs.cache
 D:\GIT\tecwi_web\TecWi_Web.Tests\obj\Debug\net5.0\TecWi_Web.Tests.AssemblyInfo.cs

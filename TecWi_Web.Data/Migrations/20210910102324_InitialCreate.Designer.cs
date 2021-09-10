@@ -10,7 +10,7 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210908015527_InitialCreate")]
+    [Migration("20210910102324_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,57 @@ namespace TecWi_Web.Data.Migrations
                     b.HasIndex("IdUsuario");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobranca", b =>
+                {
+                    b.Property<int>("IdContato")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Anotacao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DtAgenda")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DtContato")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TipoContato")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdContato");
+
+                    b.ToTable("ContatoCobranca");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobrancaLancamento", b =>
+                {
+                    b.Property<int>("IdContato")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Numlancto")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Sq")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cdfilial")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("IdContato", "Numlancto", "Sq", "Cdfilial");
+
+                    b.HasIndex("Numlancto", "Sq", "Cdfilial");
+
+                    b.ToTable("ContatoCobrancaLancamento");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
@@ -164,6 +215,25 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobrancaLancamento", b =>
+                {
+                    b.HasOne("TecWi_Web.Domain.Entities.ContatoCobranca", "ContatoCobranca")
+                        .WithMany("ContatoCobrancaLancamento")
+                        .HasForeignKey("IdContato")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
+                        .WithMany("ContatoCobrancaLancamento")
+                        .HasForeignKey("Numlancto", "Sq", "Cdfilial")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ContatoCobranca");
+
+                    b.Navigation("PagarReceber");
+                });
+
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
@@ -189,6 +259,16 @@ namespace TecWi_Web.Data.Migrations
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Cliente", b =>
                 {
                     b.Navigation("PagarReceber");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobranca", b =>
+                {
+                    b.Navigation("ContatoCobrancaLancamento");
+                });
+
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
+                {
+                    b.Navigation("ContatoCobrancaLancamento");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Usuario", b =>
