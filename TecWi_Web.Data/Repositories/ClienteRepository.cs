@@ -39,6 +39,7 @@ namespace TecWi_Web.Data.Repositories
         {
             IQueryable<Cliente> _cliente = _dataContext.Cliente
                 .Include(x => x.PagarReceber.Where(x => x.Stcobranca && x.Dtpagto == null))
+                .Include(x => x.ContatoCobranca.Where(x => x.DtAgenda.Day <= DateTime.Now.Day))
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)

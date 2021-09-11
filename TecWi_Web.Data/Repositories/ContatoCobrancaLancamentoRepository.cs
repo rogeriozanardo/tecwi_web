@@ -23,7 +23,7 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => contatoCobrancaLancamentoFilter.IdContato != 0 ? x.IdContato == contatoCobrancaLancamentoFilter.IdContato : true)
                 .Where(x => !string.IsNullOrWhiteSpace(contatoCobrancaLancamentoFilter.Numlancto) ? x.Numlancto == contatoCobrancaLancamentoFilter.Numlancto : true)
                 .Where(x => contatoCobrancaLancamentoFilter.Sq != 0 ? x.Sq == contatoCobrancaLancamentoFilter.Sq : true)
-                .Where(x => !string.IsNullOrWhiteSpace(contatoCobrancaLancamentoFilter.Cdfilial) ? x.Cdfilial == contatoCobrancaLancamentoFilter.Cdfilial : true);
+                .Where(x => !string.IsNullOrWhiteSpace(contatoCobrancaLancamentoFilter.Cdfilial) ? x.CdFilial == contatoCobrancaLancamentoFilter.Cdfilial : true);
 
             List<ContatoCobrancaLancamento> contatoCobrancaLancamento = await _contatoCobrancaLancamento
                 .AsNoTracking()

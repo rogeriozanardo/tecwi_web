@@ -3,8 +3,8 @@
     public class ContatoCobrancaLancamentoDTO
     {
         public int IdContato { get; set; }
-        public string Numlancto { get; private set; }
+        public string Numlancto { get; set; }
         public int Sq { get; set; }
-        public string Cdfilial { get; private set; }
+        public string CdFilial { get; set; }
     }
 }

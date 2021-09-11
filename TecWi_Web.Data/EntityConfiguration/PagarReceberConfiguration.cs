@@ -8,7 +8,7 @@ namespace TecWi_Web.Data.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<PagarReceber> entityTypeBuilder)
         {
-            entityTypeBuilder.HasKey(x => new { numlancto = x.Numlancto, sq = x.Sq, cdfilial = x.Cdfilial });
+            entityTypeBuilder.HasKey(x => new { numlancto = x.Numlancto, sq = x.Sq, dfilial = x.Cdfilial});
             entityTypeBuilder.HasOne(x => x.Cliente)
                 .WithMany(x => x.PagarReceber)
                 .HasForeignKey(x => x.Cdclifor)

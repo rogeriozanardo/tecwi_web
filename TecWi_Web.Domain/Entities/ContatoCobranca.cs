@@ -23,6 +23,7 @@ namespace TecWi_Web.Domain.Entities
         public Cliente Cliente { get; set; }
         public List<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
 
+        private string IdContatoInvalido = "Id inválido!";
         private string IdClienteInvalido = "Cliente inválido!";
         private string IdUsuarioInvalido = "Usuário inválido!";
         private string DtContatoInvalido = "Data contato inválida!";
@@ -30,7 +31,7 @@ namespace TecWi_Web.Domain.Entities
         private string DataAgendaInvalido = "Data agenda inválida!";
         private void ValidateDomain(int idCliente, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
         {
-            DomainValidadorException.Whem(IdCliente == 0, IdClienteInvalido);
+            DomainValidadorException.Whem(idCliente == 0, IdClienteInvalido);
             IdCliente = idCliente;
 
             DomainValidadorException.Whem(idUsuario == new Guid(), IdUsuarioInvalido);
@@ -44,8 +45,14 @@ namespace TecWi_Web.Domain.Entities
 
             TipoContato = tipoContato;
 
-            DomainValidadorException.Whem(dtAgenda.DayOfYear != DateTime.Now.DayOfYear, DataAgendaInvalido);
+            DomainValidadorException.Whem(dtAgenda.DayOfYear < DateTime.Now.DayOfYear, DataAgendaInvalido);
             DtAgenda = dtAgenda;
+        }
+
+        public void Update(int idContato)
+        {
+            DomainValidadorException.Whem(idContato == 0, IdContatoInvalido);
+            IdContato = idContato;
         }
     }
 }

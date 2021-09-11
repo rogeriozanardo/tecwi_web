@@ -39,6 +39,7 @@ namespace TecWi_Web.Data.Repositories
         public async Task<int> InsertAsync(ContatoCobranca contatoCobranca)
         {
             await _dataContext.ContatoCobranca.AddAsync(contatoCobranca);
+            await _dataContext.SaveChangesAsync();
             return contatoCobranca.IdContato;
             
         }
