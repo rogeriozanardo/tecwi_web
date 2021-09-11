@@ -29,7 +29,7 @@ namespace TecWi_Web.Application.Services
             try
             {
                 List<Cliente> cliente = _iMapper.Map<List<Cliente>>(clienteDTO);
-                await _iClienteRepository.BulkInsertOrUpdateAsync(cliente);
+                await _iClienteRepository.BulkInsertAsync(cliente);
                 await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)

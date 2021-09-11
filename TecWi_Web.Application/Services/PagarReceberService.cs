@@ -121,7 +121,7 @@ namespace TecWi_Web.Application.Services
 
             if (cliente.Count > 0)
             {
-                await _iClienteRepository.BulkInsertOrUpdateAsync(cliente);
+                await _iClienteRepository.BulkInsertAsync(cliente);
             }
         }
 

@@ -19,9 +19,19 @@ namespace TecWi_Web.Data.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<bool> BulkInsertOrUpdateAsync(List<Cliente> cliente)
+        public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
         {
             await _dataContext.AddRangeAsync(cliente);
+            return true;
+        }
+
+        public async Task<bool> BulkUpdateAsync(List<Cliente> cliente)
+        {
+            await Task.Run(() =>
+            {
+                _dataContext.UpdateRange(cliente);
+            });
+
             return true;
         }
 
@@ -40,11 +50,11 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => clientePagarReceberFilter.dtvenctoEnd != null ? x.PagarReceber.Where(y => y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.NotasFiscais) ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
 
-                List<Cliente> cliente = await _cliente
-                .AsNoTracking()
-                .Skip((clientePagarReceberFilter.PageNumber - 1) * clientePagarReceberFilter.PageSize)
-                .Take(clientePagarReceberFilter.PageSize)
-                .ToListAsync();
+            List<Cliente> cliente = await _cliente
+            .AsNoTracking()
+            .Skip((clientePagarReceberFilter.PageNumber - 1) * clientePagarReceberFilter.PageSize)
+            .Take(clientePagarReceberFilter.PageSize)
+            .ToListAsync();
 
             return cliente;
         }

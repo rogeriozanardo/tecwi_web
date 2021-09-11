@@ -19,6 +19,8 @@ namespace TecWi_Web.Domain.Entities
         public string Anotacao { get; private set; }
         public TipoContato TipoContato { get; private set; }
         public DateTime DtAgenda { get; private set; }
+        public Usuario Usuario { get; set; }
+        public Cliente Cliente { get; set; }
         public List<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
 
         private string IdClienteInvalido = "Cliente inválido!";
