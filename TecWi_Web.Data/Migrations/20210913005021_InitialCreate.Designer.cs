@@ -10,7 +10,7 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210912235346_InitialCreate")]
+    [Migration("20210913005021_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

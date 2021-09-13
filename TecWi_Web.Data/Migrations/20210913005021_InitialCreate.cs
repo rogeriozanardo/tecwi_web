@@ -29,6 +29,7 @@ namespace TecWi_Web.Data.Migrations
                 columns: table => new
                 {
                     Cdclifor = table.Column<int>(type: "int", nullable: false),
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Inscrifed = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fantasia = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Razao = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -36,8 +37,7 @@ namespace TecWi_Web.Data.Migrations
                     Fone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
