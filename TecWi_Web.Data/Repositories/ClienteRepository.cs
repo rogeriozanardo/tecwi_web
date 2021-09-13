@@ -38,8 +38,10 @@ namespace TecWi_Web.Data.Repositories
         public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
             IQueryable<Cliente> _cliente = _dataContext.Cliente
-                .Include(x => x.PagarReceber.Where(x => x.Stcobranca && x.Dtpagto == null))
-                .Include(x => x.ContatoCobranca.Where(x => x.DtAgenda.Day <= DateTime.Now.Day))
+                .Include(x => x.PagarReceber)
+                .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
+                .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
+                .Where(x => x.ContatoCobranca.Any(y => y.DtAgenda.DayOfYear >= DateTime.Now.DayOfYear))
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)

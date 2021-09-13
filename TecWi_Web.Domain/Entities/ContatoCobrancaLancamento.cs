@@ -10,6 +10,11 @@ namespace TecWi_Web.Domain.Entities
             ValidateDomain(idContato, numlancto, sq, cdfilial);
         }
 
+        public ContatoCobrancaLancamento()
+        {
+
+        }
+
         public int IdContato { get; set; }
         public string Numlancto { get; private set; }
         public int Sq { get; private set; }
@@ -21,7 +26,7 @@ namespace TecWi_Web.Domain.Entities
         private string NumlanctoInvalido = "Campo 'Numlancto' inválido!";
         private string SqInvalido = "Campo 'Sq' inválido!";
         private string CdfilialInvalido = "Campo 'Cdfilial' inválido!";
-        private void ValidateDomain(int idContato, string numlancto, int sq, string cdifilial)
+        private void ValidateDomain(int idContato, string numlancto, int sq, string cdfilial)
         {
             DomainValidadorException.Whem(idContato == 0, IdContatoInvalido);
             IdContato = idContato;
@@ -32,8 +37,8 @@ namespace TecWi_Web.Domain.Entities
             DomainValidadorException.Whem(sq == 0, SqInvalido);
             Sq = sq;
 
-            DomainValidadorException.Whem(string.IsNullOrWhiteSpace(cdifilial), CdfilialInvalido);
-            CdFilial = cdifilial;
+            DomainValidadorException.Whem(string.IsNullOrWhiteSpace(cdfilial), CdfilialInvalido);
+            CdFilial = cdfilial;
         }
     }
 }

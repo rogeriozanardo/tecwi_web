@@ -103,12 +103,12 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<int>("Sq")
                         .HasColumnType("int");
 
-                    b.Property<string>("dfilial")
+                    b.Property<string>("CdFilial")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("IdContato", "Numlancto", "Sq", "dfilial");
+                    b.HasKey("IdContato", "Numlancto", "Sq", "CdFilial");
 
-                    b.HasIndex("Numlancto", "Sq", "dfilial");
+                    b.HasIndex("Numlancto", "Sq", "CdFilial");
 
                     b.ToTable("ContatoCobrancaLancamento");
                 });
@@ -121,7 +121,7 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<int>("Sq")
                         .HasColumnType("int");
 
-                    b.Property<string>("dfilial")
+                    b.Property<string>("Cdfilial")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Cdclifor")
@@ -149,7 +149,7 @@ namespace TecWi_Web.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Numlancto", "Sq", "dfilial");
+                    b.HasKey("Numlancto", "Sq", "Cdfilial");
 
                     b.HasIndex("Cdclifor");
 
@@ -246,7 +246,7 @@ namespace TecWi_Web.Data.Migrations
 
                     b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
                         .WithMany("ContatoCobrancaLancamento")
-                        .HasForeignKey("Numlancto", "Sq", "dfilial")
+                        .HasForeignKey("Numlancto", "Sq", "CdFilial")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

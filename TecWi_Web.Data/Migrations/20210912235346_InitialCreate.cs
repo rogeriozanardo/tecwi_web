@@ -101,7 +101,7 @@ namespace TecWi_Web.Data.Migrations
                 {
                     Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sq = table.Column<int>(type: "int", nullable: false),
-                    dfilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Cdfilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SeqID = table.Column<int>(type: "int", nullable: false),
                     Cdclifor = table.Column<int>(type: "int", nullable: false),
                     Stcobranca = table.Column<bool>(type: "bit", nullable: false),
@@ -113,7 +113,7 @@ namespace TecWi_Web.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PagarReceber", x => new { x.Numlancto, x.Sq, x.dfilial });
+                    table.PrimaryKey("PK_PagarReceber", x => new { x.Numlancto, x.Sq, x.Cdfilial });
                     table.ForeignKey(
                         name: "FK_PagarReceber_Cliente_Cdclifor",
                         column: x => x.Cdclifor,
@@ -128,21 +128,21 @@ namespace TecWi_Web.Data.Migrations
                     IdContato = table.Column<int>(type: "int", nullable: false),
                     Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sq = table.Column<int>(type: "int", nullable: false),
-                    dfilial = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CdFilial = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContatoCobrancaLancamento", x => new { x.IdContato, x.Numlancto, x.Sq, x.dfilial });
+                    table.PrimaryKey("PK_ContatoCobrancaLancamento", x => new { x.IdContato, x.Numlancto, x.Sq, x.CdFilial });
                     table.ForeignKey(
                         name: "FK_ContatoCobrancaLancamento_ContatoCobranca_IdContato",
                         column: x => x.IdContato,
                         principalTable: "ContatoCobranca",
                         principalColumn: "IdContato");
                     table.ForeignKey(
-                        name: "FK_ContatoCobrancaLancamento_PagarReceber_Numlancto_Sq_dfilial",
-                        columns: x => new { x.Numlancto, x.Sq, x.dfilial },
+                        name: "FK_ContatoCobrancaLancamento_PagarReceber_Numlancto_Sq_CdFilial",
+                        columns: x => new { x.Numlancto, x.Sq, x.CdFilial },
                         principalTable: "PagarReceber",
-                        principalColumns: new[] { "Numlancto", "Sq", "dfilial" });
+                        principalColumns: new[] { "Numlancto", "Sq", "Cdfilial" });
                 });
 
             migrationBuilder.CreateIndex(
@@ -161,9 +161,9 @@ namespace TecWi_Web.Data.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContatoCobrancaLancamento_Numlancto_Sq_dfilial",
+                name: "IX_ContatoCobrancaLancamento_Numlancto_Sq_CdFilial",
                 table: "ContatoCobrancaLancamento",
-                columns: new[] { "Numlancto", "Sq", "dfilial" });
+                columns: new[] { "Numlancto", "Sq", "CdFilial" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PagarReceber_Cdclifor",

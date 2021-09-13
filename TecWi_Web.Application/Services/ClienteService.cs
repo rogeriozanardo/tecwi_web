@@ -47,6 +47,7 @@ namespace TecWi_Web.Application.Services
             {
                 List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
+
                 serviceResponse.Data = clienteDTO;
             }
             catch (Exception ex)
