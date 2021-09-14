@@ -6,14 +6,18 @@ namespace TecWi_Web.Domain.Entities
 {
     public class Cliente
     {
+        public Cliente()
+        {
+
+        }
         public Cliente(int cdclifor, string inscrifed, string fantasia, string razao, string ddd, string fone1, string fone2, string email, string cidade)
         {
             ValidateDomain(cdclifor, inscrifed, fantasia, razao, ddd, fone1, fone2, email, cidade);
         }
 
-        public Cliente()
+        public void Update(int cdclifor, string inscrifed, string fantasia, string razao, string ddd, string fone1, string fone2, string email, string cidade)
         {
-
+            ValidateDomain(cdclifor, inscrifed, fantasia, razao, ddd, fone1, fone2, email, cidade);
         }
 
         public int Cdclifor { get; private set; }

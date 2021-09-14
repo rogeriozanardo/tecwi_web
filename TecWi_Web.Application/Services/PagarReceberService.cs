@@ -87,7 +87,7 @@ namespace TecWi_Web.Application.Services
                 Task<List<PagarReceber>> TaskPagarReceberPending = _iPagarReceberRepository.GetPendingPagarReceber();
                 Task<List<PagarReceber>> TaskPagarReceberPaid = _iPagarReceberRepository.GetPaidPagarReceber();
                 Task<List<PagarReceber>> TaskPagarReceberEfCore = _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
-                Task<List<Cliente>> TaskClienteEfCore = _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { });
+                Task<List<Cliente>> TaskClienteEfCore = _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { }, Guid.Empty);
 
                 await Task.WhenAll(TaskPagarReceberPending, TaskPagarReceberPaid, TaskPagarReceberEfCore, TaskClienteEfCore);
 
@@ -96,7 +96,8 @@ namespace TecWi_Web.Application.Services
                 List<PagarReceber> pagarReceberEfCore = TaskPagarReceberEfCore.Result;
                 List<Cliente> clienteEFCore = TaskClienteEfCore.Result;
 
-                await InsertOrUpdateCliente(pagarReceberPending, clienteEFCore);
+                await InsertCliente(pagarReceberPending, clienteEFCore);
+                await UpdateCliente(pagarReceberPending, clienteEFCore);
                 await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberPaid(pagarReceberPaid);
@@ -112,17 +113,38 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        private async Task InsertOrUpdateCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)
+        private async Task InsertCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)
         {
             List<Cliente> cliente = GetUniqueClients(pagarReceberPending);
+            List<Cliente> clienteToInsert = cliente.Where(x => !clienteEFCore.Any(y => y.Cdclifor == x.Cdclifor)).ToList();
             List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter());
 
-            AssingUsuarioToClienteRandonly(cliente.Where(x => !clienteEFCore.Any(y => y.Cdclifor == x.Cdclifor)).ToList(), usuario);
+            AssingUsuarioToClienteRandonly(clienteToInsert, usuario);
 
-            if (cliente.Count > 0)
+            if (clienteToInsert.Count > 0)
             {
-                await _iClienteRepository.BulkInsertAsync(cliente);
+                await _iClienteRepository.BulkInsertAsync(clienteToInsert);
             }
+        }
+
+        private async Task UpdateCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)
+        {
+            List<Cliente> cliente = GetUniqueClients(pagarReceberPending);
+            List<Cliente> clienteEfCore = cliente.Where(x => clienteEFCore.Any(y => y.Cdclifor == x.Cdclifor)).ToList();
+            List<Cliente> clienteToUpdate = new List<Cliente>();
+            foreach (Cliente _cliente in clienteEfCore)
+            {
+                Cliente _clienteEfCore = clienteEFCore.FirstOrDefault(x => x.Cdclifor == _cliente.Cdclifor);
+                if (_clienteEfCore == null)
+                {
+                    continue;
+                }
+
+                _clienteEfCore.Update(_cliente.Cdclifor,  _cliente.Inscrifed, _cliente.Fantasia, _cliente.Razao, _cliente.DDD, _cliente.Fone1, _cliente.Fone2, _cliente.Email, _cliente.Cidade); ;
+                clienteToUpdate.Add(_clienteEfCore);
+            }
+
+            await _iClienteRepository.BulkUpdateAsync(clienteToUpdate);
         }
 
         private async Task InsertPagarReceber(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)

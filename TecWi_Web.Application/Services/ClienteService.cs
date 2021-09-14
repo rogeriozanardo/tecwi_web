@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
@@ -16,12 +18,16 @@ namespace TecWi_Web.Application.Services
         private readonly IMapper _iMapper;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IClienteRepository _iClienteRepository;
-        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository)
+        private readonly IHttpContextAccessor _ihttpContextAccessor;
+        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository, IHttpContextAccessor iHttpContextAccessor)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iClienteRepository = iClienteRepository;
+            _ihttpContextAccessor = iHttpContextAccessor;
         }
+
+        private Guid GetUserId() => Guid.Parse(_ihttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
         {
@@ -45,7 +51,8 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();
             try
             {
-                List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
+                Guid IdUsuario = GetUserId();
+                List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter, IdUsuario);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
 
                 serviceResponse.Data = clienteDTO;
