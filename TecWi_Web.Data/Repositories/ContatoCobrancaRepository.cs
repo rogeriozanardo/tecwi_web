@@ -21,7 +21,7 @@ namespace TecWi_Web.Data.Repositories
         {
             IQueryable<ContatoCobranca> _contatoCobranca = _dataContext.ContatoCobranca
                 .Include(x => x.ContatoCobrancaLancamento)
-                .Where(x => contatoCobrancaFilter.IdCliente != 0 ? x.IdCliente == contatoCobrancaFilter.IdCliente : true)
+                .Where(x => contatoCobrancaFilter.IdCliente != 0 ? x.Cdclifor == contatoCobrancaFilter.IdCliente : true)
                 .Where(x => contatoCobrancaFilter.IdUsuario != new Guid() ? x.IdUsuario == contatoCobrancaFilter.IdUsuario : true)
                 .Where(x => contatoCobrancaFilter.DtContatoStart != null ? x.DtContato >= contatoCobrancaFilter.DtContatoStart : true)
                 .Where(x => contatoCobrancaFilter.DtContatoEnd != null ? x.DtContato <= contatoCobrancaFilter.DtContatoEnd : true)

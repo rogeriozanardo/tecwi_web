@@ -7,13 +7,18 @@ namespace TecWi_Web.Domain.Entities
 {
     public class ContatoCobranca
     {
-        public ContatoCobranca(int idCliente, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        public ContatoCobranca(int Cdclifor, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
         {
-            ValidateDomain(idCliente, IdUsuario, dtContato, anotacao, tipoContato, dtAgenda);
+            ValidateDomain(Cdclifor, IdUsuario, dtContato, anotacao, tipoContato, dtAgenda);
+        }
+
+        public ContatoCobranca()
+        {
+
         }
 
         public int IdContato { get; private set; }
-        public int IdCliente { get; private set; }
+        public int Cdclifor { get; private set; }
         public Guid IdUsuario { get; private set; }
         public DateTime DtContato { get; private set; }
         public string Anotacao { get; private set; }
@@ -24,15 +29,15 @@ namespace TecWi_Web.Domain.Entities
         public List<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
 
         private string IdContatoInvalido = "Id inválido!";
-        private string IdClienteInvalido = "Cliente inválido!";
+        private string CdcliforInvalido = "Cliente inválido!";
         private string IdUsuarioInvalido = "Usuário inválido!";
         private string DtContatoInvalido = "Data contato inválida!";
         private string AnotacaoInvalido = "Anotação inválida!";
         private string DataAgendaInvalido = "Data agenda inválida!";
-        private void ValidateDomain(int idCliente, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        private void ValidateDomain(int cdclifor, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
         {
-            DomainValidadorException.Whem(idCliente == 0, IdClienteInvalido);
-            IdCliente = idCliente;
+            DomainValidadorException.Whem(cdclifor == 0, CdcliforInvalido);
+            Cdclifor = cdclifor;
 
             DomainValidadorException.Whem(idUsuario == new Guid(), IdUsuarioInvalido);
             IdUsuario = idUsuario;

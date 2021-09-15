@@ -10,7 +10,7 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210913005021_InitialCreate")]
+    [Migration("20210914123332_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,14 +70,14 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("Anotacao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Cdclifor")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DtAgenda")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DtContato")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("IdUsuario")
                         .HasColumnType("uniqueidentifier");
@@ -87,7 +87,7 @@ namespace TecWi_Web.Data.Migrations
 
                     b.HasKey("IdContato");
 
-                    b.HasIndex("IdCliente");
+                    b.HasIndex("Cdclifor");
 
                     b.HasIndex("IdUsuario");
 
@@ -223,7 +223,7 @@ namespace TecWi_Web.Data.Migrations
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
                         .WithMany("ContatoCobranca")
-                        .HasForeignKey("IdCliente")
+                        .HasForeignKey("Cdclifor")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

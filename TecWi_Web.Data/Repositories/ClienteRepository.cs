@@ -41,8 +41,7 @@ namespace TecWi_Web.Data.Repositories
                 .Include(x => x.PagarReceber)
                 .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
                 .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
-                .Where(x => IdUsuario != Guid.Empty ? x.IdUsuario == IdUsuario : true)
-                .Where(x => IdUsuario != Guid.Empty ? x.ContatoCobranca.Any(y => y.DtAgenda.DayOfYear >= DateTime.Now.DayOfYear) : true)
+                .Where(x => IdUsuario != Guid.Empty ? x.IdUsuario == IdUsuario || x.ContatoCobranca.Any(y => y.DtAgenda.DayOfYear <= DateTime.Now.DayOfYear) : true)
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)
@@ -56,8 +55,6 @@ namespace TecWi_Web.Data.Repositories
 
             List<Cliente> cliente = await _cliente
             .AsNoTracking()
-            .Skip((clientePagarReceberFilter.PageNumber - 1) * clientePagarReceberFilter.PageSize)
-            .Take(clientePagarReceberFilter.PageSize)
             .ToListAsync();
 
             return cliente;

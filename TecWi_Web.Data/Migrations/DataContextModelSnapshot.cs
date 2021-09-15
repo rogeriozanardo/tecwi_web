@@ -68,14 +68,14 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("Anotacao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Cdclifor")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DtAgenda")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DtContato")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("IdUsuario")
                         .HasColumnType("uniqueidentifier");
@@ -85,7 +85,7 @@ namespace TecWi_Web.Data.Migrations
 
                     b.HasKey("IdContato");
 
-                    b.HasIndex("IdCliente");
+                    b.HasIndex("Cdclifor");
 
                     b.HasIndex("IdUsuario");
 
@@ -221,7 +221,7 @@ namespace TecWi_Web.Data.Migrations
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
                         .WithMany("ContatoCobranca")
-                        .HasForeignKey("IdCliente")
+                        .HasForeignKey("Cdclifor")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

@@ -73,7 +73,7 @@ namespace TecWi_Web.Data.Migrations
                 {
                     IdContato = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdCliente = table.Column<int>(type: "int", nullable: false),
+                    Cdclifor = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DtContato = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Anotacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -84,8 +84,8 @@ namespace TecWi_Web.Data.Migrations
                 {
                     table.PrimaryKey("PK_ContatoCobranca", x => x.IdContato);
                     table.ForeignKey(
-                        name: "FK_ContatoCobranca_Cliente_IdCliente",
-                        column: x => x.IdCliente,
+                        name: "FK_ContatoCobranca_Cliente_Cdclifor",
+                        column: x => x.Cdclifor,
                         principalTable: "Cliente",
                         principalColumn: "Cdclifor");
                     table.ForeignKey(
@@ -151,9 +151,9 @@ namespace TecWi_Web.Data.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContatoCobranca_IdCliente",
+                name: "IX_ContatoCobranca_Cdclifor",
                 table: "ContatoCobranca",
-                column: "IdCliente");
+                column: "Cdclifor");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContatoCobranca_IdUsuario",
