@@ -9,6 +9,16 @@ namespace TecWi_Web.Data.EntityConfiguration
         public void Configure(EntityTypeBuilder<ContatoCobranca> entityTypeBuilder)
         {
             entityTypeBuilder.HasKey(x => x.IdContato);
+
+            entityTypeBuilder.HasOne(x => x.Usuario)
+                .WithMany(x => x.ContatoCobranca)
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entityTypeBuilder.HasOne(x => x.Cliente)
+                .WithMany(x => x.ContatoCobranca)
+                .HasForeignKey(x => x.Cdclifor)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

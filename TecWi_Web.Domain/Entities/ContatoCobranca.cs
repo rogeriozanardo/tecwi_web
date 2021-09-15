@@ -7,29 +7,37 @@ namespace TecWi_Web.Domain.Entities
 {
     public class ContatoCobranca
     {
-        public ContatoCobranca(int idCliente, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        public ContatoCobranca(int Cdclifor, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
         {
-            ValidateDomain(idCliente, IdUsuario, dtContato, anotacao, tipoContato, dtAgenda);
+            ValidateDomain(Cdclifor, IdUsuario, dtContato, anotacao, tipoContato, dtAgenda);
+        }
+
+        public ContatoCobranca()
+        {
+
         }
 
         public int IdContato { get; private set; }
-        public int IdCliente { get; private set; }
+        public int Cdclifor { get; private set; }
         public Guid IdUsuario { get; private set; }
         public DateTime DtContato { get; private set; }
         public string Anotacao { get; private set; }
         public TipoContato TipoContato { get; private set; }
         public DateTime DtAgenda { get; private set; }
+        public Usuario Usuario { get; set; }
+        public Cliente Cliente { get; set; }
         public List<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
 
-        private string IdClienteInvalido = "Cliente inválido!";
+        private string IdContatoInvalido = "Id inválido!";
+        private string CdcliforInvalido = "Cliente inválido!";
         private string IdUsuarioInvalido = "Usuário inválido!";
         private string DtContatoInvalido = "Data contato inválida!";
         private string AnotacaoInvalido = "Anotação inválida!";
         private string DataAgendaInvalido = "Data agenda inválida!";
-        private void ValidateDomain(int idCliente, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        private void ValidateDomain(int cdclifor, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
         {
-            DomainValidadorException.Whem(IdCliente == 0, IdClienteInvalido);
-            IdCliente = idCliente;
+            DomainValidadorException.Whem(cdclifor == 0, CdcliforInvalido);
+            Cdclifor = cdclifor;
 
             DomainValidadorException.Whem(idUsuario == new Guid(), IdUsuarioInvalido);
             IdUsuario = idUsuario;
@@ -42,8 +50,14 @@ namespace TecWi_Web.Domain.Entities
 
             TipoContato = tipoContato;
 
-            DomainValidadorException.Whem(dtAgenda.DayOfYear != DateTime.Now.DayOfYear, DataAgendaInvalido);
+            DomainValidadorException.Whem(dtAgenda.DayOfYear < DateTime.Now.DayOfYear, DataAgendaInvalido);
             DtAgenda = dtAgenda;
+        }
+
+        public void Update(int idContato)
+        {
+            DomainValidadorException.Whem(idContato == 0, IdContatoInvalido);
+            IdContato = idContato;
         }
     }
 }

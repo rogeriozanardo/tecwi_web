@@ -8,10 +8,19 @@ namespace TecWi_Web.Application.MappingProfiles
     {
         public MappingProfile()
         {
-            CreateMap<UsuarioDTO, Usuario>().ReverseMap();
-            CreateMap<UsuarioAplicacaoDTO, UsuarioAplicacao>().ReverseMap();
+            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            CreateMap<UsuarioAplicacao, UsuarioAplicacaoDTO>().ReverseMap();
             CreateMap<PagarReceber, PagarReceberDTO>().ReverseMap();
-            CreateMap<Cliente, ClienteDTO>().ReverseMap();
+            CreateMap<Cliente, ClienteDTO>()
+                .ForMember(dest => dest.ContatoCobrancaDTO, opt => opt.MapFrom(src => src.ContatoCobranca))
+                .ForMember(dest => dest.PagarReceberDTO, opt => opt.MapFrom(src => src.PagarReceber));
+            CreateMap<ContatoCobranca, ContatoCobrancaDTO>()
+                .ForMember(dest => dest.ContatoCobrancaLancamentoDTO, opt => opt.MapFrom(src => src.ContatoCobrancaLancamento));
+            CreateMap<ContatoCobrancaLancamento, ContatoCobrancaLancamentoDTO>().ReverseMap();
+
+            CreateMap<ClienteDTO, Cliente>();
+            CreateMap<ContatoCobrancaDTO, ContatoCobranca>();
+            CreateMap<ContatoCobrancaLancamentoDTO, ContatoCobrancaLancamento>();
         }
     }
 }

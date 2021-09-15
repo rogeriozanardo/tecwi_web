@@ -68,14 +68,14 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("Anotacao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Cdclifor")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DtAgenda")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DtContato")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("IdUsuario")
                         .HasColumnType("uniqueidentifier");
@@ -84,6 +84,10 @@ namespace TecWi_Web.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("IdContato");
+
+                    b.HasIndex("Cdclifor");
+
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("ContatoCobranca");
                 });
@@ -99,12 +103,12 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<int>("Sq")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cdfilial")
+                    b.Property<string>("CdFilial")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("IdContato", "Numlancto", "Sq", "Cdfilial");
+                    b.HasKey("IdContato", "Numlancto", "Sq", "CdFilial");
 
-                    b.HasIndex("Numlancto", "Sq", "Cdfilial");
+                    b.HasIndex("Numlancto", "Sq", "CdFilial");
 
                     b.ToTable("ContatoCobrancaLancamento");
                 });
@@ -213,6 +217,25 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobranca", b =>
+                {
+                    b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
+                        .WithMany("ContatoCobranca")
+                        .HasForeignKey("Cdclifor")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("ContatoCobranca")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobrancaLancamento", b =>
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.ContatoCobranca", "ContatoCobranca")
@@ -223,7 +246,7 @@ namespace TecWi_Web.Data.Migrations
 
                     b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
                         .WithMany("ContatoCobrancaLancamento")
-                        .HasForeignKey("Numlancto", "Sq", "Cdfilial")
+                        .HasForeignKey("Numlancto", "Sq", "CdFilial")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -256,6 +279,8 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Cliente", b =>
                 {
+                    b.Navigation("ContatoCobranca");
+
                     b.Navigation("PagarReceber");
                 });
 
@@ -272,6 +297,8 @@ namespace TecWi_Web.Data.Migrations
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Usuario", b =>
                 {
                     b.Navigation("Cliente");
+
+                    b.Navigation("ContatoCobranca");
 
                     b.Navigation("UsuarioAplicacao");
                 });

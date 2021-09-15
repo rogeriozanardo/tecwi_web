@@ -65,7 +65,7 @@ namespace TecWi_Web.Data.Repositories
 
         private string GetPendingPagarReceberSQL()
         {
-            return @"select top 5 p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.valorr, string_agg(nf.NumNota, ', ') as NotasFiscais,  
+            return @"select p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.valorr, string_agg(nf.NumNota, ', ') as NotasFiscais,  
             p.cdclifor, e.inscrifed,  e.fantasia, e.razao, e.ddd, e.fone1, e.fone2, e.email, trim(e.cidade)+ ' - ' + e.uf as cidade from 
             PagarReceber p with(nolock)
             left join ntfiscal nf with(nolock) on nf.NumPedido=p.numpedido

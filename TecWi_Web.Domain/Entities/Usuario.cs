@@ -15,6 +15,7 @@ namespace TecWi_Web.Domain.Entities
         public byte[] SenhaHash { get; private set; }
         public List<UsuarioAplicacao> UsuarioAplicacao { get;set; }
         public List<Cliente> Cliente { get; set; }
+        public List<ContatoCobranca> ContatoCobranca { get; set; }
 
         public Usuario(Guid idUsuario, string login, string nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
         {

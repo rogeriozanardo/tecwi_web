@@ -8,11 +8,11 @@ namespace TecWi_Web.Data.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<ContatoCobrancaLancamento> entityTypeBuilder)
         {
-            entityTypeBuilder.HasKey(x => new { idContato = x.IdContato, numlancto = x.Numlancto, sq = x.Sq, cdfilial = x.Cdfilial });
+            entityTypeBuilder.HasKey(x => new { idContato = x.IdContato, numlancto = x.Numlancto, sq = x.Sq, dfilial = x.CdFilial });
 
             entityTypeBuilder.HasOne(x => x.PagarReceber)
                 .WithMany(x => x.ContatoCobrancaLancamento)
-                .HasForeignKey(x => new { numlancto = x.Numlancto, sq = x.Sq, cdfilial = x.Cdfilial })
+                .HasForeignKey(x => new { numlancto = x.Numlancto, sq = x.Sq, dfilial = x.CdFilial })
                 .OnDelete(DeleteBehavior.NoAction);
 
             entityTypeBuilder.HasOne(x => x.ContatoCobranca)

@@ -19,16 +19,29 @@ namespace TecWi_Web.Data.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<bool> BulkInsertOrUpdateAsync(List<Cliente> cliente)
+        public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
         {
             await _dataContext.AddRangeAsync(cliente);
             return true;
         }
 
-        public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
+        public async Task<bool> BulkUpdateAsync(List<Cliente> cliente)
+        {
+            await Task.Run(() =>
+            {
+                _dataContext.UpdateRange(cliente);
+            });
+
+            return true;
+        }
+
+        public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter, Guid IdUsuario)
         {
             IQueryable<Cliente> _cliente = _dataContext.Cliente
-                .Include(x => x.PagarReceber.Where(x => x.Stcobranca && x.Dtpagto == null))
+                .Include(x => x.PagarReceber)
+                .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
+                .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
+                .Where(x => IdUsuario != Guid.Empty ? x.IdUsuario == IdUsuario || x.ContatoCobranca.Any(y => y.DtAgenda.DayOfYear <= DateTime.Now.DayOfYear) : true)
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? x.Fantasia.Contains(clientePagarReceberFilter.fantasia) : true)
@@ -40,11 +53,9 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => clientePagarReceberFilter.dtvenctoEnd != null ? x.PagarReceber.Where(y => y.Dtvencto <= (DateTime)clientePagarReceberFilter.dtvenctoEnd).ToList().Count > 0 : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.NotasFiscais) ? x.PagarReceber.Where(y => y.NotasFiscais.Contains(clientePagarReceberFilter.NotasFiscais)).ToList().Count > 0 : true);
 
-                List<Cliente> cliente = await _cliente
-                .AsNoTracking()
-                .Skip((clientePagarReceberFilter.PageNumber - 1) * clientePagarReceberFilter.PageSize)
-                .Take(clientePagarReceberFilter.PageSize)
-                .ToListAsync();
+            List<Cliente> cliente = await _cliente
+            .AsNoTracking()
+            .ToListAsync();
 
             return cliente;
         }

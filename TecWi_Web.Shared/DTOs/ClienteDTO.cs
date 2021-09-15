@@ -1,4 +1,6 @@
-﻿namespace TecWi_Web.Shared.DTOs
+﻿using System.Collections.Generic;
+
+namespace TecWi_Web.Shared.DTOs
 {
     public class ClienteDTO
     {
@@ -11,5 +13,7 @@
         public string fone2 { get; set; }
         public string email { get; set; }
         public string cidade { get; set; }
+        public List<PagarReceberDTO> PagarReceberDTO { get; set; }
+        public List<ContatoCobrancaDTO> ContatoCobrancaDTO { get; set; }
     }
 }
