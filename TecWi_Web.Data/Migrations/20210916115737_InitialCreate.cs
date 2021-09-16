@@ -71,8 +71,7 @@ namespace TecWi_Web.Data.Migrations
                 name: "ContatoCobranca",
                 columns: table => new
                 {
-                    IdContato = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdContato = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Cdclifor = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DtContato = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -125,7 +124,7 @@ namespace TecWi_Web.Data.Migrations
                 name: "ContatoCobrancaLancamento",
                 columns: table => new
                 {
-                    IdContato = table.Column<int>(type: "int", nullable: false),
+                    IdContato = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sq = table.Column<int>(type: "int", nullable: false),
                     CdFilial = table.Column<string>(type: "nvarchar(450)", nullable: false)

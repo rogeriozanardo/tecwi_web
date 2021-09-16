@@ -6,7 +6,7 @@ namespace TecWi_Web.Shared.DTOs
 {
     public class ContatoCobrancaDTO
     {
-        public int IdContato { get; set; }
+        public Guid IdContato { get; set; }
         public int Cdclifor { get; set; }
         public Guid IdUsuario { get; set; }
         public DateTime DtContato { get; set; }

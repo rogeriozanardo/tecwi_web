@@ -17,7 +17,7 @@ namespace TecWi_Web.Domain.Entities
 
         }
 
-        public int IdContato { get; private set; }
+        public Guid IdContato { get; private set; }
         public int Cdclifor { get; private set; }
         public Guid IdUsuario { get; private set; }
         public DateTime DtContato { get; private set; }
@@ -54,9 +54,9 @@ namespace TecWi_Web.Domain.Entities
             DtAgenda = dtAgenda;
         }
 
-        public void Update(int idContato)
+        public void Update(Guid idContato)
         {
-            DomainValidadorException.Whem(idContato == 0, IdContatoInvalido);
+            DomainValidadorException.Whem(idContato == Guid.Empty, IdContatoInvalido);
             IdContato = idContato;
         }
     }

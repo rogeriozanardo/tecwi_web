@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace TecWi_Web.Data.Repositories
         public async Task<List<ContatoCobrancaLancamento>> GetAllAsyc(ContatoCobrancaLancamentoFilter contatoCobrancaLancamentoFilter)
         {
             IQueryable<ContatoCobrancaLancamento> _contatoCobrancaLancamento = _dataContext.ContatoCobrancaLancamento
-                .Where(x => contatoCobrancaLancamentoFilter.IdContato != 0 ? x.IdContato == contatoCobrancaLancamentoFilter.IdContato : true)
+                .Where(x => contatoCobrancaLancamentoFilter.IdContato != Guid.Empty ? x.IdContato == contatoCobrancaLancamentoFilter.IdContato : true)
                 .Where(x => !string.IsNullOrWhiteSpace(contatoCobrancaLancamentoFilter.Numlancto) ? x.Numlancto == contatoCobrancaLancamentoFilter.Numlancto : true)
                 .Where(x => contatoCobrancaLancamentoFilter.Sq != 0 ? x.Sq == contatoCobrancaLancamentoFilter.Sq : true)
                 .Where(x => !string.IsNullOrWhiteSpace(contatoCobrancaLancamentoFilter.Cdfilial) ? x.CdFilial == contatoCobrancaLancamentoFilter.Cdfilial : true);

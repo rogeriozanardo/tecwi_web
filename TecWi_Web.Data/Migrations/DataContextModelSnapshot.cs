@@ -60,10 +60,9 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobranca", b =>
                 {
-                    b.Property<int>("IdContato")
+                    b.Property<Guid>("IdContato")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Anotacao")
                         .HasColumnType("nvarchar(max)");
@@ -94,8 +93,8 @@ namespace TecWi_Web.Data.Migrations
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobrancaLancamento", b =>
                 {
-                    b.Property<int>("IdContato")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IdContato")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Numlancto")
                         .HasColumnType("nvarchar(450)");

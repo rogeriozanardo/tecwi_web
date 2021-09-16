@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using TecWi_Web.Domain.Validators;
 
 namespace TecWi_Web.Domain.Entities
 {
     public  class ContatoCobrancaLancamento
     {
-        public ContatoCobrancaLancamento(int idContato, string numlancto, int sq, string cdfilial)
+        public ContatoCobrancaLancamento(Guid idContato, string numlancto, int sq, string cdfilial)
         {
             ValidateDomain(idContato, numlancto, sq, cdfilial);
         }
@@ -15,7 +15,7 @@ namespace TecWi_Web.Domain.Entities
 
         }
 
-        public int IdContato { get; set; }
+        public Guid IdContato { get; set; }
         public string Numlancto { get; private set; }
         public int Sq { get; private set; }
         public string CdFilial { get; private set; }
@@ -26,9 +26,9 @@ namespace TecWi_Web.Domain.Entities
         private string NumlanctoInvalido = "Campo 'Numlancto' inválido!";
         private string SqInvalido = "Campo 'Sq' inválido!";
         private string CdfilialInvalido = "Campo 'Cdfilial' inválido!";
-        private void ValidateDomain(int idContato, string numlancto, int sq, string cdfilial)
+        private void ValidateDomain(Guid idContato, string numlancto, int sq, string cdfilial)
         {
-            DomainValidadorException.Whem(idContato == 0, IdContatoInvalido);
+            DomainValidadorException.Whem(idContato == Guid.Empty, IdContatoInvalido);
             IdContato = idContato;
 
             DomainValidadorException.Whem(string.IsNullOrWhiteSpace(numlancto), NumlanctoInvalido);
