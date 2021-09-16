@@ -1,0 +1,172 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<div id="header" style="background: #F7F7F7; padding: 9px; margin-left: 249px; border-bottom: 1px solid #D6D5D5; overflow:hidden">
+    <div class="row">
+        <div class="col-auto">
+            <img class="icon-nome-modulo ml-4 mt-1" src="./assets/icon-gestao-logistica.svg" height="20" />
+        </div>
+
+        <div class="col pl-0">
+            <h5 class="mt-1">Gestão Logistica</h5>
+        </div>
+
+        <div class="col-auto">
+            <SfButton CssClass="btn-blue" OnClick="TrocarModulo_OnClick">
+                <span class="oi oi-grid-two-up"></span>
+                Trocar de Módulo
+            </SfButton>
+
+            <SfButton CssClass="e-danger" OnClick="Sair_OnClick">
+                <span class="oi oi-power-standby"></span>
+            </SfButton>
+        </div>
+    </div>
+</div>
+
+<SfSidebar EnableGestures="false" Width="250px" IsOpen="true">
+    <ChildContent>
+        <div class="sidebar-logo text-center sidebar-logo-container">
+            <img class="nav-logo-dash" src="/assets/tecwi_logo.svg" height="30" />
+        </div>
+        <SfAccordion>
+            <AccordionItems>
+                <div class="button-inicio mt-3">
+                    <div class="icon-home sidebar-icon" />
+                    <div class="text-button">
+                        <a href="home">INICIO</a>
+                    </div>
+                </div>
+                <AccordionItem Header="CADASTROS" CssClass="accordeon-option" IconCss="icon-cadastro sidebar-icon">
+                    <ContentTemplate>
+                        <ul class="menu-item">
+                            <li><a href="ClienteLista">Clientes</a></li>
+                            <li><a href="FornecedorLista">Fornecedores</a></li>
+                            <li><a href="ProdutoLista">Produtos</a></li>
+                        </ul>
+                    </ContentTemplate>
+                </AccordionItem>
+                <AccordionItem Header="COMPRAS" IconCss="icon-compras sidebar-icon">
+                    <ContentTemplate>
+                        <ul class="menu-item">
+                            <li><a href="home">Análise</a></li>
+                            <li><a href="CotacaoLista">Cotações de Compras</a></li>
+                            <li><a href="CompraLista">Compras Realizadas</a></li>
+                        </ul>
+                    </ContentTemplate>
+                </AccordionItem>
+                <AccordionItem Header="VENDAS" IconCss="icon-vendas sidebar-icon">
+                    <ContentTemplate>
+                        <ul class="menu-item">
+                            <li><a href="home">Análise</a></li>
+                            <li><a href="OportunidadeLista">Cotações de Vendas</a></li>
+                        </ul>
+                    </ContentTemplate>
+                </AccordionItem>
+
+                <AccordionItem Header="CONFIGURAÇÕES" IconCss="icon-configuracoes sidebar-icon">
+                    <ContentTemplate>
+                        <ul class="menu-item">
+                            <li><a href="home">Empresa</a></li>
+                        </ul>
+                    </ContentTemplate>
+                </AccordionItem>
+            </AccordionItems>
+        </SfAccordion>
+    </ChildContent>
+</SfSidebar>
+
+<div id="main-content container-fluid col-md-12" class="p-3">
+    @Body
+</div>
+
+
+<style>
+    .nav-logo-dash {
+        margin: 10px
+    }
+
+    .icon-nome-modulo {
+        filter: invert();
+    }
+
+    .sidebar-logo-container,
+    .e-accordion .e-acrdn-item.e-select .e-acrdn-panel .e-acrdn-content {
+        background: #183A61;
+    }
+
+
+    .e-accordion .e-acrdn-item.e-selected.e-select {
+        border: none
+    }
+
+
+    .e-sidebar, .e-accordion,
+    .e-accordion .e-acrdn-item.e-select.e-expand-state > .e-acrdn-header {
+        background: #2A6CB2
+    }
+
+        .e-accordion .e-acrdn-item.e-select.e-selected.e-expand-state > .e-acrdn-header,
+        .e-accordion .e-acrdn-item.e-expand-state.e-select:not(.e-selected) > .e-acrdn-header:focus,
+        .e-accordion .e-acrdn-item.e-selected.e-select.e-expand-state > .e-acrdn-header:focus {
+            background: #F58634
+        }
+
+        .e-accordion .e-acrdn-item.e-selected.e-select > .e-acrdn-header {
+            border-radius: 0px
+        }
+
+    .e-acrdn-header-content {
+        color: #FFF !important;
+        text-decoration: none !important;
+    }
+
+
+    .e-accordion .e-acrdn-item .e-acrdn-header {
+        background: #2A6CB2;
+    }
+
+        .e-accordion .e-acrdn-item .e-acrdn-header:hover {
+            background: #F58634;
+        }
+
+    .e-accordion .e-acrdn-item.e-selected.e-select > .e-acrdn-header {
+        background: #2A6CB2;
+    }
+
+    .e-accordion {
+        border: none;
+    }
+
+
+    .menu-item li {
+        list-style: none;
+        margin-top: 13px;
+    }
+
+        .menu-item li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+            .menu-item li a:hover {
+                color: #F58634
+            }
+
+
+    .button-inicio {
+        padding: 9px;
+        border-bottom: 1px solid #255E9B
+    }
+
+        .button-inicio:hover {
+            background: #F58634
+        }
+
+        .button-inicio a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            margin-left: 15px;
+        }
+</style>

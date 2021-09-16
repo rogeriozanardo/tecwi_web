@@ -1,0 +1,61 @@
+﻿@page "/Home"
+@layout HomeLayout
+@inject NavigationManager Navigation
+
+<div class="text-center container-modulos">
+    <h4 class="mb-5">Selecione um módulo para continuar!</h4>
+
+    <SfButton id="gestao-cobranca" CssClass="btn-modulo" OnClick="GestaoCobranca_OnClick">
+        <div>
+            <img src="./assets/icon-gestao-cobranca.svg" height="40" class="icon-home" />
+        </div>
+        Gestão de Cobrança
+    </SfButton>
+
+    <SfButton id="gestao-logistica" CssClass="e-primary btn-modulo" OnClick="GestaoLogistica_OnClick">
+        <div>
+            <img src="./assets/icon-gestao-logistica.svg" height="40" class="icon-home" />
+        </div>
+        Gestão de Logística
+    </SfButton>
+
+    <SfButton id="configuracoes" CssClass="btn-modulo" OnClick="Configuracoes_OnClick">
+        <div>
+            <img src="./assets/icon-configuracoes.svg" height="40" class="icon-home" />
+        </div>
+        Configurações
+    </SfButton>
+</div>
+
+
+<style>
+    .icon-home {
+        margin: 15px 0px;
+    }
+
+    #gestao-cobranca {
+        background: #6EC401;
+        border-color: #6EC401;
+    }
+
+    #configuracoes {
+        background: #0092ff;
+        border-color: #0092ff
+    }
+
+    .container-modulos {
+        margin-top: 25vh
+    }
+
+    .btn-modulo {
+        font-size: 16px;
+        font-weight: bold;
+        height: 175px;
+        width: 210px;
+    }
+
+        .btn-modulo:hover {
+            filter: brightness(95%) !important;
+        }
+</style>
+
