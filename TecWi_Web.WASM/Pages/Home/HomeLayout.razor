@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+
+<div class="modulo-layout-container">
+
+    <nav class="navbar navbar-blue">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                <img src="./assets/tecwi_logo.svg" height="30" />
+            </div>
+            <SfButton OnClick="Sair" CssClass="e-danger">
+                <span class="oi oi-power-standby"></span>
+            </SfButton>
+        </div>
+    </nav>
+
+    <div class="selecao-modulo-container">
+        @Body
+    </div>
+</div>
+
+
+<style>
+    .modulo-layout-container {
+        background: #F7F7F7;
+        height: 100vh;
+    }
+
+    .navbar-blue {
+        background: #183A61
+    }
+</style>
