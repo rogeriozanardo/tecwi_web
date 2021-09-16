@@ -12,7 +12,7 @@ namespace TecWi_Web.WASM
     {
         public static async Task Main(string[] args)
         {
-            SyncfusionLicenseProvider.RegisterLicense("NDMwNjQ2QDMxMzkyZTMxMmUzMG5yU0lkZHZSUGZoem5uMFQ5T0Q0bzNGYXBaS3l2Rm8zN2VXUGQrZWRDWTA9");
+            SyncfusionLicenseProvider.RegisterLicense("NTAxNzA5QDMxMzkyZTMyMmUzMFE0M2QrUm1JbjZEbjBSaFRHbmx3UjF5bEtFSHd0Rkx2YWV5YjNBU2F4aXM9");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
