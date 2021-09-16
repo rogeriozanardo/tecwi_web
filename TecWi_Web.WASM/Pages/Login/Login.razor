@@ -1,0 +1,57 @@
+﻿@page "/"
+@layout LoginLayout
+@inject NavigationManager Navigation
+
+
+<div id="login-container" class="d-flex justify-content-center">
+    <img class="m-4" src="./assets/tecwi_logo.svg" width="140">
+</div>
+
+<div class="d-flex justify-content-center">
+    <div id="card-login" class="card shadow pb-3">
+        <div class="card-body">
+            <h5 class="mb-4 mt-2" style="color: #414141">Olá! <br />Faça login para continuar...</h5>
+
+            <div class="form">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <SfTextBox Type="InputType.Text" />
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <SfTextBox Type="InputType.Password" />
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <SfSwitch id="switchSenha" @bind-Checked="isChecked" />
+                            <label for="switchSenha">Lembrar-me</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <SfButton CssClass="e-primary" Content="Entrar" OnClick="FazLogin" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="d-flex justify-content-center">
+    <small class=" mt-2" style="color: #5389bf;">2021 &copy; - Desenvolvido por Z4 Software.</small>
+</div>
+
+
+<style>
+
+    #login-container {
+        padding-top: 15vh;
+    }
+
+    #card-login {
+        width: 340px;
+    }
+</style>

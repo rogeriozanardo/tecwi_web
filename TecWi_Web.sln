@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Shared", "TecWi_W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Tests", "TecWi_Web.Tests\TecWi_Web.Tests.csproj", "{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TecWi_Web.WASM", "TecWi_Web.WASM\TecWi_Web.WASM.csproj", "{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.WASM", "TecWi_Web.WASM\TecWi_Web.WASM.csproj", "{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
