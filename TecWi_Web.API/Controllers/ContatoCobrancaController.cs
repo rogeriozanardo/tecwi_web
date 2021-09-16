@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
@@ -38,7 +39,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(InsertAsync))]
         public async Task<IActionResult> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
         {
-            ServiceResponse<int> serviceResponse = await _iContatoCobrancaService.InsertAsync(contatoCobrancaDTO);
+            ServiceResponse<Guid> serviceResponse = await _iContatoCobrancaService.InsertAsync(contatoCobrancaDTO);
 
             if (serviceResponse.Success)
             {

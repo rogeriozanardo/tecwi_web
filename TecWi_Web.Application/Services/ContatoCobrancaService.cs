@@ -42,9 +42,9 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<int>> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
+        public async Task<ServiceResponse<Guid>> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
         {
-            ServiceResponse<int> serviceResponse = new ServiceResponse<int>();
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
             try
             {
                 ContatoCobranca contatoCobranca = _iMapper.Map<ContatoCobranca>(contatoCobrancaDTO);
