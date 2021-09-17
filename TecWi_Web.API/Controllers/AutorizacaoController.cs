@@ -33,7 +33,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(Login))]
         public async Task<ActionResult> Login(UsuarioDTO UsuarioDTO)
         {
-            ServiceResponse<string> serviceResponse = await _iAutorizacaoService.Login(UsuarioDTO);
+            ServiceResponse<UsuarioDTO> serviceResponse = await _iAutorizacaoService.Login(UsuarioDTO);
             if (!serviceResponse.Success)
             {
                 return BadRequest(serviceResponse.Message);

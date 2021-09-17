@@ -11,6 +11,7 @@ using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Messages;
 using TecWi_Web.Shared.Utility;
@@ -34,9 +35,11 @@ namespace TecWi_Web.Application.Services
             _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
-        public async Task<ServiceResponse<string>> Login(UsuarioDTO usuarioDTO)
+        public async Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO)
         {
-            ServiceResponse<string> serviceResponse = new ServiceResponse<string>();
+            ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
+            serviceResponse.Data.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+
             try
             {
                 Usuario usuario = await _iUsuarioRepository.GetByLoginAsync(usuarioDTO.Login);
@@ -53,7 +56,25 @@ namespace TecWi_Web.Application.Services
                 }
                 else
                 {
-                    serviceResponse.Data = CreateTokem(usuario);
+                    serviceResponse.Data.Login = usuario.Login;
+                    serviceResponse.Data.Nome = usuario.Nome;
+                    serviceResponse.Data.Email = usuario.Email;
+                    serviceResponse.Data.Token = CreateTokem(usuario);
+
+                    if(usuario.Login == "admin")
+                    {
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Cobranca, IdPerfil = IdPerfil.Gestor });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Comercial, IdPerfil = IdPerfil.Gestor });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Configuracoes, IdPerfil = IdPerfil.Gestor });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Gestor });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Gestor });
+                    }
+                    else
+                    {
+                        // implementar aqui a busca pela lista de aplicações e perfis do usuário
+                    }
+
+
                 }
 
             }

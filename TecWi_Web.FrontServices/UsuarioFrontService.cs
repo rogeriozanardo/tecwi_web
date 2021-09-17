@@ -30,7 +30,10 @@ namespace TecWi_Web.FrontServices
                 }
                 else
                 {
-                    
+                    serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<UsuarioDTO>>();
+                    Config.Autorizado = true;
+                    Config.usuarioDTO.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+                    Config.usuarioDTO = serviceResponse.Data;
                 }
             }
             catch(Exception e)

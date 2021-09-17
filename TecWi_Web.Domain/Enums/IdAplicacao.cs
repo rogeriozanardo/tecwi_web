@@ -5,6 +5,7 @@
         Cobranca = 1,
         Comercial = 2,
         Financeiro = 3,
-        Logistica = 4
+        Logistica = 4,
+        Configuracoes =5
     }
 }

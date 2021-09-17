@@ -19,10 +19,16 @@ namespace TecWi_Web.WASM.Pages.Login
     
         private async Task FazLogin()
         {
+            ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
 
-            
+            serviceResponse = await usuarioFrontService.Login(usuarioDTO);
+            if(!serviceResponse.Success)
+            {
 
-            Navigation.NavigateTo("/Home");
+            }else if(Config.Autorizado)
+            {
+                Navigation.NavigateTo("/Home");
+            }
         }
 
         

@@ -7,6 +7,6 @@ namespace TecWi_Web.Application.Interfaces
     {
         Task<ServiceResponse<UsuarioDTO>> Register(UsuarioDTO usuarioDTO);
 
-        Task<ServiceResponse<string>> Login(UsuarioDTO usuarioDTO);
+        Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.FrontServices
 {
@@ -10,9 +11,7 @@ namespace TecWi_Web.FrontServices
     {
         public static string ApiUrl { get; set; }
         public static bool Autorizado { get; set; }
-        public static string Token { get; set; }
-        public static int IdUsuario { get; set; }
-        public static string Login { get; set; }
-        public static string NomeUsuario { get; set; }
+        public static UsuarioDTO usuarioDTO { get; set; }
+
     }
 }
