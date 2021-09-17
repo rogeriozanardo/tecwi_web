@@ -1,6 +1,12 @@
 ﻿@page "/"
 @layout LoginLayout
+@using TecWi_Web.FrontServices.Interfaces
+@using TecWi_Web.FrontServices;
+
+@inject IUsuarioFrontService usuarioFrontService
+@inject Microsoft.Extensions.Configuration.IConfiguration configurations
 @inject NavigationManager Navigation
+
 
 
 <div id="login-container" class="d-flex justify-content-center">
@@ -15,18 +21,18 @@
             <div class="form">
                 <div class="form-group">
                     <label>Usuário</label>
-                    <SfTextBox Type="InputType.Text" />
+                    <SfTextBox Type="InputType.Text" @bind-Value="usuarioDTO.Login" />
                 </div>
                 <div class="form-group">
                     <label>Senha</label>
-                    <SfTextBox Type="InputType.Password" />
+                    <SfTextBox Type="InputType.Password" @bind-Value="usuarioDTO.Senha" />
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <SfSwitch id="switchSenha" @bind-Checked="isChecked" />
-                            <label for="switchSenha">Lembrar-me</label>
+                            <SfSwitch id="lembrarMe" @bind-Checked="isChecked" />
+                            <label for="lembrarMe">Lembrar-me</label>
                         </div>
                     </div>
                     <div class="col-auto">
@@ -41,10 +47,15 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <small class=" mt-2" style="color: #5389bf;">2021 &copy; - Desenvolvido por Z4 Software.</small>
+    <small class=" mt-2" style="color: #5389bf;">@ano &copy; - Desenvolvido por Z4 Code.</small>
 </div>
-
-
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        Config.ApiUrl = configurations["ApiUrl"];
+    }
+}
 <style>
 
     #login-container {

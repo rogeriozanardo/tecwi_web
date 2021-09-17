@@ -13,5 +13,6 @@ namespace TecWi_Web.Data.Interfaces
         Task<Usuario> GetByEmailAsync(string Email);
 
         Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter);
+        Task<Usuario> GetByLoginAsync(string Login);
     }
 }

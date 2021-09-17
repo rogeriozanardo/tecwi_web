@@ -39,7 +39,7 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<string> serviceResponse = new ServiceResponse<string>();
             try
             {
-                Usuario usuario = await _iUsuarioRepository.GetByEmailAsync(usuarioDTO.Email);
+                Usuario usuario = await _iUsuarioRepository.GetByLoginAsync(usuarioDTO.Login);
                 if (usuario == null)
                 {
                     serviceResponse.Success = false;

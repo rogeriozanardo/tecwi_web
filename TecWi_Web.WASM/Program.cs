@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
+using TecWi_Web.FrontServices;
+using TecWi_Web.FrontServices.Interfaces;
 
 namespace TecWi_Web.WASM
 {
@@ -20,6 +22,9 @@ namespace TecWi_Web.WASM
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             
             builder.Services.AddSyncfusionBlazor();
+
+            builder.Services.AddSingleton<IUsuarioFrontService, UsuarioFrontService>();
+
             await builder.Build().RunAsync();
         }
     }

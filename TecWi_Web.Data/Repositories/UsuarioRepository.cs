@@ -25,6 +25,12 @@ namespace TecWi_Web.Data.Repositories
             return usuario;
         }
 
+        public async Task<Usuario> GetByLoginAsync(string Login)
+        {
+            Usuario usuario = await _dataContext.Usuario.FirstOrDefaultAsync(x => x.Login == Login);
+            return usuario;
+        }
+
         public async Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter)
         {
             IQueryable<Usuario> usuario = _dataContext.Usuario

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Configuracoes\**" />
+    <Content Remove="Pages\Configuracoes\**" />
+    <EmbeddedResource Remove="Pages\Configuracoes\**" />
+    <None Remove="Pages\Configuracoes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.10" PrivateAssets="all" />
     <PackageReference Include="Syncfusion.Blazor.Buttons" Version="19.2.0.62" />
@@ -14,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Configuracoes\" />
+    <ProjectReference Include="..\TecWi_Web.FrontServices\TecWi_Web.FrontServices.csproj" />
   </ItemGroup>
 
 </Project>
