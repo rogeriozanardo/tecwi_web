@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,14 @@ namespace TecWi_Web.FrontServices
         public async Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
+
+            if(string.IsNullOrEmpty(usuarioDTO.Login) || string.IsNullOrEmpty(usuarioDTO.Senha))
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Usuário ou senha não podem ficar em branco.";
+                return serviceResponse;
+            }
+
             try
             {
                 string url = $"{Config.ApiUrl}Autorizacao/Login";
@@ -30,8 +39,9 @@ namespace TecWi_Web.FrontServices
                 }
                 else
                 {
-                    serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<UsuarioDTO>>();
+                    serviceResponse.Data = await httpResponseMessage.Content.ReadFromJsonAsync<UsuarioDTO>();
                     Config.Autorizado = true;
+                    Config.usuarioDTO = new UsuarioDTO();
                     Config.usuarioDTO.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
                     Config.usuarioDTO = serviceResponse.Data;
                 }

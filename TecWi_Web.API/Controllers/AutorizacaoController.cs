@@ -36,10 +36,10 @@ namespace TecWi_Web.API.Controllers
             ServiceResponse<UsuarioDTO> serviceResponse = await _iAutorizacaoService.Login(UsuarioDTO);
             if (!serviceResponse.Success)
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
             }
 
-            return Ok(serviceResponse);
+            return Ok(serviceResponse.Data);
         }
     }
 }

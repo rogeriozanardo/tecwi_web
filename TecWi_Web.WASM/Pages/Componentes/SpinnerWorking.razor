@@ -1,0 +1,13 @@
+﻿<SfDialog Width="330px" Height="120px" Target="#target" IsModal="true" @bind-Visible="exibe">
+    <DialogTemplates>
+        <Content>
+            <SfSpinner Size="40" Label="Trabalhando... " Type="SpinnerType.Material" Visible="exibe"></SfSpinner>
+        </Content>
+    </DialogTemplates>
+    <DialogAnimationSettings Effect="@DialogEffect.Fade"></DialogAnimationSettings>
+</SfDialog>
+
+@code
+{ [Parameter]
+    public bool exibe { get; set; } 
+}

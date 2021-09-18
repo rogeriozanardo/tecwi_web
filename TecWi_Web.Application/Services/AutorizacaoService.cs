@@ -38,6 +38,7 @@ namespace TecWi_Web.Application.Services
         public async Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
+            serviceResponse.Data = new UsuarioDTO();
             serviceResponse.Data.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
 
             try

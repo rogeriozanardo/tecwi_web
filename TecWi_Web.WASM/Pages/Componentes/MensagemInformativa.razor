@@ -1,0 +1,33 @@
+﻿@using Syncfusion.Blazor.Popups
+
+<SfDialog id="ModalMensagemInformativa" Width="400px" Target="#taget" IsModal="true" @bind-Visible="mensagemInformativaDTO.Exibe">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-2">
+                <img class="icone-modal" src="./assets/icone aviso.png" height="20" />
+                @mensagemInformativaDTO.Titulo
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid">
+                <p class="m-3" style="white-space: pre-line">
+                    @mensagemInformativaDTO.Mensagem
+                </p>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton IsPrimary="true" OnClick="FechaMensagem">Entendi</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+    <DialogAnimationSettings Effect="DialogEffect.FlipXUp"></DialogAnimationSettings>
+</SfDialog>
+
+<style>
+    #ModalMensagemInformativa {
+        max-height: none !important;
+    }
+</style>

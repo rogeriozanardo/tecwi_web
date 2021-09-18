@@ -47,11 +47,17 @@ namespace TecWi_Web.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(cors => cors
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials()
+                );
+
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseRouting();
-
-            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -59,6 +65,8 @@ namespace TecWi_Web.API
             {
                 endpoints.MapControllers();
             });
+
+           
         }
     }
 }
