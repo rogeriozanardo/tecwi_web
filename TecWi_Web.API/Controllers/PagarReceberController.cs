@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace TecWi_Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PagarReceberController : ControllerBase
     {
         private readonly IPagarReceberService _iPagarReceberService;
@@ -26,7 +28,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(PopulateData))]
         public async Task<IActionResult> PopulateData()
         {
-            ServiceResponse<bool> serviceResponse =  await _iPagarReceberService.PopulateData();
+            ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateData();
 
             if (serviceResponse.Success)
             {
@@ -34,7 +36,7 @@ namespace TecWi_Web.API.Controllers
             }
             else
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
             }
         }
     }

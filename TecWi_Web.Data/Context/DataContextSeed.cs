@@ -17,7 +17,6 @@ namespace TecWi_Web.Data.Context
                 List<Usuario> usuario = new List<Usuario>()
                 {
                     new Usuario(new Guid(), "admin", "admin", "email@email", senhaHash, senhaSalt)
-                    
                 };
 
                 _dataContext.Usuario.AddRange(usuario);

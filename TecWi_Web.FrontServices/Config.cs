@@ -11,6 +11,7 @@ namespace TecWi_Web.FrontServices
     {
         public static string ApiUrl { get; set; }
         public static bool Autorizado { get; set; }
+        public static DateTime DtUltAtualicacaoDados { get; set; }
         public static UsuarioDTO usuarioDTO { get; set; }
 
     }

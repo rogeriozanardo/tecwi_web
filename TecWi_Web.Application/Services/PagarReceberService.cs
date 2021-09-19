@@ -79,9 +79,9 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> PopulateData()
+        public async Task<ServiceResponse<DateTime>> PopulateData()
         {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
             try
             {
                 Task<List<PagarReceber>> TaskPagarReceberPending = _iPagarReceberRepository.GetPendingPagarReceber();
@@ -103,7 +103,7 @@ namespace TecWi_Web.Application.Services
                 await UpdatePagarReceberPaid(pagarReceberPaid);
 
                 await _iUnitOfWork.CommitAsync();
-                serviceResponse.Data = true;
+                serviceResponse.Data = DateTime.Now;
             }
             catch (Exception ex)
             {

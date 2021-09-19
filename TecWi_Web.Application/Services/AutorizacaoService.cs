@@ -13,6 +13,7 @@ using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 using TecWi_Web.Shared.Messages;
 using TecWi_Web.Shared.Utility;
 
@@ -123,9 +124,27 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<UsuarioDTO>>> GetUserList(UsuarioFilter usuarioFilter)
+        {
+            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
+            
+            try
+            {
+                List<Usuario> usuarioList = new List<Usuario>();
+                usuarioList = await _iUsuarioRepository.GetAllAsync(usuarioFilter);
+
+                serviceResponse.Data = _iMapper.Map<List<UsuarioDTO>>(usuarioList);
+
+            }catch(Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
         private async Task<bool> UsuarioExists(UsuarioDTO usuarioDTO)
         {
-            Usuario usuario = await _iUsuarioRepository.GetByEmailAsync(usuarioDTO.Email);
+            Usuario usuario = await _iUsuarioRepository.GetByLoginAsync(usuarioDTO.Login);
             return usuario != null;
         }
 
@@ -171,5 +190,7 @@ namespace TecWi_Web.Application.Services
             SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
             return jwtSecurityTokenHandler.WriteToken(securityToken);
         }
+
+        
     }
 }

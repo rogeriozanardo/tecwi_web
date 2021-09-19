@@ -4,11 +4,11 @@
 <div id="header" style="background: #F7F7F7; padding: 9px; margin-left: 249px; border-bottom: 1px solid #D6D5D5; overflow:hidden">
     <div class="row">
         <div class="col-auto">
-            <img class="icon-nome-modulo ml-4 mt-1" src="./assets/icon-gestao-cobranca.svg" height="20" />
+            <img class="icon-nome-modulo ml-4 mt-1" src="./assets/icon-configuracoes.svg" height="20" />
         </div>
 
         <div class="col pl-0">
-            <h5 class="mt-1">Gestão de Cobranças</h5>
+            <h5 class="mt-1">Configurações</h5>
         </div>
 
         <div class="col-auto">
@@ -34,40 +34,13 @@
                 <div class="button-inicio mt-3">
                     <div class="icon-home sidebar-icon" />
                     <div class="text-button">
-                        <a href="GestaoCobranca">INICIO</a>
+                        <a href="Configuracoes">INICIO</a>
                     </div>
                 </div>
-                <AccordionItem Header="COBRANÇA" CssClass="accordeon-option" IconCss="icon-cadastro sidebar-icon">
+                <AccordionItem Header="GERAL" CssClass="accordeon-option" IconCss="icon-cadastro sidebar-icon">
                     <ContentTemplate>
                         <ul class="menu-item">
-                            <li><a href="ClienteLista">Clientes</a></li>
-                            <li><a href="FornecedorLista">Fornecedores</a></li>
-                            <li><a href="ProdutoLista">Produtos</a></li>
-                        </ul>
-                    </ContentTemplate>
-                </AccordionItem>
-                <AccordionItem Header="COMPRAS" IconCss="icon-compras sidebar-icon">
-                    <ContentTemplate>
-                        <ul class="menu-item">
-                            <li><a href="home">Análise</a></li>
-                            <li><a href="CotacaoLista">Cotações de Compras</a></li>
-                            <li><a href="CompraLista">Compras Realizadas</a></li>
-                        </ul>
-                    </ContentTemplate>
-                </AccordionItem>
-                <AccordionItem Header="VENDAS" IconCss="icon-vendas sidebar-icon">
-                    <ContentTemplate>
-                        <ul class="menu-item">
-                            <li><a href="home">Análise</a></li>
-                            <li><a href="OportunidadeLista">Cotações de Vendas</a></li>
-                        </ul>
-                    </ContentTemplate>
-                </AccordionItem>
-
-                <AccordionItem Header="CONFIGURAÇÕES" IconCss="icon-configuracoes sidebar-icon">
-                    <ContentTemplate>
-                        <ul class="menu-item">
-                            <li><a href="home">Empresa</a></li>
+                            <li><a href="UsuarioLista">Usuários</a></li>
                         </ul>
                     </ContentTemplate>
                 </AccordionItem>
@@ -158,14 +131,14 @@
         border-bottom: 1px solid #255E9B
     }
 
-                .button-inicio:hover {
-                    background: #F58634
-                }
+        .button-inicio:hover {
+            background: #F58634
+        }
 
-            .button-inicio a {
-                text-decoration: none;
-                color: #fff;
-                font-size: 14px;
-                margin-left: 15px;
-            }
+        .button-inicio a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            margin-left: 15px;
+        }
 </style>

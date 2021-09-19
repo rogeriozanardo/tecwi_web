@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsuarioAutorizacaoController : ControllerBase
     {
         private readonly IUsuarioAplicacaoService _iUsuarioAplicacaoService;
@@ -75,5 +78,24 @@ namespace TecWi_Web.API.Controllers
                 return BadRequest(serviceResponse.Message);
             }
         }
+        [HttpPost]
+        [Route(nameof(GetUserList))]
+        public async Task<IActionResult> GetUserList(UsuarioFilter usuarioFilter)
+        {
+            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
+
+            serviceResponse.Data = new List<UsuarioDTO>();
+            serviceResponse = await _iUsuarioAplicacaoService
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse);
+            }
+        }
+
+
     }
 }

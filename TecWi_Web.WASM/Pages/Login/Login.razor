@@ -1,8 +1,7 @@
 ﻿@page "/"
 @layout LoginLayout
-@using TecWi_Web.FrontServices.Interfaces
-@using TecWi_Web.FrontServices;
 
+@inject Blazored.LocalStorage.ILocalStorageService iLocalStorage
 @inject IUsuarioFrontService usuarioFrontService
 @inject Microsoft.Extensions.Configuration.IConfiguration configurations
 @inject NavigationManager Navigation
@@ -34,7 +33,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <SfSwitch id="lembrarMe" @bind-Checked="isChecked" />
+                            <SfSwitch id="lembrarMe" @bind-Checked="lembrarMe" />
                             <label for="lembrarMe">Lembrar-me</label>
                         </div>
                     </div>
@@ -57,6 +56,16 @@
     protected override async Task OnInitializedAsync()
     {
         Config.ApiUrl = configurations["ApiUrl"];
+
+        lembraUsuario = await iLocalStorage.GetItemAsync<string>("Usuario");
+        lembraSenha = await iLocalStorage.GetItemAsync<string>("Senha");
+
+        if (!string.IsNullOrEmpty(lembraUsuario) && !string.IsNullOrEmpty(lembraSenha))
+        {
+            usuarioDTO.Login = lembraUsuario;
+            usuarioDTO.Senha = lembraSenha;
+            lembrarMe = true;
+        }
     }
 }
 <style>

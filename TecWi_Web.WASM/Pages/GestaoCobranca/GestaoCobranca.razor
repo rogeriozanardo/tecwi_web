@@ -1,15 +1,32 @@
 ﻿@layout GestaoCobrancaLayout
 @page "/GestaoCobranca"
 
+@inject NavigationManager Navigation
+@inject ICobrancaFrontService cobrancaFrontService
+@inject Microsoft.Extensions.Configuration.IConfiguration configurations
 
-<h3>olá</h3>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu orci a enim porta laoreet. Lorem ipsum dolor sit
-    amet, consectetur adipiscing elit. Sed eget purus faucibus, interdum nulla sed, tincidunt magna. Nulla aliquam massa
-    justo, nec tincidunt neque faucibus sit amet. Nullam lacinia augue eget nulla tempus congue. Vivamus id mauris pretium,
-    pretium ex vel, gravida purus. Pellentesque a pretium neque. Donec malesuada luctus lacus, in vulputate erat.
-    Sed consectetur sapien tellus, non fringilla massa malesuada vitae. Nullam eget odio ac mauris aliquam fermentum
-    in a mauris. Suspendisse egestas odio nibh, sit amet pretium dui tincidunt eu. Donec facilisis vulputate lectus ac
-    rutrum. Vestibulum mollis purus vel leo convallis vestibulum. Etiam a nisi libero.
-</p>
+
+<SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
+<MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+
+<div class="card-group">
+    <div class="card card-dashboard shadow">
+        <div class="d-flex card-flex">
+            <div class="p-2 col card-dash-content">
+                <div class="form">
+                    <div class="form-row mb-3 mt-4">
+                        <div class="form-group col-md-6">
+                            <h6>Dados de cobrança atualizados em: @DtUltAtualicacaoCobranca.ToString("dd/MM/yyyy HH:mm")</h6>
+                        </div>
+
+                        <div class="form-group col-md pt-1 mt-2 text-right">
+                            <SfButton CssClass="e-primary" Content="Atualizar dados de cobrança" OnClick="AtualizarDadosCobranca" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 

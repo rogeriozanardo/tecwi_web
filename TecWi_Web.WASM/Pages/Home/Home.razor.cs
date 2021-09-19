@@ -42,15 +42,24 @@ namespace TecWi_Web.WASM.Pages.Home
                 mensagemInformativaDTO.Exibe = true;
                 return;
             }
-
-
-
-            
         }
 
         public void Configuracoes_OnClick()
         {
-            Navigation.NavigateTo("/Configuracoes");
+
+            int index = Config.usuarioDTO.UsuarioAplicacaoDTO.FindIndex(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Configuracoes);
+
+            if (index >= 0)
+            {
+                Navigation.NavigateTo("/Configuracoes");
+            }
+            else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Você não tem acesso a esta aplicação.";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
         }
     }
 }

@@ -44,6 +44,7 @@ namespace TecWi_Web.FrontServices
                     Config.usuarioDTO = new UsuarioDTO();
                     Config.usuarioDTO.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
                     Config.usuarioDTO = serviceResponse.Data;
+                    Config.usuarioDTO.Token = $"Bearer {serviceResponse.Data.Token}";
                 }
             }
             catch(Exception e)

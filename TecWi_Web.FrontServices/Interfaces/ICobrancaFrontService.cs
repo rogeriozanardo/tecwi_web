@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TecWi_Web.Shared.DTOs;
 
-namespace TecWi_Web.Application.Interfaces
+namespace TecWi_Web.FrontServices.Interfaces
 {
-    public interface IPagarReceberService
+    public interface ICobrancaFrontService
     {
         Task<ServiceResponse<DateTime>> PopulateData();
     }
