@@ -21,19 +21,26 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<Usuario> GetByEmailAsync(string Email)
         {
-            Usuario usuario = await _dataContext.Usuario.FirstOrDefaultAsync(x => x.Email == Email);
+            Usuario usuario = await _dataContext.Usuario.Include(x => x.UsuarioAplicacao).FirstOrDefaultAsync(x => x.Email == Email);
             return usuario;
         }
 
         public async Task<Usuario> GetByLoginAsync(string Login)
         {
-            Usuario usuario = await _dataContext.Usuario.FirstOrDefaultAsync(x => x.Login == Login);
+            Usuario usuario = await _dataContext.Usuario.Include(x => x.UsuarioAplicacao).FirstOrDefaultAsync(x => x.Login == Login);
+            return usuario;
+        }
+
+        public async Task<Usuario> GetByIdAsync(Guid Idusuario)
+        {
+            Usuario usuario = await _dataContext.Usuario.Include(x => x.UsuarioAplicacao).FirstOrDefaultAsync(x => x.IdUsuario == Idusuario);
             return usuario;
         }
 
         public async Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter)
         {
             IQueryable<Usuario> usuario = _dataContext.Usuario
+                .Include(x => x.UsuarioAplicacao)
                 .Where(x => !string.IsNullOrWhiteSpace(usuarioFilter.None) ? x.Nome == usuarioFilter.None : true);
 
             List<Usuario> _usuario = await usuario

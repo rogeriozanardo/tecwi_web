@@ -8,11 +8,12 @@ namespace TecWi_Web.Data.Interfaces
 {
     public interface IUsuarioRepository
     {
+        Task<Usuario> GetByEmailAsync(string Email);
+        Task<Usuario> GetByLoginAsync(string Login);
+        Task<Usuario> GetByIdAsync(Guid Idusuario);
+        Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter);
         Task<Guid> Insert(Usuario usuario);
         void Update(Usuario usuario);
-        Task<Usuario> GetByEmailAsync(string Email);
 
-        Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter);
-        Task<Usuario> GetByLoginAsync(string Login);
     }
 }

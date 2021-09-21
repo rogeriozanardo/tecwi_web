@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TecWi_Web.Shared.DTOs
 {
     public class UsuarioDTO
     {
+        public Guid IdUsuario { get; set; }
         public string Login { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }

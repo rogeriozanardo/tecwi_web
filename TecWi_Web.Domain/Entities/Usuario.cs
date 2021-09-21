@@ -28,6 +28,7 @@ namespace TecWi_Web.Domain.Entities
                 
         }
 
+        private string IdInvalido = "Id inválido!";
         private string LoginInvalido = "Login inválido!";
         private string NomeInvalido = "Nome inválido!";
         private string EmailInvalido = "Email inválido!";
@@ -35,6 +36,7 @@ namespace TecWi_Web.Domain.Entities
         private string SenhaSaltInvalido = "Senha salt inválido!";
         private void ValidateDomain(Guid idUsuario, string login, string nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
         {
+            DomainValidadorException.Whem(idUsuario == Guid.Empty, IdInvalido);
             IdUsuario = idUsuario;
 
             DomainValidadorException.Whem(string.IsNullOrWhiteSpace(login), LoginInvalido);
@@ -53,5 +55,10 @@ namespace TecWi_Web.Domain.Entities
             DomainValidadorException.Whem(senhaSalt == null || senhaSalt.Length == 0, SenhaSaltInvalido);
             SenhaSalt = senhaSalt;
         } 
+
+        public void Update(Guid idUsuario, string login, string nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
+        {
+            ValidateDomain(idUsuario, login, nome, eMail, senhaHash, senhaSalt);
+        }
     }
 }
