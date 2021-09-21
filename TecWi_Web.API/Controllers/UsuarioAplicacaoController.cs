@@ -20,10 +20,10 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpPost]
-        [Route(nameof(Insert))]
-        public async Task<IActionResult> Insert(UsuarioAplicacaoDTO usuarioAplicacaoDTO)
+        [Route(nameof(InsertAsync))]
+        public async Task<IActionResult> InsertAsync(UsuarioAplicacaoDTO usuarioAplicacaoDTO)
         {
-            ServiceResponse<Guid> serviceResponse = await _iUsuarioAplicacaoService.Insert(usuarioAplicacaoDTO);
+            ServiceResponse<Guid> serviceResponse = await _iUsuarioAplicacaoService.InsertAsync(usuarioAplicacaoDTO);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
@@ -35,10 +35,10 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpPost]
-        [Route(nameof(BulkInsert))]
-        public async Task<IActionResult> BulkInsert(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
+        [Route(nameof(BulkInsertAsync))]
+        public async Task<IActionResult> BulkInsertAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
         {
-            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.BulkInsert(usuarioAplicacaoDTO);
+            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.BulkInsertAsync(usuarioAplicacaoDTO);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
@@ -50,10 +50,10 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpDelete]
-        [Route(nameof(Delete))]
-        public async Task<IActionResult> Delete(Guid idUsuario)
+        [Route(nameof(DeleteAsync))]
+        public async Task<IActionResult> DeleteAsync(Guid idUsuario)
         {
-            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.Delete(idUsuario);
+            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.DeleteAsync(idUsuario);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
@@ -65,9 +65,9 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByIdUsuario(Guid idUsuario)
+        public async Task<IActionResult> GetByIdUsuarioAsync(Guid idUsuario)
         {
-            ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = await _iUsuarioAplicacaoService.GetByIdUsuario(idUsuario);
+            ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = await _iUsuarioAplicacaoService.GetByIdUsuarioAsync(idUsuario);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);

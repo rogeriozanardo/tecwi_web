@@ -7,9 +7,9 @@ namespace TecWi_Web.Application.Interfaces
 {
     public interface IUsuarioAplicacaoService
     {
-        Task<ServiceResponse<Guid>> Insert(UsuarioAplicacaoDTO usuarioAplicacaoDTO);
-        Task<ServiceResponse<bool>> BulkInsert(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO);
-        Task<ServiceResponse<bool>> Delete(Guid idUsuario);
-        Task<ServiceResponse<List<UsuarioAplicacaoDTO>>> GetByIdUsuario(Guid idUsuario);
+        Task<ServiceResponse<Guid>> InsertAsync(UsuarioAplicacaoDTO usuarioAplicacaoDTO);
+        Task<ServiceResponse<bool>> BulkInsertAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO);
+        Task<ServiceResponse<bool>> DeleteAsync(Guid idUsuario);
+        Task<ServiceResponse<List<UsuarioAplicacaoDTO>>> GetByIdUsuarioAsync(Guid idUsuario);
     }
 }

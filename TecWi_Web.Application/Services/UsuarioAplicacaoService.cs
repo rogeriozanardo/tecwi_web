@@ -24,7 +24,7 @@ namespace TecWi_Web.Application.Services
             _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
-        public async Task<ServiceResponse<bool>> BulkInsert(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
+        public async Task<ServiceResponse<bool>> BulkInsertAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -42,7 +42,7 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> Delete(Guid idUsuario)
+        public async Task<ServiceResponse<bool>> DeleteAsync(Guid idUsuario)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -59,7 +59,7 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<UsuarioAplicacaoDTO>>> GetByIdUsuario(Guid idUsuario)
+        public async Task<ServiceResponse<List<UsuarioAplicacaoDTO>>> GetByIdUsuarioAsync(Guid idUsuario)
         {
             ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = new ServiceResponse<List<UsuarioAplicacaoDTO>>();
             try
@@ -77,7 +77,7 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Guid>> Insert(UsuarioAplicacaoDTO usuarioAplicacaoDTO)
+        public async Task<ServiceResponse<Guid>> InsertAsync(UsuarioAplicacaoDTO usuarioAplicacaoDTO)
         {
             ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
             try

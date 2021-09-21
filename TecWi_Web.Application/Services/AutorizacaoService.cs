@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -9,34 +8,25 @@ using System.Text;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
-using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
-using TecWi_Web.Shared.Filters;
 using TecWi_Web.Shared.Messages;
-using TecWi_Web.Shared.Utility;
 
 namespace TecWi_Web.Application.Services
 {
     public class AutorizacaoService : IAutorizacaoService
     {
         private readonly IConfiguration _configuration;
-        private readonly IUnitOfWork _iUnitOfWork;
-        private readonly IMapper _iMapper;
         private readonly IUsuarioRepository _iUsuarioRepository;
-        private readonly IUsuarioAplicacaoRepository _iUsuarioAplicacaoRepository;
 
-        public AutorizacaoService(IConfiguration configuration, IUnitOfWork iUnitOfWork, IMapper iMapper, IUsuarioRepository iUsuarioRepository, IUsuarioAplicacaoRepository iUsuarioAplicacaoRepository)
+        public AutorizacaoService(IConfiguration configuration, IUsuarioRepository iUsuarioRepository)
         {
             _configuration = configuration;
-            _iUnitOfWork = iUnitOfWork;
-            _iMapper = iMapper;
             _iUsuarioRepository = iUsuarioRepository;
-            _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
-        public async Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO)
+        public async Task<ServiceResponse<UsuarioDTO>> LoginAsync(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
             serviceResponse.Data = new UsuarioDTO();
@@ -71,14 +61,7 @@ namespace TecWi_Web.Application.Services
                         serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Gestor });
                         serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Gestor });
                     }
-                    else
-                    {
-                        // implementar aqui a busca pela lista de aplicações e perfis do usuário
-                    }
-
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -87,65 +70,6 @@ namespace TecWi_Web.Application.Services
             }
 
             return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<UsuarioDTO>> Register(UsuarioDTO usuarioDTO)
-        {
-            ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
-            try
-            {
-                if (await UsuarioExists(usuarioDTO))
-                {
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = ServiceMessages.UsuarioJaCadastrado;
-                    return serviceResponse;
-                }
-
-                PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
-
-                Usuario usuario = new Usuario(new Guid(), usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
-
-                await _iUsuarioRepository.Insert(usuario);
-
-                usuarioDTO.UsuarioAplicacaoDTO.ForEach(x => { x.IdUsuario = usuario.IdUsuario; });
-                List<UsuarioAplicacao> usuarioAplicacao = _iMapper.Map<List<UsuarioAplicacao>>(usuarioDTO.UsuarioAplicacaoDTO);
-                await _iUsuarioAplicacaoRepository.BulkInsert(usuarioAplicacao);
-
-                await _iUnitOfWork.CommitAsync();
-
-                serviceResponse.Data = usuarioDTO;
-                serviceResponse.Message = ServiceMessages.UsuarioSucessoCadastro;
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Message = ex.GetBaseException().Message;
-                serviceResponse.Success = false;
-            }
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<List<UsuarioDTO>>> GetUserList(UsuarioFilter usuarioFilter)
-        {
-            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
-            
-            try
-            {
-                List<Usuario> usuarioList = new List<Usuario>();
-                usuarioList = await _iUsuarioRepository.GetAllAsync(usuarioFilter);
-
-                serviceResponse.Data = _iMapper.Map<List<UsuarioDTO>>(usuarioList);
-
-            }catch(Exception ex)
-            {
-                serviceResponse.Message = ex.GetBaseException().Message;
-                serviceResponse.Success = false;
-            }
-            return serviceResponse;
-        }
-        private async Task<bool> UsuarioExists(UsuarioDTO usuarioDTO)
-        {
-            Usuario usuario = await _iUsuarioRepository.GetByLoginAsync(usuarioDTO.Login);
-            return usuario != null;
         }
 
         private bool VerifyPasswordHash(string senha, byte[] senhaHash, byte[] senhadSalt)
@@ -190,7 +114,5 @@ namespace TecWi_Web.Application.Services
             SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
             return jwtSecurityTokenHandler.WriteToken(securityToken);
         }
-
-        
     }
 }

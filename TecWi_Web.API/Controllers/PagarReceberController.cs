@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Shared.DTOs;
@@ -25,10 +22,10 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpGet]
-        [Route(nameof(PopulateData))]
-        public async Task<IActionResult> PopulateData()
+        [Route(nameof(PopulateDataAsync))]
+        public async Task<IActionResult> PopulateDataAsync()
         {
-            ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateData();
+            ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateDataAsync();
 
             if (serviceResponse.Success)
             {

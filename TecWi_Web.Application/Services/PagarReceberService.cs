@@ -88,7 +88,7 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<DateTime>> PopulateData()
+        public async Task<ServiceResponse<DateTime>> PopulateDataAsync()
         {
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
             try

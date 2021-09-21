@@ -17,23 +17,10 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpPost]
-        [Route(nameof(Register))]
-        public async Task<ActionResult> Register(UsuarioDTO UsuarioDTO)
+        [Route(nameof(LoginAsync))]
+        public async Task<ActionResult> LoginAsync(UsuarioDTO UsuarioDTO)
         {
-            ServiceResponse<UsuarioDTO> serviceResponse = await _iAutorizacaoService.Register(UsuarioDTO);
-            if (!serviceResponse.Success)
-            {
-                return BadRequest(serviceResponse.Message);
-            }
-
-            return Ok(serviceResponse);
-        }
-
-        [HttpPost]
-        [Route(nameof(Login))]
-        public async Task<ActionResult> Login(UsuarioDTO UsuarioDTO)
-        {
-            ServiceResponse<UsuarioDTO> serviceResponse = await _iAutorizacaoService.Login(UsuarioDTO);
+            ServiceResponse<UsuarioDTO> serviceResponse = await _iAutorizacaoService.LoginAsync(UsuarioDTO);
             if (!serviceResponse.Success)
             {
                 return BadRequest(serviceResponse);

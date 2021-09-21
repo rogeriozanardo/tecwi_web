@@ -26,7 +26,7 @@ namespace TecWi_Web.Application.Services
             _iUsuarioRepository = iUsuarioRepository;
         }
 
-        public async Task<ServiceResponse<List<UsuarioDTO>>> GetAllAsycn(UsuarioFilter usuarioFilter)
+        public async Task<ServiceResponse<List<UsuarioDTO>>> GetAllAsync(UsuarioFilter usuarioFilter)
         {
             ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
             try
@@ -44,7 +44,60 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> Update(UsuarioDTO usuarioDTO)
+        public async Task<ServiceResponse<UsuarioDTO>> GetByIdAsync(Guid Idusuario)
+        {
+            ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
+            try
+            {
+                Usuario usuario = await _iUsuarioRepository.GetByIdAsync(Idusuario);
+                UsuarioDTO usuarioDTO = _iMapper.Map<UsuarioDTO>(usuario);
+                serviceResponse.Data = usuarioDTO;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<UsuarioDTO>> GetByLoginAsync(string Login)
+        {
+            ServiceResponse<UsuarioDTO> serviceResponse = new ServiceResponse<UsuarioDTO>();
+            try
+            {
+                Usuario usuario = await _iUsuarioRepository.GetByLoginAsync(Login);
+                UsuarioDTO usuarioDTO = _iMapper.Map<UsuarioDTO>(usuario);
+                serviceResponse.Data = usuarioDTO;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<Guid>> InsertAsync(UsuarioDTO usuarioDTO)
+        {
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            try
+            {
+                PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
+                Usuario usuario = new Usuario(Guid.NewGuid(), usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
+                await _iUsuarioRepository.Insert(usuario);
+                await _iUnitOfWork.CommitAsync();
+                serviceResponse.Data = usuario.IdUsuario;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateAsync(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try

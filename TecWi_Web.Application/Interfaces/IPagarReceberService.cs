@@ -7,6 +7,6 @@ namespace TecWi_Web.Application.Interfaces
 {
     public interface IPagarReceberService
     {
-        Task<ServiceResponse<DateTime>> PopulateData();
+        Task<ServiceResponse<DateTime>> PopulateDataAsync();
     }
 }

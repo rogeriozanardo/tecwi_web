@@ -39,6 +39,7 @@ namespace TecWi_Web.API
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAutorizacaoService, AutorizacaoService>();
             services.AddScoped<IUsuarioAplicacaoService, UsuarioAplicacaoService>();
             services.AddScoped<IPagarReceberService, PagarReceberService>();
