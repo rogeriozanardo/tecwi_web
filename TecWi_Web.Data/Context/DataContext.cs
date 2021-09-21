@@ -10,6 +10,11 @@ namespace TecWi_Web.Data.Context
 
         }
 
+        public DataContext() : base()
+        {
+
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -22,5 +27,6 @@ namespace TecWi_Web.Data.Context
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<ContatoCobranca> ContatoCobranca { get; set; }
         public DbSet<ContatoCobrancaLancamento> ContatoCobrancaLancamento { get; set; }
+        public DbSet<LogOperacao> LogOperacao { get; set; }
     }
 }

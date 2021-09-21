@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Filters;
 
@@ -19,14 +22,20 @@ namespace TecWi_Web.Application.Services
         private readonly IPagarReceberRepository _iPagarReceberRepository;
         private readonly IClienteRepository _iClienteRepository;
         private readonly IUsuarioRepository _iUsuarioRepository;
-        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository)
+        private readonly ILogOperacaoRepository _iLogOperacaoRepository;
+        private readonly IHttpContextAccessor _iHttpContextAccessor;
+        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository, ILogOperacaoRepository iLogOperacaoRepository, IHttpContextAccessor iHttpContextAccessor)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iPagarReceberRepository = iPagarReceberRepository;
             _iClienteRepository = iClienteRepository;
             _iUsuarioRepository = iUsuarioRepository;
+            _iLogOperacaoRepository = iLogOperacaoRepository;
+            _iHttpContextAccessor = iHttpContextAccessor;
         }
+
+        private Guid GetUserId() => Guid.Parse(_iHttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<bool>> BulkInsertEfCoreAsync(List<PagarReceberDTO> pagarReceberDTO)
         {
@@ -84,23 +93,17 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
             try
             {
-                Task<List<PagarReceber>> TaskPagarReceberPending = _iPagarReceberRepository.GetPendingPagarReceber();
-                Task<List<PagarReceber>> TaskPagarReceberPaid = _iPagarReceberRepository.GetPaidPagarReceber();
-                Task<List<PagarReceber>> TaskPagarReceberEfCore = _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
-                Task<List<Cliente>> TaskClienteEfCore = _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { }, Guid.Empty);
-
-                await Task.WhenAll(TaskPagarReceberPending, TaskPagarReceberPaid, TaskPagarReceberEfCore, TaskClienteEfCore);
-
-                List<PagarReceber> pagarReceberPending = TaskPagarReceberPending.Result;
-                List<PagarReceber> pagarReceberPaid = TaskPagarReceberPaid.Result;
-                List<PagarReceber> pagarReceberEfCore = TaskPagarReceberEfCore.Result;
-                List<Cliente> clienteEFCore = TaskClienteEfCore.Result;
+                List<PagarReceber> pagarReceberPending = await _iPagarReceberRepository.GetPendingPagarReceber();
+                List<PagarReceber> pagarReceberPaid = await _iPagarReceberRepository.GetPaidPagarReceber();
+                List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
+                List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { }, Guid.Empty);
 
                 await InsertCliente(pagarReceberPending, clienteEFCore);
                 await UpdateCliente(pagarReceberPending, clienteEFCore);
                 await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
                 await UpdatePagarReceberPaid(pagarReceberPaid);
+                await InsertLog();
 
                 await _iUnitOfWork.CommitAsync();
                 serviceResponse.Data = DateTime.Now;
@@ -188,6 +191,19 @@ namespace TecWi_Web.Application.Services
             {
                 await _iPagarReceberRepository.BulkUpdateEfCore(pagarReceberUpdate);
             }
+        }
+
+        private async Task InsertLog()
+        {
+            LogOperacao logOperacao = new LogOperacao
+            (
+                Guid.NewGuid(),
+                GetUserId(),
+                TipoOperacao.AtualizarDadosCobranca,
+                DateTime.Now
+            );
+
+            await _iLogOperacaoRepository.InsertAsync(logOperacao);
         }
 
         private List<Cliente> GetUniqueClients(List<PagarReceber> pagarReceber)

@@ -11,6 +11,8 @@ namespace TecWi_Web.Application.MappingProfiles
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
             CreateMap<UsuarioAplicacao, UsuarioAplicacaoDTO>().ReverseMap();
             CreateMap<PagarReceber, PagarReceberDTO>().ReverseMap();
+            CreateMap<LogOperacao, LogOperacaoDTO>().
+                ForMember(dest => dest.UsuarioDTO, opt => opt.MapFrom(src => src.Usuario));
             CreateMap<Cliente, ClienteDTO>()
                 .ForMember(dest => dest.ContatoCobrancaDTO, opt => opt.MapFrom(src => src.ContatoCobranca))
                 .ForMember(dest => dest.PagarReceberDTO, opt => opt.MapFrom(src => src.PagarReceber));

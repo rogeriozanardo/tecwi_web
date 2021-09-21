@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using TecWi_Web.Application.Services;
@@ -23,7 +24,9 @@ namespace TecWi_Web.Tests.UnitTests.Application
             Mock<IPagarReceberRepository> _iPagarReceberRepository = new Mock<IPagarReceberRepository>();
             Mock<IClienteRepository> _iClienteRepository = new Mock<IClienteRepository>();
             Mock<IUsuarioRepository> _iUsuarioRepository = new Mock<IUsuarioRepository>();
-            _pagarReceberService = new PagarReceberService(_iMapper.Object, _iUnitOfWork.Object, _iPagarReceberRepository.Object, _iClienteRepository.Object, _iUsuarioRepository.Object);
+            Mock<ILogOperacaoRepository> _iLogOperacaoRepository = new Mock<ILogOperacaoRepository>();
+            Mock<IHttpContextAccessor> _iHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            _pagarReceberService = new PagarReceberService(_iMapper.Object, _iUnitOfWork.Object, _iPagarReceberRepository.Object, _iClienteRepository.Object, _iUsuarioRepository.Object, _iLogOperacaoRepository.Object, _iHttpContextAccessor.Object);
         }
 
         [Test]
@@ -34,7 +37,7 @@ namespace TecWi_Web.Tests.UnitTests.Application
             List<Usuario> usuario = CreateUsuario(quantityUsuario);
             _pagarReceberService.AssingUsuarioToClienteRandonly(cliente, usuario);
             int clienteGroupPerUsuario = cliente.GroupBy(x => new { x.IdUsuario }).ToList().Count;
-            
+
             Assert.IsTrue(clienteGroupPerUsuario == quantityUsuario);
         }
 

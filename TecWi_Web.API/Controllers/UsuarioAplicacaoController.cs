@@ -12,10 +12,10 @@ namespace TecWi_Web.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UsuarioAutorizacaoController : ControllerBase
+    public class UsuarioAplicacaoController : ControllerBase
     {
         private readonly IUsuarioAplicacaoService _iUsuarioAplicacaoService;
-        public UsuarioAutorizacaoController(IUsuarioAplicacaoService iUsuarioAplicacaoService)
+        public UsuarioAplicacaoController(IUsuarioAplicacaoService iUsuarioAplicacaoService)
         {
             _iUsuarioAplicacaoService = iUsuarioAplicacaoService;
         }
@@ -85,7 +85,7 @@ namespace TecWi_Web.API.Controllers
             ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
 
             serviceResponse.Data = new List<UsuarioDTO>();
-            serviceResponse = await _iUsuarioAplicacaoService
+            //serviceResponse = await _iUsuarioAplicacaoService
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
