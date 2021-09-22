@@ -15,7 +15,7 @@ namespace TecWi_Web.FrontServices
         public async Task<ServiceResponse<DateTime>> PopulateData()
         {
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
-            string url = $"{Config.ApiUrl}PagarReceber/PopulateData";
+            string url = $"{Config.ApiUrl}PagarReceber/PopulateDataAsync";
 
             try
             {
@@ -30,6 +30,30 @@ namespace TecWi_Web.FrontServices
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = e.Message;
+            }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<DateTime>> BuscaDataAtualizacaoDados()
+        {
+            ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
+
+            string url = $"{Config.ApiUrl}PagarReceber/GetNewestAsync";
+            string body = "";
+      
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, body);
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<DateTime>>();
+
+                Config.DtUltAtualicacaoDados = serviceResponse.Data;
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
             }
 
             return serviceResponse;

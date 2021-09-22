@@ -10,5 +10,6 @@ namespace TecWi_Web.FrontServices.Interfaces
     public interface ICobrancaFrontService
     {
         Task<ServiceResponse<DateTime>> PopulateData();
+        Task<ServiceResponse<DateTime>> BuscaDataAtualizacaoDados();
     }
 }

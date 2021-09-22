@@ -36,5 +36,20 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             mensagemInformativaDTO.Exibe = true;
 
         }
+
+        protected override async Task OnInitializedAsync()
+        {
+            exibeSpinner = true;
+            ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
+
+            serviceResponse = await cobrancaFrontService.BuscaDataAtualizacaoDados();
+
+            if(serviceResponse.Success)
+            {
+                DtUltAtualicacaoCobranca = serviceResponse.Data;
+            }
+            exibeSpinner = false;
+
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace TecWi_Web.Data.Repositories
         {
             IQueryable<Usuario> usuario = _dataContext.Usuario
                 .Include(x => x.UsuarioAplicacao)
-                .Where(x => !string.IsNullOrWhiteSpace(usuarioFilter.None) ? x.Nome == usuarioFilter.None : true);
+                .Where(x => !string.IsNullOrWhiteSpace(usuarioFilter.Nome) ? x.Nome == usuarioFilter.Nome : true);
 
             List<Usuario> _usuario = await usuario
                 .AsNoTracking()

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
@@ -10,6 +11,7 @@ namespace TecWi_Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LogOperacaoController : ControllerBase
     {
         private readonly ILogOperacaoService _iLogOperacaoService;
@@ -47,7 +49,7 @@ namespace TecWi_Web.API.Controllers
             }
             else
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
             }
         }
 

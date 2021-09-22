@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(InsertAsync))]
         public async Task<IActionResult> InsertAsync(UsuarioDTO usuarioDTO)
         {
-            ServiceResponse<Guid> serviceResponse = await _iUsuarioService.InsertAsync(usuarioDTO);
+            ServiceResponse<bool> serviceResponse = await _iUsuarioService.InsertAsync(usuarioDTO);
 
             if (serviceResponse.Success)
             {

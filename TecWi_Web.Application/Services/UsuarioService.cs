@@ -78,16 +78,25 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Guid>> InsertAsync(UsuarioDTO usuarioDTO)
+        public async Task<ServiceResponse<bool>> InsertAsync(UsuarioDTO usuarioDTO)
         {
-            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                Usuario checaUsuario = await _iUsuarioRepository.GetByLoginAsync(usuarioDTO.Login);
+                if(checaUsuario != null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Login já cadastrado.";
+                    return serviceResponse;
+                }
+
+
                 PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
                 Usuario usuario = new Usuario(Guid.NewGuid(), usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
                 await _iUsuarioRepository.Insert(usuario);
                 await _iUnitOfWork.CommitAsync();
-                serviceResponse.Data = usuario.IdUsuario;
+                
             }
             catch (Exception ex)
             {

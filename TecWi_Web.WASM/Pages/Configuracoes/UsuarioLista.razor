@@ -1,8 +1,71 @@
 ﻿@layout ConfiguracoesLayout
 @page "/UsuarioLista"
 
+@inject IUsuarioFrontService usuarioFrontService
+
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+
+<!-- Inicio do Modal Inclui/Edita usuário -->
+<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="500" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                Cadastro de usuário
+            </div>
+        </Header>
+        <Content>
+            
+            <div class="container-fluid container-modal-form bg-white">
+                <EditForm Model="usuarioDTO">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="nome">Nome</label>
+                            <SfTextBox ID="nome" @bind-value="usuarioDTO.Nome" />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="email">e-mail</label>
+                            <SfTextBox ID="email" @bind-value="usuarioDTO.Email" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="login">Login</label>
+                            <SfTextBox ID="login" @bind-value="usuarioDTO.Login" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="senha">Senha</label>
+                            <SfTextBox ID="senha" @bind-value="usuarioDTO.Senha" Type="InputType.Password" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="confirmesenha">Confirme a senha</label>
+                            <SfTextBox ID="confirmesenha" @bind-value="confirmaSenha" Type="InputType.Password" />
+                        </div>
+                    </div>
+                    <hr>
+
+                    <CardFooter>
+                        <div class="form-row mt-5 mb-3">
+                            <div class="form-group col">
+                                <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalCadastro">Fechar</SfButton>
+                            </div>
+
+                            <div class="form-group col-md-auto">
+                                <SfButton CssClass="btn-blue" OnClick="SalvarUsuario">Salvar e Fechar</SfButton>
+                            </div>
+                        </div>
+                    </CardFooter>
+                </EditForm>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<!-- Fim do Modal Inclui/Edita usuário -->
 
 <div class="container-fluid">
     <SfCard CssClass="card-tela">
@@ -13,7 +76,22 @@
                 </div>
             </div>
             <hr />
-            @if (listaUsuarioDTO.Count >= 0)
+            <div class="form">
+                <div class="form-row mb-3 mt-4">
+                    <div class="form-group col-5">
+                        <SfTextBox Placeholder="Digite Nome, Login ou e-mail para pesquisar"></SfTextBox>
+                    </div>
+
+                    <div class="form-group col-auto">
+                        <SfButton IsPrimary="true" CssClass="mr-2" OnClick="PesquisaUsuarios">Pesquisar</SfButton>
+                    </div>
+                    <div class="form-group col-auto text-right">
+                        <SfButton CssClass="btn-blue" OnClick="ModalIncluirUsuario">+ Incluir Usuário</SfButton>
+                    </div>
+                </div>
+            </div>
+
+            @if (listaUsuarioDTO.Count > 0)
             {
                 <SfGrid DataSource="@listaUsuarioDTO" AllowPaging="true">
                     <GridPageSettings PageCount="5" PageSizes="true" PageSize="20"></GridPageSettings>
@@ -33,3 +111,12 @@
         </CardContent>
     </SfCard>
 </div>
+
+
+
+
+<style>
+    #modalUsuario {
+        max-height: none !important;
+    }
+</style>

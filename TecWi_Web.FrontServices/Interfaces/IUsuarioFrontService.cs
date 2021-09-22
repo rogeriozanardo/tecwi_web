@@ -10,5 +10,6 @@ namespace TecWi_Web.FrontServices.Interfaces
     public interface IUsuarioFrontService
     {
         Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO);
+        Task<ServiceResponse<bool>> SalvarUsuario(UsuarioDTO usuarioDTO);
     }
 }
