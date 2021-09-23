@@ -30,8 +30,8 @@ namespace TecWi_Web.Application.Services
             try
             {
                 List<UsuarioAplicacao> usuarioAplicacao = _iMapper.Map<List<UsuarioAplicacao>>(usuarioAplicacaoDTO);
-                 await _iUnitOfWork.CommitAsync();
                 serviceResponse.Data = await _iUsuarioAplicacaoRepository.BulkInsert(usuarioAplicacao);
+                await _iUnitOfWork.CommitAsync();
                 serviceResponse.Message = ServiceMessages.OperacaoConculidaComSucesso;
             }
             catch (Exception ex)

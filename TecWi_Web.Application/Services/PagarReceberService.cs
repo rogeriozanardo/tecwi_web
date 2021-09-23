@@ -12,6 +12,7 @@ using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Filters;
+using TecWi_Web.Shared.Messages;
 
 namespace TecWi_Web.Application.Services
 {
@@ -93,34 +94,56 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
             try
             {
-                List<PagarReceber> pagarReceberPending = await _iPagarReceberRepository.GetPendingPagarReceber();
-                List<PagarReceber> pagarReceberPaid = await _iPagarReceberRepository.GetPaidPagarReceber();
-                List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
-                List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { }, Guid.Empty);
+                bool hasValidUsers = await ValidadeUsuarioAplicacao();
+                if (hasValidUsers)
+                {
+                    List<PagarReceber> pagarReceberPending = await _iPagarReceberRepository.GetPendingPagarReceber();
+                    List<PagarReceber> pagarReceberPaid = await _iPagarReceberRepository.GetPaidPagarReceber();
+                    List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
+                    List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { }, Guid.Empty);
 
-                await InsertCliente(pagarReceberPending, clienteEFCore);
-                await UpdateCliente(pagarReceberPending, clienteEFCore);
-                await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
-                await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
-                await UpdatePagarReceberPaid(pagarReceberPaid);
-                await InsertLog();
+                    await InsertCliente(pagarReceberPending, clienteEFCore);
+                    await UpdateCliente(pagarReceberPending, clienteEFCore);
+                    await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
+                    await UpdatePagarReceberDifferent(pagarReceberEfCore, pagarReceberPending);
+                    await UpdatePagarReceberPaid(pagarReceberPaid);
+                    await InsertLog();
 
-                await _iUnitOfWork.CommitAsync();
-                serviceResponse.Data = DateTime.Now;
+                    await _iUnitOfWork.CommitAsync();
+                    serviceResponse.Data = DateTime.Now;
+                }
+                else
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = ServiceMessages.NaoExistemUsuariosComAcessoAGetaoDeCobranca;
+                }
             }
             catch (Exception ex)
             {
-                serviceResponse.Message = ex.GetBaseException().Message;
                 serviceResponse.Success = false;
+                serviceResponse.Message = ex.GetBaseException().Message;
             }
             return serviceResponse;
+        }
+
+        private async Task<bool> ValidadeUsuarioAplicacao()
+        {
+
+            List<Usuario> usuario = await GetUsuarioWithPermission();
+            return usuario.Count != 0;
+        }
+
+        private async Task<List<Usuario>> GetUsuarioWithPermission()
+        {
+            List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter { });
+            return usuario.Where(x => x.UsuarioAplicacao.Any(y => y.IdAplicacao == IdAplicacao.Cobranca && y.IdPerfil == IdPerfil.Operador && y.StAtivo)).ToList();
         }
 
         private async Task InsertCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)
         {
             List<Cliente> cliente = GetUniqueClients(pagarReceberPending);
             List<Cliente> clienteToInsert = cliente.Where(x => !clienteEFCore.Any(y => y.Cdclifor == x.Cdclifor)).ToList();
-            List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter());
+            List<Usuario> usuario = await GetUsuarioWithPermission();
 
             AssingUsuarioToClienteRandonly(clienteToInsert, usuario);
 
@@ -143,7 +166,7 @@ namespace TecWi_Web.Application.Services
                     continue;
                 }
 
-                _clienteEfCore.Update(_cliente.Cdclifor,  _cliente.Inscrifed, _cliente.Fantasia, _cliente.Razao, _cliente.DDD, _cliente.Fone1, _cliente.Fone2, _cliente.Email, _cliente.Cidade); ;
+                _clienteEfCore.Update(_cliente.Cdclifor, _cliente.Inscrifed, _cliente.Fantasia, _cliente.Razao, _cliente.DDD, _cliente.Fone1, _cliente.Fone2, _cliente.Email, _cliente.Cidade); ;
                 clienteToUpdate.Add(_clienteEfCore);
             }
 

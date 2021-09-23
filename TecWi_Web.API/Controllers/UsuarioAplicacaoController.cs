@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.API.Controllers
 {
@@ -51,9 +52,9 @@ namespace TecWi_Web.API.Controllers
 
         [HttpDelete]
         [Route(nameof(DeleteAsync))]
-        public async Task<IActionResult> DeleteAsync(Guid idUsuario)
+        public async Task<IActionResult> DeleteAsync(UsuarioAplicacaoFilter usuarioAplicacaoFilter)
         {
-            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.DeleteAsync(idUsuario);
+            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.DeleteAsync(usuarioAplicacaoFilter.IdUsuario);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
@@ -64,10 +65,10 @@ namespace TecWi_Web.API.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetByIdUsuarioAsync(Guid idUsuario)
+        [HttpPost]
+        public async Task<IActionResult> GetByIdUsuarioAsync(UsuarioAplicacaoFilter usuarioAplicacaoFilter)
         {
-            ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = await _iUsuarioAplicacaoService.GetByIdUsuarioAsync(idUsuario);
+            ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = await _iUsuarioAplicacaoService.GetByIdUsuarioAsync(usuarioAplicacaoFilter.IdUsuario);
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
