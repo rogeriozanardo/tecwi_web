@@ -8,19 +8,22 @@ namespace TecWi_Web.Domain.Entities
     {
         public Usuario Usuario { get; set; }
         public Guid IdUsuario { get; private set; }
+        public bool StAtivo { get; private set; }
         public IdAplicacao IdAplicacao { get; private set; }
         public IdPerfil IdPerfil { get; private set; }
 
-        public UsuarioAplicacao(Guid idUsuario, IdAplicacao idAplicacao, IdPerfil idPerfil)
+        public UsuarioAplicacao(Guid idUsuario, bool stAtivo, IdAplicacao idAplicacao, IdPerfil idPerfil)
         {
-            ValidateDomain(idUsuario, idAplicacao, idPerfil);
+            ValidateDomain(idUsuario, stAtivo, idAplicacao, idPerfil);
         }
 
         private string IdAplicacaoInvalido = "Id aplicação inválido!";
         private string IdPerfilInvalido = "Id perfil inválido!";
-        private void ValidateDomain(Guid idUsuario, IdAplicacao idAplicacao, IdPerfil idPerfil)
+        private void ValidateDomain(Guid idUsuario, bool stAtivo, IdAplicacao idAplicacao, IdPerfil idPerfil)
         {
             IdUsuario = idUsuario;
+
+            StAtivo = stAtivo;
 
             DomainValidadorException.Whem((int)idAplicacao == 0, IdAplicacaoInvalido);
             IdAplicacao = idAplicacao;

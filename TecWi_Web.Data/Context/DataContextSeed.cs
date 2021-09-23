@@ -16,7 +16,7 @@ namespace TecWi_Web.Data.Context
                 PasswordHashUtitlity.CreatePaswordHash("Z4@BestDevs", out byte[] senhaHash, out byte[] senhaSalt);
                 List<Usuario> usuario = new List<Usuario>()
                 {
-                    new Usuario(new Guid(), "admin", "admin", "email@email", senhaHash, senhaSalt)
+                    new Usuario(Guid.NewGuid(), "admin", "admin", "email@email", senhaHash, senhaSalt)
                 };
 
                 _dataContext.Usuario.AddRange(usuario);

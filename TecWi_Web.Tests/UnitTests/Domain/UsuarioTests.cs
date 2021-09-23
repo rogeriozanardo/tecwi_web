@@ -18,7 +18,7 @@ namespace TecWi_Web.Tests.UnitTests.Domain
         [TestCase("Login", "Nome", "email@email", new byte[] { 0x20 }, new byte[] { 0x20 })]
         public void CreateUsuarioWithValidParameters(string login, string Nome, string eMail, byte[] senhaHash, byte[] senhaSalt)
         {
-            Action action = () => new Usuario(new Guid(), login, Nome, eMail, senhaHash, senhaSalt);
+            Action action = () => new Usuario(Guid.NewGuid(), login, Nome, eMail, senhaHash, senhaSalt);
             action.Should().NotThrow<DomainValidadorException>();
         }
 
