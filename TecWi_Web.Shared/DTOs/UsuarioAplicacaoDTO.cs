@@ -10,6 +10,5 @@ namespace TecWi_Web.Shared.DTOs
         public IdAplicacao IdAplicacao { get; set; }
         public string DsAplicacao { get; set; }
         public IdPerfil IdPerfil { get; set; }
-        public bool StAtivo { get; set; }
     }
 }
