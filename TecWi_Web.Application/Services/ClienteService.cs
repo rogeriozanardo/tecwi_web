@@ -51,9 +51,28 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();
             try
             {
-                Guid IdUsuario = GetUserId();
-                List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter, IdUsuario);
+                clientePagarReceberFilter.IdUsuario = GetUserId();
+                List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
+
+                serviceResponse.Data = clienteDTO;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<ClienteDTO>> GetNextInQueueAsync()
+        {
+            ServiceResponse<ClienteDTO> serviceResponse = new ServiceResponse<ClienteDTO>();
+            try
+            {
+                ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter { IdUsuario = GetUserId() };
+                Cliente cliente = await _iClienteRepository.GetNextInQueueAsync(clientePagarReceberFilter);
+                ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
 
                 serviceResponse.Data = clienteDTO;
             }

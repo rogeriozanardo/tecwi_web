@@ -4,6 +4,7 @@ namespace TecWi_Web.Shared.Filters
 {
     public class ClientePagarReceberFilter : FilterBase
     {
+        public Guid IdUsuario { get; set; }
         public int? cdclifor { get; set; }
         public string inscrifed { get; private set; }
         public string fantasia { get; private set; }

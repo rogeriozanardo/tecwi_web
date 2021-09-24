@@ -35,5 +35,21 @@ namespace TecWi_Web.API.Controllers
                 return BadRequest(serviceResponse.Message);
             }
         }
+
+        [HttpGet]
+        [Route(nameof(GetNextInQueueAsync))]
+        public async Task<IActionResult> GetNextInQueueAsync()
+        {
+            ServiceResponse<ClienteDTO> serviceResponse = await _iClienteService.GetNextInQueueAsync();
+
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse.Message);
+            }
+        }
     }
 }
