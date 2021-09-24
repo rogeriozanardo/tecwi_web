@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.WASM.Pages.Configuracoes
@@ -39,6 +40,19 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         private void ModalIncluirUsuario()
         {
             usuarioDTO = new UsuarioDTO();
+            usuarioDTO.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+
+            usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Cobranca, IdPerfil = IdPerfil.Operador, StAtivo = false });
+            usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Comercial, IdPerfil = IdPerfil.Operador, StAtivo = false });
+            usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Configuracoes, IdPerfil = IdPerfil.Operador, StAtivo = false });
+            usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Operador, StAtivo = false });
+            usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Operador, StAtivo = false });
+
+            foreach(var item in usuarioDTO.UsuarioAplicacaoDTO)
+            {
+                item.DsAplicacao = item.IdAplicacao.GetDisplayName();
+            }
+
             confirmaSenha = string.Empty;
             exibeModalIncluiAlteraUsuario = true;
         }
@@ -92,6 +106,11 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             }
 
             mensagemInformativaDTO.Exibe = true;
+        }
+
+        private void EditaAplicacoesUsuario()
+        {
+
         }
     }
 }

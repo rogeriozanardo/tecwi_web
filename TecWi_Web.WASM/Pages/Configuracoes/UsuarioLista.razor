@@ -7,7 +7,7 @@
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
 <!-- Inicio do Modal Inclui/Edita usuário -->
-<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="500" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario">
+<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario">
     <DialogTemplates>
         <Header>
             <div class="row mt-1">
@@ -47,7 +47,19 @@
                         </div>
                     </div>
                     <hr>
-
+                    <SfGrid DataSource="usuarioDTO.UsuarioAplicacaoDTO" Height="210" AllowPaging="false" >
+                        <GridEvents CommandClicked="EditaAplicacoesUsuario" TValue="UsuarioAplicacaoDTO"></GridEvents>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.DsAplicacao) HeaderText="Aplicação"></GridColumn>
+                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.IdPerfil) HeaderText="Perfil"></GridColumn>
+                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.StAtivo) HeaderText="Status"></GridColumn>
+                            <GridColumn HeaderText="" Width="130">
+                            <GridCommandColumns>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
+                            </GridCommandColumns>
+                            </GridColumn>
+                        </GridColumns>
+                    </SfGrid>
                     <CardFooter>
                         <div class="form-row mt-5 mb-3">
                             <div class="form-group col">
