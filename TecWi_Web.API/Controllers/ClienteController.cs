@@ -22,9 +22,9 @@ namespace TecWi_Web.API.Controllers
 
         [HttpPost]
         [Route(nameof(GetAllAsync))]
-        public async Task<IActionResult> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilterr)
+        public async Task<IActionResult> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
-            ServiceResponse<List<ClienteDTO>> serviceResponse = await _iClienteService.GetAllAsync(clientePagarReceberFilterr);
+            ServiceResponse<List<ClienteDTO>> serviceResponse = await _iClienteService.GetAllAsync(clientePagarReceberFilter);
 
             if (serviceResponse.Success)
             {
@@ -36,11 +36,11 @@ namespace TecWi_Web.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(GetNextInQueueAsync))]
-        public async Task<IActionResult> GetNextInQueueAsync()
+        public async Task<IActionResult> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
-            ServiceResponse<ClienteDTO> serviceResponse = await _iClienteService.GetNextInQueueAsync();
+            ServiceResponse<ClienteDTO> serviceResponse = await _iClienteService.GetNextInQueueAsync(clientePagarReceberFilter);
 
             if (serviceResponse.Success)
             {

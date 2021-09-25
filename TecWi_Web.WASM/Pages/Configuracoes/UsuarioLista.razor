@@ -7,7 +7,7 @@
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
 <!-- Inicio do Modal Inclui/Edita usuário -->
-<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario">
+<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario" >
     <DialogTemplates>
         <Header>
             <div class="row mt-1">
@@ -60,6 +60,7 @@
                             </GridColumn>
                         </GridColumns>
                     </SfGrid>
+
                     <CardFooter>
                         <div class="form-row mt-5 mb-3">
                             <div class="form-group col">

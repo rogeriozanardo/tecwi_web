@@ -1,0 +1,64 @@
+﻿@layout GestaoCobrancaLayout
+@page "/ContatosLista"
+
+@inject NavigationManager Navigation
+@inject ICobrancaFrontService cobrancaFrontService
+@inject IClienteFrontservice clienteFrontService
+
+<SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
+<MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+
+
+
+<SfDialog id="modalContato" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalContato">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                <h4>@clienteDTO.razao</h4>
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid container-modal-form bg-white">
+                <EditForm Model="clienteDTO">
+
+
+                </EditForm>
+                <CardFooter>
+                    <div class="form-row mt-5 mb-3">
+                        <div class="form-group col">
+                            <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalContato">Fechar</SfButton>
+                        </div>
+
+                        <div class="form-group col-md-auto">
+                            <SfButton CssClass="btn-blue" OnClick="SalvareBuscaProximoCliente">Salvar e buscar próximo cliente</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<div class="card-group">
+    <div class="card card-dashboard shadow">
+        <div class="d-flex card-flex">
+            <div class="p-2 col card-dash-content">
+                <div class="form">
+                    <div class="form-row mb-3 mt-4">
+                        <div class="form-group col-md pt-1 mt-2 text-center">
+                            <SfButton CssClass="e-primary" Content="Iniciar Contatos" OnClick="InciaContatos" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    #modalContato {
+        max-height: none !important;
+    }
+</style>

@@ -19,11 +19,13 @@ namespace TecWi_Web.Application.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IUsuarioRepository _iUsuarioRepository;
+        private readonly IUsuarioAplicacaoRepository _iUsuarioAplicacaoRepository;
 
-        public AutorizacaoService(IConfiguration configuration, IUsuarioRepository iUsuarioRepository)
+        public AutorizacaoService(IConfiguration configuration, IUsuarioRepository iUsuarioRepository, IUsuarioAplicacaoRepository iUsuarioAplicacaoRepository)
         {
             _configuration = configuration;
             _iUsuarioRepository = iUsuarioRepository;
+            _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
         public async Task<ServiceResponse<UsuarioDTO>> LoginAsync(UsuarioDTO usuarioDTO)
@@ -48,6 +50,7 @@ namespace TecWi_Web.Application.Services
                 }
                 else
                 {
+                    serviceResponse.Data.IdUsuario = usuario.IdUsuario;
                     serviceResponse.Data.Login = usuario.Login;
                     serviceResponse.Data.Nome = usuario.Nome;
                     serviceResponse.Data.Email = usuario.Email;
@@ -60,6 +63,22 @@ namespace TecWi_Web.Application.Services
                         serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Configuracoes, IdPerfil = IdPerfil.Gestor });
                         serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Gestor });
                         serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Gestor });
+                    }
+                    else
+                    {
+                        serviceResponse.Data.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+                        List<UsuarioAplicacao> usuarioAplicacao = await _iUsuarioAplicacaoRepository.GetByIdUsuario(usuario.IdUsuario);
+
+                        foreach(var item in usuarioAplicacao)
+                        {
+                            serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO()
+                            {
+                                IdAplicacao = item.IdAplicacao,
+                                IdUsuario = usuario.IdUsuario,
+                                IdPerfil = item.IdPerfil,
+                                StAtivo = item.StAtivo
+                            });
+                        }
                     }
                 }
             }

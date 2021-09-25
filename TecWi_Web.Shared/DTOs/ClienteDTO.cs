@@ -15,5 +15,11 @@ namespace TecWi_Web.Shared.DTOs
         public string cidade { get; set; }
         public List<PagarReceberDTO> PagarReceberDTO { get; set; }
         public List<ContatoCobrancaDTO> ContatoCobrancaDTO { get; set; }
+
+        public ClienteDTO()
+        {
+            this.PagarReceberDTO = new List<PagarReceberDTO>();
+            this.ContatoCobrancaDTO = new List<ContatoCobrancaDTO>();
+        }
     }
 }

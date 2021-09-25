@@ -47,8 +47,14 @@ namespace TecWi_Web.API.Controllers
             ServiceResponse<LogOperacaoDTO> serviceResponseUsuario = await _iLogOperacaoService.GetNewestAsync(TipoOperacao.AtualizarDadosCobranca);
 
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
+            try
+            {
+                serviceResponse.Data = serviceResponseUsuario.Data.Data;
+            }catch(Exception e)
+            {
 
-            serviceResponse.Data = serviceResponseUsuario.Data.Data;
+            }
+            
 
             if (serviceResponse.Success)
             {

@@ -65,12 +65,12 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<ClienteDTO>> GetNextInQueueAsync()
+        public async Task<ServiceResponse<ClienteDTO>> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
             ServiceResponse<ClienteDTO> serviceResponse = new ServiceResponse<ClienteDTO>();
             try
             {
-                ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter { IdUsuario = GetUserId() };
+                //ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter { IdUsuario = GetUserId() };
                 Cliente cliente = await _iClienteRepository.GetNextInQueueAsync(clientePagarReceberFilter);
                 ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
 

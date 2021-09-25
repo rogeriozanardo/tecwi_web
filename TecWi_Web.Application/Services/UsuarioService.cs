@@ -18,12 +18,14 @@ namespace TecWi_Web.Application.Services
         private readonly IMapper _iMapper;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IUsuarioRepository _iUsuarioRepository;
+        private readonly IUsuarioAplicacaoRepository _iUsuarioAplicacaoRepository;
 
-        public UsuarioService(IMapper iMapper, IUnitOfWork iUnitOfWork, IUsuarioRepository iUsuarioRepository)
+        public UsuarioService(IMapper iMapper, IUnitOfWork iUnitOfWork, IUsuarioRepository iUsuarioRepository, IUsuarioAplicacaoRepository iUsuarioAplicacaoRepository)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iUsuarioRepository = iUsuarioRepository;
+            _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
         public async Task<ServiceResponse<List<UsuarioDTO>>> GetAllAsync(UsuarioFilter usuarioFilter)
@@ -95,6 +97,22 @@ namespace TecWi_Web.Application.Services
                 PasswordHashUtitlity.CreatePaswordHash(usuarioDTO.Senha, out byte[] senhaHash, out byte[] senhaSalt);
                 Usuario usuario = new Usuario(Guid.NewGuid(), usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
                 await _iUsuarioRepository.Insert(usuario);
+
+                List<UsuarioAplicacao> usuarioAplicacao = new List<UsuarioAplicacao>();
+
+                foreach(var item in usuarioDTO.UsuarioAplicacaoDTO)
+                {
+                    usuarioAplicacao.Add(new UsuarioAplicacao()
+                    {
+                        IdUsuario = usuario.IdUsuario,
+                        IdAplicacao = item.IdAplicacao,
+                        IdPerfil = item.IdPerfil,
+                        StAtivo = item.StAtivo
+
+                    });
+                }
+
+                await _iUsuarioAplicacaoRepository.BulkInsert(usuarioAplicacao);
                 await _iUnitOfWork.CommitAsync();
                 
             }
