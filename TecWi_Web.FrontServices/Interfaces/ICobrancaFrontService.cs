@@ -11,5 +11,6 @@ namespace TecWi_Web.FrontServices.Interfaces
     {
         Task<ServiceResponse<DateTime>> PopulateData();
         Task<ServiceResponse<DateTime>> BuscaDataAtualizacaoDados();
+        Task<ServiceResponse<bool>> GravaContato(ContatoCobrancaDTO contatoCobrancaDTO);
     }
 }

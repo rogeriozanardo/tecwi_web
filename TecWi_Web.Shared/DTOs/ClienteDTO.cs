@@ -13,6 +13,7 @@ namespace TecWi_Web.Shared.DTOs
         public string fone2 { get; set; }
         public string email { get; set; }
         public string cidade { get; set; }
+        public decimal totalLancamentos { get; set; }
         public List<PagarReceberDTO> PagarReceberDTO { get; set; }
         public List<ContatoCobrancaDTO> ContatoCobrancaDTO { get; set; }
 

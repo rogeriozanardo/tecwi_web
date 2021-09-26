@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
@@ -73,6 +74,8 @@ namespace TecWi_Web.Application.Services
                 //ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter { IdUsuario = GetUserId() };
                 Cliente cliente = await _iClienteRepository.GetNextInQueueAsync(clientePagarReceberFilter);
                 ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
+
+                clienteDTO.totalLancamentos = clienteDTO.PagarReceberDTO.Sum(x => x.valorr);
 
                 serviceResponse.Data = clienteDTO;
             }

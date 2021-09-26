@@ -42,9 +42,9 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Guid>> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
+        public async Task<ServiceResponse<bool>> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
         {
-            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
                 ContatoCobranca contatoCobranca = _iMapper.Map<ContatoCobranca>(contatoCobrancaDTO);
@@ -54,7 +54,6 @@ namespace TecWi_Web.Application.Services
                 List<ContatoCobrancaLancamento> contatoCobrancaLancamento = _iMapper.Map<List<ContatoCobrancaLancamento>>(contatoCobrancaDTO.ContatoCobrancaLancamentoDTO);
                 await _iContatoCobrancaLancamentoRepository.BulkInsertAsync(contatoCobrancaLancamento);
 
-                serviceResponse.Data = contatoCobrancaDTO.IdContato;
                 await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)

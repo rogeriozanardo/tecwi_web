@@ -58,5 +58,27 @@ namespace TecWi_Web.FrontServices
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<bool>> GravaContato(ContatoCobrancaDTO contatoCobrancaDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            string url = $"{Config.ApiUrl}ContatoCobranca/InsertAsync";
+
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, contatoCobrancaDTO);
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+            }
+            catch (Exception e)
+            {
+                serviceResponse.Success = false;
+            }
+
+            return serviceResponse;
+        }
     }
 }

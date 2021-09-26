@@ -10,6 +10,7 @@ namespace TecWi_Web.Shared.DTOs
         public string cdfilial { get; set; }
         public DateTime dtemissao { get; set; }
         public DateTime dtvencto { get; set; }
+        public int qtdDiasVencido { get; set; }
         public decimal valorr { get; set; }
         public string NotasFiscais { get; set; }
         public int cdclifor { get; set; }

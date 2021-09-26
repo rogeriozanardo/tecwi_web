@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace TecWi_Web.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ContatoCobrancaController : ControllerBase
     {
         private readonly IContatoCobrancaService _iContatoCobrancaService;
@@ -39,7 +41,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(InsertAsync))]
         public async Task<IActionResult> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO)
         {
-            ServiceResponse<Guid> serviceResponse = await _iContatoCobrancaService.InsertAsync(contatoCobrancaDTO);
+            ServiceResponse<bool> serviceResponse = await _iContatoCobrancaService.InsertAsync(contatoCobrancaDTO);
 
             if (serviceResponse.Success)
             {
@@ -47,7 +49,7 @@ namespace TecWi_Web.API.Controllers
             }
             else
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
             }
         }
     }

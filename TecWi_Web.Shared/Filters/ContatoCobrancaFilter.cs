@@ -10,7 +10,7 @@ namespace TecWi_Web.Shared.Filters
         public DateTime? DtContatoStart { get; set; }
         public DateTime? DtContatoEnd { get; set; }
         public string Anotacao { get; set; }
-        public TipoContato TipoContato { get; set; }
+        public TipoContatoEnum TipoContato { get; set; }
         public DateTime? DtAgendaStart { get; set; }
         public DateTime? DtAgendaEnd { get; set; }
     }

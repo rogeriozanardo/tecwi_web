@@ -7,7 +7,7 @@ namespace TecWi_Web.Domain.Entities
 {
     public class ContatoCobranca
     {
-        public ContatoCobranca(int Cdclifor, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        public ContatoCobranca(int Cdclifor, Guid IdUsuario, DateTime dtContato, string anotacao, TipoContatoEnum tipoContato, DateTime dtAgenda)
         {
             ValidateDomain(Cdclifor, IdUsuario, dtContato, anotacao, tipoContato, dtAgenda);
         }
@@ -22,7 +22,7 @@ namespace TecWi_Web.Domain.Entities
         public Guid IdUsuario { get; private set; }
         public DateTime DtContato { get; private set; }
         public string Anotacao { get; private set; }
-        public TipoContato TipoContato { get; private set; }
+        public TipoContatoEnum TipoContato { get; private set; }
         public DateTime DtAgenda { get; private set; }
         public Usuario Usuario { get; set; }
         public Cliente Cliente { get; set; }
@@ -34,7 +34,7 @@ namespace TecWi_Web.Domain.Entities
         private string DtContatoInvalido = "Data contato inválida!";
         private string AnotacaoInvalido = "Anotação inválida!";
         private string DataAgendaInvalido = "Data agenda inválida!";
-        private void ValidateDomain(int cdclifor, Guid idUsuario, DateTime dtContato, string anotacao, TipoContato tipoContato, DateTime dtAgenda)
+        private void ValidateDomain(int cdclifor, Guid idUsuario, DateTime dtContato, string anotacao, TipoContatoEnum tipoContato, DateTime dtAgenda)
         {
             DomainValidadorException.Whem(cdclifor == 0, CdcliforInvalido);
             Cdclifor = cdclifor;
