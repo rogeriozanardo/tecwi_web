@@ -1,2 +1,48 @@
 ﻿@layout GestaoCobrancaLayout
 @page "/ClienteLista"
+
+@inject IClienteFrontservice clienteFrontService
+
+
+<SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
+<MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+
+<div class="container-fluid">
+    <SfCard CssClass="card-tela mb-2">
+        <CardContent>
+            <div class="row mt-2 mb-4">
+                <div class="col">
+                    <h6 class="display-4 mb-0" style="font-size:2.0rem"><span class="arrow-title">» </span>Clientes</h6>
+                </div>
+            </div>
+            <hr />
+            <div class="form">
+                <div class="form-row mb-3 mt-4">
+                    <div class="form-group col-10">
+                        <SfTextBox Placeholder="Digite o CNPJ (somente números), Razão ou Fantasia para pesquisar" @bind-Value="@pesquisa"></SfTextBox>
+                    </div>
+
+                    <div class="form-group col-auto">
+                        <SfButton IsPrimary="true" CssClass="mr-2" OnClick="PesquisaCliente">Pesquisar</SfButton>
+                    </div>
+                </div>
+            </div>
+            @if (listaClienteDTO.Count > 0)
+            {
+                <SfGrid DataSource="@listaClienteDTO" AllowPaging="true">
+                    <GridPageSettings PageCount="5" PageSizes="true" PageSize="20"></GridPageSettings>
+                    <GridEvents CommandClicked="ExibeTelaCadastroCliente" TValue="ClienteDTO"></GridEvents>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(ClienteDTO.fantasia) HeaderText="Fantasia" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razao" Width="200"></GridColumn>
+                        <GridColumn HeaderText="" Width="80">
+                            <GridCommandColumns>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Detalhes" })"></GridCommandColumn>
+                            </GridCommandColumns>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            }
+        </CardContent>
+    </SfCard>
+</div>

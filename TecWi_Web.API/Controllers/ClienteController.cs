@@ -32,7 +32,7 @@ namespace TecWi_Web.API.Controllers
             }
             else
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
             }
         }
 

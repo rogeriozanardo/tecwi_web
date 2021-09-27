@@ -78,7 +78,7 @@
                                             </div>
 
                                             <div class="form-check-inline col-md-auto">
-                                                <SfSwitch id="ckbHabilitaVendas" @bind-Checked="agendaContatoFuturo" ValueChange="AlteraStatusAgenda" TChecked="bool?"/>
+                                                <SfSwitch id="ckbHabilitaVendas" @bind-Checked="agendaContatoFuturo" ValueChange="AlteraStatusAgenda" TChecked="bool?" />
                                                 <p style="margin-top: 14px; margin-left: 9px;">Agendar contato futuro </p>
                                             </div>
 
@@ -118,20 +118,10 @@
                                             <GridColumn Field=@nameof(PagarReceberDTO.NotasFiscais) HeaderText="Nota Fiscal" Width="80"></GridColumn>
                                             <GridColumn Field=@nameof(PagarReceberDTO.valorr) HeaderText="Valor" Width="80" Format="N2" TextAlign="TextAlign.Right"></GridColumn>
                                             <GridColumn Field=@nameof(PagarReceberDTO.dtemissao) Format="dd/MM/yyyy" HeaderText="Emissão" Width="80"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.dtvencto)  Format="dd/MM/yyyy" HeaderText="Vencimento" Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.dtvencto) Format="dd/MM/yyyy" HeaderText="Vencimento" Width="80"></GridColumn>
                                             <GridColumn Field=@nameof(PagarReceberDTO.qtdDiasVencido) HeaderText="Dias Vencido" Format="N0" Width="80" TextAlign="TextAlign.Right"></GridColumn>
                                         </GridColumns>
                                     </SfGrid>
-
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Contatos anteriores"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="container-fluid container-modal-form">
 
                                 </div>
                             </ContentTemplate>

@@ -11,5 +11,6 @@ namespace TecWi_Web.FrontServices.Interfaces
     public interface IClienteFrontservice
     {
         Task<ServiceResponse<ClienteDTO>> BuscaProximoClienteFilaPorUsuario();
+        Task<ServiceResponse<List<ClienteDTO>>> PesquisaCliente(string pesquisa);
     }
 }

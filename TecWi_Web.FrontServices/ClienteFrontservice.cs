@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TecWi_Web.FrontServices.Interfaces;
 using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Filters;
+using TecWi_Web.Shared.Utility;
 
 namespace TecWi_Web.FrontServices
 {
@@ -35,6 +36,39 @@ namespace TecWi_Web.FrontServices
                 serviceResponse.Message = e.Message;
             }
 
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<ClienteDTO>>> PesquisaCliente(string pesquisa)
+        {
+            ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();
+            ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter();
+
+            string url = $"{Config.ApiUrl}Cliente/GetAllAsync";
+
+            bool somenteNumeros = Utilitarios.ChecaSeStringTemSomenteNumeros(pesquisa);
+            if(somenteNumeros)
+            {
+                clientePagarReceberFilter.inscrifed = pesquisa;
+            }else
+            {
+                clientePagarReceberFilter.fantasia = pesquisa;
+                clientePagarReceberFilter.razao = pesquisa;
+            }
+
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, clientePagarReceberFilter);
+
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<List<ClienteDTO>>>();
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.Message;
+            }
             return serviceResponse;
         }
     }

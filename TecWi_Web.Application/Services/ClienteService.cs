@@ -71,11 +71,15 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<ClienteDTO> serviceResponse = new ServiceResponse<ClienteDTO>();
             try
             {
-                //ClientePagarReceberFilter clientePagarReceberFilter = new ClientePagarReceberFilter { IdUsuario = GetUserId() };
                 Cliente cliente = await _iClienteRepository.GetNextInQueueAsync(clientePagarReceberFilter);
                 ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
 
                 clienteDTO.totalLancamentos = clienteDTO.PagarReceberDTO.Sum(x => x.valorr);
+
+                foreach(var item in clienteDTO.PagarReceberDTO)
+                {
+                    item.qtdDiasVencido = DateTime.Now.Subtract(item.dtvencto).Days;
+                }
 
                 serviceResponse.Data = clienteDTO;
             }
