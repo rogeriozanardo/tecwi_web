@@ -7,6 +7,124 @@
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
+@*INICIO MODAL CADASTRO CLIENTE*@
+<SfDialog id="modalcliente" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalCliente">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                <h4>@clienteDTO.cdclifor - @clienteDTO.razao</h4>
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid container-modal-form bg-white">
+                <SfTab Height="430" CssClass="tabcontrol-modal" @ref="tabCliente">
+                    <TabItems>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Informações do cliente"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                <div class="container-fluid container-modal-form">
+                                    <div class="form">
+                                        <div class="form-row">
+                                            <div class="form-group col-md">
+                                                <label for="fantasia">Fantasia</label>
+                                                <SfTextBox id="fantasia" @bind-Value="clienteDTO.fantasia" Enabled="false"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md">
+                                                <label for="cnpj">CNPJ</label>
+                                                <SfMaskedTextBox id="cnpj" type="text" Mask="00.000.000/0000-00" @bind-Value="clienteDTO.inscrifed" Enabled="false"></SfMaskedTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-2">
+                                                <label for="total">Total lançamentos</label>
+                                                <SfNumericTextBox id="total" @bind-Value="clienteDTO.totalLancamentos" Format="N2" Enabled="false"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md">
+                                                <label for="email">e-mail</label>
+                                                <SfTextBox id="email" @bind-Value="clienteDTO.email" Enabled="false"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-1">
+                                                <label for="ddd">DDD</label>
+                                                <SfTextBox id="ddd" @bind-Value="clienteDTO.ddd" Enabled="false"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-2">
+                                                <label for="fone1">Fone 1</label>
+                                                <SfTextBox id="fone1" @bind-Value="clienteDTO.fone1" Enabled="false"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-2">
+                                                <label for="fone2">Fone 2</label>
+                                                <SfTextBox id="fone2" @bind-Value="clienteDTO.fone2" Enabled="false"></SfTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Lançamentos"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                <div class="container-fluid container-modal-form">
+                                    <SfGrid DataSource="clienteDTO.PagarReceberDTO" Height="350">
+                                        <GridPageSettings></GridPageSettings>
+                                        <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
+                                        <GridEvents TValue="PagarReceberDTO"></GridEvents>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.cdfilial) HeaderText="" Width="40"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.numlancto) HeaderText="Lancto." Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.sq) HeaderText="Parc." Width="60"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.NotasFiscais) HeaderText="Nota Fiscal" Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.valorr) HeaderText="Valor" Width="80" Format="N2" TextAlign="TextAlign.Right"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.dtemissao) Format="dd/MM/yyyy" HeaderText="Emissão" Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.dtvencto) Format="dd/MM/yyyy" HeaderText="Vencimento" Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(PagarReceberDTO.qtdDiasVencido) HeaderText="Dias Vencido" Format="N0" Width="80" TextAlign="TextAlign.Right"></GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Histórico de contatos"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                <div class="container-fluid container-modal-form">
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                    </TabItems>
+                </SfTab>
+                <EditForm Model="clienteDTO">
+
+
+                </EditForm>
+                <CardFooter>
+                    <div class="form-row mt-5 mb-3">
+                        <div class="form-group col">
+                            <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalCliente">Fechar</SfButton>
+                        </div>
+
+                        <div class="form-group col-md-auto">
+                            <SfButton CssClass="btn-blue" OnClick="SalvarCliente">Salvar</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+@*FIM MODAL CADASTRO CLIENTE*@
+
 <div class="container-fluid">
     <SfCard CssClass="card-tela mb-2">
         <CardContent>
@@ -33,8 +151,10 @@
                     <GridPageSettings PageCount="5" PageSizes="true" PageSize="20"></GridPageSettings>
                     <GridEvents CommandClicked="ExibeTelaCadastroCliente" TValue="ClienteDTO"></GridEvents>
                     <GridColumns>
-                        <GridColumn Field=@nameof(ClienteDTO.fantasia) HeaderText="Fantasia" Width="100"></GridColumn>
-                        <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razao" Width="200"></GridColumn>
+                        <GridColumn Field=@nameof(ClienteDTO.fantasia) HeaderText="Fantasia" Width="100">
+                        </GridColumn>
+                        <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razao" Width="200">
+                        </GridColumn>
                         <GridColumn HeaderText="" Width="80">
                             <GridCommandColumns>
                                 <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Detalhes" })"></GridCommandColumn>
@@ -46,3 +166,9 @@
         </CardContent>
     </SfCard>
 </div>
+
+<style>
+    #modalcliente {
+        max-height: none !important;
+    }
+</style>

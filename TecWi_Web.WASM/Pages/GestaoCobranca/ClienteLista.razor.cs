@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +11,12 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
     public partial class ClienteLista
     {
         private List<ClienteDTO> listaClienteDTO = new List<ClienteDTO>();
+        private ClienteDTO clienteDTO = new ClienteDTO();
+
+        private bool exibeModalCliente = false;
+
+        private SfTab tabCliente = new SfTab();
+
         private string pesquisa = string.Empty;
         bool exibeSpinner = false;
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
@@ -38,7 +46,20 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             }
         }
 
-        private void ExibeTelaCadastroCliente()
+        private void ExibeTelaCadastroCliente(CommandClickEventArgs<ClienteDTO> args)
+        {
+            clienteDTO = args.RowData;
+            tabCliente.Select(0);
+
+            exibeModalCliente = true;
+        }
+
+        private void FechaModalCliente()
+        {
+            exibeModalCliente = false;
+        }
+
+        private async Task SalvarCliente()
         {
 
         }

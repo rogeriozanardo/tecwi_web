@@ -56,6 +56,15 @@ namespace TecWi_Web.Application.Services
                 List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
 
+                foreach(var item in clienteDTO)
+                {
+                    item.totalLancamentos = item.PagarReceberDTO.Sum(x => x.valorr);
+                    foreach(var lancamento in item.PagarReceberDTO)
+                    {
+                        lancamento.qtdDiasVencido = DateTime.Now.Subtract(lancamento.dtvencto).Days;
+                    }
+                }
+
                 serviceResponse.Data = clienteDTO;
             }
             catch (Exception ex)
