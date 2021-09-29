@@ -50,7 +50,7 @@ namespace TecWi_Web.API.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route(nameof(DeleteAsync))]
         public async Task<IActionResult> DeleteAsync(UsuarioAplicacaoFilter usuarioAplicacaoFilter)
         {
@@ -66,6 +66,7 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpPost]
+        [Route(nameof(GetByIdUsuarioAsync))]
         public async Task<IActionResult> GetByIdUsuarioAsync(UsuarioAplicacaoFilter usuarioAplicacaoFilter)
         {
             ServiceResponse<List<UsuarioAplicacaoDTO>> serviceResponse = await _iUsuarioAplicacaoService.GetByIdUsuarioAsync(usuarioAplicacaoFilter.IdUsuario);
