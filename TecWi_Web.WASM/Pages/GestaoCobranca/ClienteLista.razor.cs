@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TecWi_Web.FrontServices;
 using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.WASM.Pages.GestaoCobranca
@@ -12,8 +13,11 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
     {
         private List<ClienteDTO> listaClienteDTO = new List<ClienteDTO>();
         private ClienteDTO clienteDTO = new ClienteDTO();
+        private bool perfilGestor = false;
 
         private bool exibeModalCliente = false;
+
+        private AnotacaoDTO anotacaoDTO = new AnotacaoDTO();
 
         private SfTab tabCliente = new SfTab();
 
@@ -22,7 +26,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
         private async Task PesquisaCliente()
         {
-            if(string.IsNullOrEmpty(pesquisa))
+            if (string.IsNullOrEmpty(pesquisa))
             {
                 return;
             }
@@ -35,10 +39,12 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
             exibeSpinner = false;
 
-            if(serviceResponse.Success)
+            if (serviceResponse.Success)
             {
                 listaClienteDTO = serviceResponse.Data;
-            }else
+
+            }
+            else
             {
                 mensagemInformativaDTO.Titulo = "Atenção";
                 mensagemInformativaDTO.Mensagem = serviceResponse.Message;
@@ -61,6 +67,27 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private async Task SalvarCliente()
         {
+
+        }
+
+        private void ExibeAnotacaoContato(CommandClickEventArgs<ContatoCobrancaDTO> args)
+        {
+            anotacaoDTO.DtContato = args.RowData.DtContato;
+            anotacaoDTO.Anotacao = args.RowData.Anotacao;
+            anotacaoDTO.exibe = true;
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault(); ;
+
+            if (perfil.IdPerfil == Domain.Enums.IdPerfil.Gestor)
+            {
+                perfilGestor = true;
+            } else
+            {
+                perfilGestor = false;
+            }
 
         }
     }
