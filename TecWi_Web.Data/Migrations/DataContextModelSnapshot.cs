@@ -105,7 +105,12 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("CdFilial")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IdContato", "Numlancto", "Sq", "CdFilial");
+
+                    b.HasIndex("IdUsuario");
 
                     b.HasIndex("Numlancto", "Sq", "CdFilial");
 
@@ -268,6 +273,12 @@ namespace TecWi_Web.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("ContatoCobrancaLancamento")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
                         .WithMany("ContatoCobrancaLancamento")
                         .HasForeignKey("Numlancto", "Sq", "CdFilial")
@@ -277,6 +288,8 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("ContatoCobranca");
 
                     b.Navigation("PagarReceber");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.LogOperacao", b =>
@@ -334,6 +347,8 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("ContatoCobranca");
+
+                    b.Navigation("ContatoCobrancaLancamento");
 
                     b.Navigation("LogOperacao");
 

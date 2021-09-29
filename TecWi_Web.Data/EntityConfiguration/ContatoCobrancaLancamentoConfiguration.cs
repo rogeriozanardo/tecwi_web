@@ -19,6 +19,11 @@ namespace TecWi_Web.Data.EntityConfiguration
                 .WithMany(x => x.ContatoCobrancaLancamento)
                 .HasForeignKey(x => x.IdContato)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            entityTypeBuilder.HasOne(x => x.Usuario)
+                .WithMany(x => x.ContatoCobrancaLancamento)
+                .HasForeignKey(x => x.IdUsuario)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

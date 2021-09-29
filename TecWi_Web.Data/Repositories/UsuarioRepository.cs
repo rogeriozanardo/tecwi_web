@@ -39,15 +39,17 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<List<Usuario>> GetAllAsync(UsuarioFilter usuarioFilter)
         {
-            IQueryable<Usuario> usuario = _dataContext.Usuario
+            IQueryable<Usuario> _usuario = _dataContext.Usuario
                 .Include(x => x.UsuarioAplicacao)
-                .Where(x => !string.IsNullOrWhiteSpace(usuarioFilter.Nome) ? x.Nome == usuarioFilter.Nome : true);
+                .Where(x => !string.IsNullOrWhiteSpace(usuarioFilter.Nome) ? x.Nome == usuarioFilter.Nome : true)
+                .Where(x => Enum.IsDefined(usuarioFilter.IdPerfil) ? x.UsuarioAplicacao.Any(x => x.IdPerfil == usuarioFilter.IdPerfil) : true)
+                .Where(x => Enum.IsDefined(usuarioFilter.IdAplicacao) ? x.UsuarioAplicacao.Any(y => y.IdAplicacao == usuarioFilter.IdAplicacao) : true);
 
-            List<Usuario> _usuario = await usuario
+            List<Usuario> usuario = await _usuario
                 .AsNoTracking()
                 .ToListAsync();
 
-            return _usuario;
+            return usuario;
         }
 
         public async Task<Guid> Insert(Usuario usuario)

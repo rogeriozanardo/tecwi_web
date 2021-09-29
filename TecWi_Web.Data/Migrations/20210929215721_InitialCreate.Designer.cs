@@ -10,8 +10,8 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210923012126_AddedField_StAtivo_ToTable_UsuarioAplicacao")]
-    partial class AddedField_StAtivo_ToTable_UsuarioAplicacao
+    [Migration("20210929215721_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,7 +107,12 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("CdFilial")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IdContato", "Numlancto", "Sq", "CdFilial");
+
+                    b.HasIndex("IdUsuario");
 
                     b.HasIndex("Numlancto", "Sq", "CdFilial");
 
@@ -270,6 +275,12 @@ namespace TecWi_Web.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("ContatoCobrancaLancamento")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
                         .WithMany("ContatoCobrancaLancamento")
                         .HasForeignKey("Numlancto", "Sq", "CdFilial")
@@ -279,6 +290,8 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("ContatoCobranca");
 
                     b.Navigation("PagarReceber");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.LogOperacao", b =>
@@ -336,6 +349,8 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("ContatoCobranca");
+
+                    b.Navigation("ContatoCobrancaLancamento");
 
                     b.Navigation("LogOperacao");
 

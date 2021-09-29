@@ -50,12 +50,32 @@ namespace TecWi_Web.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LogOperacao",
+                columns: table => new
+                {
+                    IdLogOperacao = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TipoOperacao = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogOperacao", x => x.IdLogOperacao);
+                    table.ForeignKey(
+                        name: "FK_LogOperacao_Usuario_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "Usuario",
+                        principalColumn: "IdUsuario");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UsuarioAplicacao",
                 columns: table => new
                 {
                     IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdAplicacao = table.Column<int>(type: "int", nullable: false),
-                    IdPerfil = table.Column<int>(type: "int", nullable: false)
+                    IdPerfil = table.Column<int>(type: "int", nullable: false),
+                    StAtivo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,7 +147,8 @@ namespace TecWi_Web.Data.Migrations
                     IdContato = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sq = table.Column<int>(type: "int", nullable: false),
-                    CdFilial = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CdFilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,6 +163,11 @@ namespace TecWi_Web.Data.Migrations
                         columns: x => new { x.Numlancto, x.Sq, x.CdFilial },
                         principalTable: "PagarReceber",
                         principalColumns: new[] { "Numlancto", "Sq", "Cdfilial" });
+                    table.ForeignKey(
+                        name: "FK_ContatoCobrancaLancamento_Usuario_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "Usuario",
+                        principalColumn: "IdUsuario");
                 });
 
             migrationBuilder.CreateIndex(
@@ -160,9 +186,19 @@ namespace TecWi_Web.Data.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ContatoCobrancaLancamento_IdUsuario",
+                table: "ContatoCobrancaLancamento",
+                column: "IdUsuario");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ContatoCobrancaLancamento_Numlancto_Sq_CdFilial",
                 table: "ContatoCobrancaLancamento",
                 columns: new[] { "Numlancto", "Sq", "CdFilial" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LogOperacao_IdUsuario",
+                table: "LogOperacao",
+                column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PagarReceber_Cdclifor",
@@ -174,6 +210,9 @@ namespace TecWi_Web.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ContatoCobrancaLancamento");
+
+            migrationBuilder.DropTable(
+                name: "LogOperacao");
 
             migrationBuilder.DropTable(
                 name: "UsuarioAplicacao");

@@ -50,7 +50,11 @@ namespace TecWi_Web.Application.Services
                 ContatoCobranca contatoCobranca = _iMapper.Map<ContatoCobranca>(contatoCobrancaDTO);
                 contatoCobrancaDTO.IdContato = await _iContatoCobrancaRepository.InsertAsync(contatoCobranca);
 
-                contatoCobrancaDTO.ContatoCobrancaLancamentoDTO.ForEach(x => { x.IdContato = contatoCobrancaDTO.IdContato; });
+                contatoCobrancaDTO.ContatoCobrancaLancamentoDTO.ForEach(x =>
+                {
+                    x.IdContato = contatoCobrancaDTO.IdContato;
+                    x.Idusuario = contatoCobrancaDTO.IdUsuario;
+                });
                 List<ContatoCobrancaLancamento> contatoCobrancaLancamento = _iMapper.Map<List<ContatoCobrancaLancamento>>(contatoCobrancaDTO.ContatoCobrancaLancamentoDTO);
                 await _iContatoCobrancaLancamentoRepository.BulkInsertAsync(contatoCobrancaLancamento);
 
