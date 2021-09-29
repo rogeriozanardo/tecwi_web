@@ -49,10 +49,15 @@ namespace TecWi_Web.API.Controllers
             ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
             try
             {
-                serviceResponse.Data = serviceResponseUsuario.Data.Data;
+                if(serviceResponseUsuario.Data != null)
+                {
+                    serviceResponse.Data = serviceResponseUsuario.Data.Data;
+                }
+                
             }catch(Exception e)
             {
-
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Falha ao buscar última data";
             }
             
 
