@@ -45,7 +45,7 @@ namespace TecWi_Web.Data.Repositories
                 .Where(x => clientePagarReceberFilter.cdclifor != null ? x.Cdclifor == clientePagarReceberFilter.cdclifor : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) && !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? (x.Fantasia.Contains(clientePagarReceberFilter.fantasia) || x.Fantasia.Contains(clientePagarReceberFilter.razao)) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) && string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? (x.Fantasia.Contains(clientePagarReceberFilter.fantasia)) : true)
-                .Where(x => string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) && !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) ? (x.Fantasia.Contains(clientePagarReceberFilter.razao)) : true)
+                .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.razao) && string.IsNullOrWhiteSpace(clientePagarReceberFilter.fantasia) ? (x.Razao.Contains(clientePagarReceberFilter.razao)) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.inscrifed) ? x.Inscrifed.Contains(clientePagarReceberFilter.inscrifed) : true)
                 .Where(x => !string.IsNullOrWhiteSpace(clientePagarReceberFilter.numlancto) ? x.PagarReceber.Where(y => y.Numlancto.Contains(clientePagarReceberFilter.numlancto)).ToList().Count > 0 : true)
                 .Where(x => clientePagarReceberFilter.dtemissaoStart != null ? x.PagarReceber.Where(y => y.Dtemissao >= (DateTime)clientePagarReceberFilter.dtemissaoStart).ToList().Count > 0 : true)

@@ -52,7 +52,6 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();
             try
             {
-                clientePagarReceberFilter.IdUsuario = GetUserId();
                 List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
 
