@@ -6,6 +6,7 @@
 
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+<Anotacao anotacaoDTO="anotacaoDTO" ></Anotacao>
 
 @*INICIO MODAL CADASTRO CLIENTE*@
 <SfDialog id="modalcliente" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalCliente">
@@ -64,6 +65,10 @@
                                                 <SfTextBox id="fone2" @bind-Value="clienteDTO.fone2" Enabled="false"></SfTextBox>
                                             </div>
                                         </div>
+                                        <hr />
+                                        <div class="form-row">
+
+                                        </div>
                                     </div>
                                 </div>
                             </ContentTemplate>
@@ -74,21 +79,25 @@
                             </ChildContent>
                             <ContentTemplate>
                                 <div class="container-fluid container-modal-form">
-                                    <SfGrid DataSource="clienteDTO.PagarReceberDTO" Height="350">
-                                        <GridPageSettings></GridPageSettings>
-                                        <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
-                                        <GridEvents TValue="PagarReceberDTO"></GridEvents>
-                                        <GridColumns>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.cdfilial) HeaderText="" Width="40"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.numlancto) HeaderText="Lancto." Width="80"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.sq) HeaderText="Parc." Width="60"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.NotasFiscais) HeaderText="Nota Fiscal" Width="80"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.valorr) HeaderText="Valor" Width="80" Format="N2" TextAlign="TextAlign.Right"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.dtemissao) Format="dd/MM/yyyy" HeaderText="Emissão" Width="80"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.dtvencto) Format="dd/MM/yyyy" HeaderText="Vencimento" Width="80"></GridColumn>
-                                            <GridColumn Field=@nameof(PagarReceberDTO.qtdDiasVencido) HeaderText="Dias Vencido" Format="N0" Width="80" TextAlign="TextAlign.Right"></GridColumn>
-                                        </GridColumns>
-                                    </SfGrid>
+                                    @if (clienteDTO.PagarReceberDTO.Count > 0)
+                                    {
+                                        <SfGrid DataSource="clienteDTO.PagarReceberDTO" Height="350">
+                                            <GridPageSettings></GridPageSettings>
+                                            <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
+                                            <GridEvents TValue="PagarReceberDTO"></GridEvents>
+                                            <GridColumns>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.cdfilial) HeaderText="" Width="40"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.numlancto) HeaderText="Lancto." Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.sq) HeaderText="Parc." Width="60"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.NotasFiscais) HeaderText="Nota Fiscal" Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.valorr) HeaderText="Valor" Width="80" Format="N2" TextAlign="TextAlign.Right"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.dtemissao) Format="dd/MM/yyyy" HeaderText="Emissão" Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.dtvencto) Format="dd/MM/yyyy" HeaderText="Vencimento" Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(PagarReceberDTO.qtdDiasVencido) HeaderText="Dias Vencido" Format="N0" Width="80" TextAlign="TextAlign.Right"></GridColumn>
+                                            </GridColumns>
+                                        </SfGrid>
+                                    }
+
 
                                 </div>
                             </ContentTemplate>
@@ -99,6 +108,25 @@
                             </ChildContent>
                             <ContentTemplate>
                                 <div class="container-fluid container-modal-form">
+                                    @if (clienteDTO.ContatoCobrancaDTO.Count > 0)
+                                    {
+                                        <SfGrid DataSource="clienteDTO.ContatoCobrancaDTO" Height="350">
+                                            <GridPageSettings></GridPageSettings>
+                                            <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
+                                            <GridEvents CommandClicked="ExibeAnotacaoContato" TValue="ContatoCobrancaDTO"></GridEvents>
+                                            <GridColumns>
+                                                <GridColumn Field=@nameof(ContatoCobrancaDTO.DtContato) Format="dd/MM/yyyy" HeaderText="Dt. Contato" Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(ContatoCobrancaDTO.DtAgenda) Format="dd/MM/yyyy" HeaderText="Dt. Agenda" Width="80"></GridColumn>
+                                                <GridColumn Field=@nameof(ContatoCobrancaDTO.TipoContato) HeaderText="Tp. Contato" Width="80"></GridColumn>
+                                                <GridColumn HeaderText="" Width="80">
+                                                    <GridCommandColumns>
+                                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Anotação" })"></GridCommandColumn>
+                                                    </GridCommandColumns>
+                                                </GridColumn>
+                                            </GridColumns>
+                                        </SfGrid>
+                                    }
+
                                 </div>
                             </ContentTemplate>
                         </TabItem>
