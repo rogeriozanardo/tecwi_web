@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TecWi_Web.Domain.Enums;
 using TecWi_Web.FrontServices;
 using TecWi_Web.Shared.DTOs;
 
@@ -15,6 +16,10 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private ClienteDTO clienteDTO = new ClienteDTO();
         private bool perfilGestor = false;
 
+        bool habilitaAgenda = false;
+
+        DateTime DataAgenda = DateTime.Now;
+
         private bool exibeModalCliente = false;
 
         private AnotacaoDTO anotacaoDTO = new AnotacaoDTO();
@@ -22,8 +27,21 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private SfTab tabCliente = new SfTab();
 
         private string pesquisa = string.Empty;
-        bool exibeSpinner = false;
+        private bool exibeSpinner = false;
+        private bool exibeModalContato = false;
+
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
+        private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
+        private int? indexTipoContato { get; set; } = 0;
+        bool? agendaContatoFuturo = false;
+        private class TipoContato
+        {
+            public int Id { get; set; }
+            public string DsTipoContato { get; set; }
+        }
+
+        private List<TipoContato> tipoContato = new List<TipoContato>();
+
         private async Task PesquisaCliente()
         {
             if (string.IsNullOrEmpty(pesquisa))
@@ -77,6 +95,105 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             anotacaoDTO.exibe = true;
         }
 
+        private async Task RegistrarContato()
+        {
+            exibeModalContato = true;
+            indexTipoContato = -1;
+            DataAgenda = DateTime.Now;
+            contatoCobrancaDTO = new ContatoCobrancaDTO();
+        }
+
+        private void SelecaoTipoContato(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, TipoContato> args)
+        {
+            if (args.Value != null)
+            {
+                contatoCobrancaDTO.TipoContato = (TipoContatoEnum)args.ItemData.Id;
+            }
+        }
+
+        private void AlteraDtAgenda(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> args)
+        {
+            if (args.Value.GetValueOrDefault() < DateTime.Now.Date)
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Data da agenda não pode ser menor que a data atual";
+                mensagemInformativaDTO.Exibe = true;
+
+            }
+            else
+            {
+                DataAgenda = args.Value.GetValueOrDefault();
+                contatoCobrancaDTO.DtAgenda = DataAgenda;
+            }
+
+        }
+
+        private void AlteraStatusAgenda(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool?> args)
+        {
+            if (!args.Checked.Value)
+            {
+                DataAgenda = DateTime.Now;
+                habilitaAgenda = false;
+            }
+            else
+            {
+                habilitaAgenda = true;
+            }
+        }
+
+        private void FechaModalContato()
+        {
+            exibeModalContato = false;
+        }
+
+        private async Task SalvarContato()
+        {
+            if (indexTipoContato < 0)
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Informe o tipo de contato";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
+
+            exibeSpinner = true;
+
+            contatoCobrancaDTO.Cdclifor = clienteDTO.cdclifor;
+            contatoCobrancaDTO.IdUsuario = Config.usuarioDTO.IdUsuario;
+            contatoCobrancaDTO.DtContato = DateTime.Now;
+            contatoCobrancaDTO.UsuarioDTO = Config.usuarioDTO;
+            contatoCobrancaDTO.ClienteDTO = clienteDTO;
+            contatoCobrancaDTO.DtAgenda = DataAgenda;
+
+            foreach (var item in clienteDTO.PagarReceberDTO)
+            {
+                contatoCobrancaDTO.ContatoCobrancaLancamentoDTO.Add(new ContatoCobrancaLancamentoDTO()
+                {
+                    Numlancto = item.numlancto,
+                    Sq = item.sq,
+                    CdFilial = item.cdfilial
+                });
+            }
+
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            serviceResponse = await cobrancaFrontService.GravaContato(contatoCobrancaDTO);
+            exibeSpinner = false;
+            if (!serviceResponse.Success)
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
+            else
+            {
+                exibeModalContato = false;
+                mensagemInformativaDTO.Titulo = "Sucesso";
+                mensagemInformativaDTO.Mensagem = "Contato gravado com sucesso";
+                mensagemInformativaDTO.Exibe = true;
+            }
+        }
+
         protected override async Task OnInitializedAsync()
         {
             var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault(); ;
@@ -88,6 +205,14 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             {
                 perfilGestor = false;
             }
+
+            tipoContato = ((TipoContatoEnum[])Enum.GetValues(typeof(TipoContatoEnum))).Select(c => new TipoContato()
+            {
+                Id = (int)c,
+                DsTipoContato = c.ToString()
+            }).ToList();
+
+            indexTipoContato = -1;
 
         }
     }
