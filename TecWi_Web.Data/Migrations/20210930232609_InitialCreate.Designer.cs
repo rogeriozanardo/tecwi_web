@@ -10,7 +10,7 @@ using TecWi_Web.Data.Context;
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210929215721_InitialCreate")]
+    [Migration("20210930232609_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,12 +107,12 @@ namespace TecWi_Web.Data.Migrations
                     b.Property<string>("CdFilial")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("IdUsuario")
+                    b.Property<Guid?>("UsuarioIdUsuario")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("IdContato", "Numlancto", "Sq", "CdFilial");
 
-                    b.HasIndex("IdUsuario");
+                    b.HasIndex("UsuarioIdUsuario");
 
                     b.HasIndex("Numlancto", "Sq", "CdFilial");
 
@@ -275,11 +275,9 @@ namespace TecWi_Web.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", "Usuario")
+                    b.HasOne("TecWi_Web.Domain.Entities.Usuario", null)
                         .WithMany("ContatoCobrancaLancamento")
-                        .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioIdUsuario");
 
                     b.HasOne("TecWi_Web.Domain.Entities.PagarReceber", "PagarReceber")
                         .WithMany("ContatoCobrancaLancamento")
@@ -290,8 +288,6 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("ContatoCobranca");
 
                     b.Navigation("PagarReceber");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.LogOperacao", b =>

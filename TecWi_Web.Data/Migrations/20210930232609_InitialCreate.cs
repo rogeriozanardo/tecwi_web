@@ -148,7 +148,7 @@ namespace TecWi_Web.Data.Migrations
                     Numlancto = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sq = table.Column<int>(type: "int", nullable: false),
                     CdFilial = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioIdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -164,10 +164,11 @@ namespace TecWi_Web.Data.Migrations
                         principalTable: "PagarReceber",
                         principalColumns: new[] { "Numlancto", "Sq", "Cdfilial" });
                     table.ForeignKey(
-                        name: "FK_ContatoCobrancaLancamento_Usuario_IdUsuario",
-                        column: x => x.IdUsuario,
+                        name: "FK_ContatoCobrancaLancamento_Usuario_UsuarioIdUsuario",
+                        column: x => x.UsuarioIdUsuario,
                         principalTable: "Usuario",
-                        principalColumn: "IdUsuario");
+                        principalColumn: "IdUsuario",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -186,14 +187,14 @@ namespace TecWi_Web.Data.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContatoCobrancaLancamento_IdUsuario",
-                table: "ContatoCobrancaLancamento",
-                column: "IdUsuario");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContatoCobrancaLancamento_Numlancto_Sq_CdFilial",
                 table: "ContatoCobrancaLancamento",
                 columns: new[] { "Numlancto", "Sq", "CdFilial" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContatoCobrancaLancamento_UsuarioIdUsuario",
+                table: "ContatoCobrancaLancamento",
+                column: "UsuarioIdUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogOperacao_IdUsuario",
