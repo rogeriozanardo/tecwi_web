@@ -37,6 +37,16 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private async Task InciaContatos()
         {
+            var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault(); ;
+
+            if (perfil.IdPerfil != Domain.Enums.IdPerfil.Operador)
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Seu usuário não tem perfil para realizar cobranças.";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
+
             ServiceResponse<ClienteDTO> serviceResponse = new ServiceResponse<ClienteDTO>();
 
             exibeSpinner = true;
