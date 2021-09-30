@@ -62,9 +62,6 @@ namespace TecWi_Web.Application.Services
                     {
                         lancamento.qtdDiasVencido = DateTime.Now.Subtract(lancamento.dtvencto).Days;
                     }
-                    
-                    
-                    
                 }
 
                 serviceResponse.Data = clienteDTO;
