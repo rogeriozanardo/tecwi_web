@@ -13,7 +13,6 @@ namespace TecWi_Web.Shared.DTOs
         public string Anotacao { get; set; }
         public TipoContatoEnum TipoContato { get; set; }
         public DateTime DtAgenda { get; set; }
-        public string NomeAtendente { get; set; }
         public UsuarioDTO UsuarioDTO { get; set; }
         public ClienteDTO ClienteDTO { get; set; }
         public List<ContatoCobrancaLancamentoDTO> ContatoCobrancaLancamentoDTO { get; set; }
