@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.FrontServices;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.WASM.Pages.GestaoCobranca
 {
@@ -15,6 +16,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private List<ClienteDTO> listaClienteDTO = new List<ClienteDTO>();
         private ClienteDTO clienteDTO = new ClienteDTO();
         private bool perfilGestor = false;
+        private List<UsuarioDTO> listaAtendentes = new List<UsuarioDTO>();
 
         bool habilitaAgenda = false;
 
@@ -33,6 +35,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
         private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
         private int? indexTipoContato { get; set; } = 0;
+        private int? indexAtendente { get; set; } = 0;
         bool? agendaContatoFuturo = false;
         private class TipoContato
         {
@@ -54,6 +57,21 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             exibeSpinner = true;
 
             serviceResponse = await clienteFrontService.PesquisaCliente(pesquisa);
+            if (listaAtendentes.Count == 0)
+            {
+                ServiceResponse<List<UsuarioDTO>> serviceResponseAtendentes = new ServiceResponse<List<UsuarioDTO>>();
+
+                UsuarioFilter usuarioFilter = new UsuarioFilter();
+                usuarioFilter.IdAplicacao = IdAplicacao.Cobranca;
+                usuarioFilter.IdPerfil = IdPerfil.Operador;
+
+                serviceResponseAtendentes = await usuarioFrontService.GetAllAsync(usuarioFilter);
+
+                if (serviceResponseAtendentes.Success)
+                {
+                    listaAtendentes = serviceResponseAtendentes.Data;
+                }
+            }
 
             exibeSpinner = false;
 
@@ -73,6 +91,17 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private void ExibeTelaCadastroCliente(CommandClickEventArgs<ClienteDTO> args)
         {
             clienteDTO = args.RowData;
+            foreach(var item in clienteDTO.ContatoCobrancaDTO)
+            {
+                item.NomeAtendente = item.UsuarioDTO.Nome;
+            }
+
+            int indexUsuario = listaAtendentes.FindIndex(x => x.IdUsuario == clienteDTO.UsuarioDTO.IdUsuario);
+            if(indexUsuario >= 0)
+            {
+                indexAtendente = indexUsuario;
+            }
+
             tabCliente.Select(0);
 
             exibeModalCliente = true;
@@ -108,6 +137,14 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             if (args.Value != null)
             {
                 contatoCobrancaDTO.TipoContato = (TipoContatoEnum)args.ItemData.Id;
+            }
+        }
+
+        private void SelecaoAtendente(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, UsuarioDTO> args)
+        {
+            if (args.Value != null)
+            {
+                clienteDTO.UsuarioDTO.IdUsuario = args.ItemData.IdUsuario;
             }
         }
 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TecWi_Web.FrontServices.Interfaces;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.FrontServices
 {
@@ -114,6 +115,28 @@ namespace TecWi_Web.FrontServices
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = "A senha deve ter no mínimo 6 caracteres e no máximo 15 caracteres.";
+            }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<UsuarioDTO>>> GetAllAsync(UsuarioFilter usuarioFilter)
+        {
+            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
+            string url = $"{Config.ApiUrl}Usuario/GetAllAsync";
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, usuarioFilter);
+
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<List<UsuarioDTO>>>();
+
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.Message;
             }
 
             return serviceResponse;

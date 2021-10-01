@@ -3,6 +3,7 @@
 
 @inject IClienteFrontservice clienteFrontService
 @inject ICobrancaFrontService cobrancaFrontService
+@inject IUsuarioFrontService usuarioFrontService 
 
 
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
@@ -125,8 +126,16 @@
                                             </div>
                                         </div>
                                         <hr />
+
                                         <div class="form-row">
-                                            <div class="form-group col-md-2">
+                                            <div class="form-group col-md-3">
+                                                <label for="atendente">Atendente responsável: </label>
+                                                <SfDropDownList TItem="UsuarioDTO" TValue="string" PopupHeight="200px" @bind-Index="@indexAtendente" DataSource="listaAtendentes">
+                                                    <DropDownListEvents TValue="string" TItem="UsuarioDTO" ValueChange="SelecaoAtendente"></DropDownListEvents>
+                                                    <DropDownListFieldSettings Text=@nameof(UsuarioDTO.Nome) Value=@nameof(UsuarioDTO.IdUsuario)></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                            <div class="form-group col-md-2 text-right">
                                                 <SfButton IsPrimary="true" OnClick="RegistrarContato" Content="Registrar Contato"></SfButton>
                                             </div>
                                         </div>
@@ -179,7 +188,7 @@
                                                 <GridColumn Field=@nameof(ContatoCobrancaDTO.DtContato) Format="dd/MM/yyyy" HeaderText="Dt. Contato" Width="80"></GridColumn>
                                                 <GridColumn Field=@nameof(ContatoCobrancaDTO.DtAgenda) Format="dd/MM/yyyy" HeaderText="Dt. Agenda" Width="80"></GridColumn>
                                                 <GridColumn Field=@nameof(ContatoCobrancaDTO.TipoContato) HeaderText="Tp. Contato" Width="80"></GridColumn>
-                                                @*<GridColumn Field=@nameof(ContatoCobrancaDTO.UsuarioDTO.Nome) HeaderText="Atendente" Width="120"></GridColumn>*@
+                                                <GridColumn Field=@nameof(ContatoCobrancaDTO.NomeAtendente) HeaderText="Atendente" Width="120"></GridColumn>
 
                                                 <GridColumn HeaderText="" Width="80">
                                                     <GridCommandColumns>
