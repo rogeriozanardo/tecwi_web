@@ -6,13 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.WASM.Pages.Configuracoes
 {
     public partial class UsuarioLista
     {
-        bool exibeSpinner = false;
-        bool exibeModalIncluiAlteraUsuario = false;
+        private bool exibeSpinner = false;
+        private bool exibeModalIncluiAlteraUsuario = false;
+        private bool habilitaCampoLogin = false;
+        private string pesquisa = string.Empty;
 
         private UsuarioDTO usuarioDTO = new UsuarioDTO();
         private string confirmaSenha = "";
@@ -23,7 +26,23 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         
         private void ModalEditaUsuario(CommandClickEventArgs<UsuarioDTO> args)
         {
+            usuarioDTO = args.RowData;
+            if(usuarioDTO.Login == "admin")
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "O usuário admin não pode ser alterado.";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
 
+            foreach (var item in usuarioDTO.UsuarioAplicacaoDTO)
+            {
+                item.DsAplicacao = item.IdAplicacao.GetDisplayName();
+            }
+
+            confirmaSenha = string.Empty;
+
+            exibeModalIncluiAlteraUsuario = true;
         }
 
         protected override async Task OnInitializedAsync()
@@ -34,6 +53,23 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
 
         private async Task PesquisaUsuarios()
         {
+            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
+            exibeSpinner = true;
+            UsuarioFilter usurioFilter = new UsuarioFilter();
+            usurioFilter.Nome = pesquisa;
+            serviceResponse = await usuarioFrontService.GetAllAsync(usurioFilter);
+
+            exibeSpinner = false;
+            if(serviceResponse.Success)
+            {
+                listaUsuarioDTO = serviceResponse.Data;
+            }else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
+
 
         }
 

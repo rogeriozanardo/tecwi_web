@@ -130,7 +130,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
                                                 <label for="atendente">Atendente responsável: </label>
-                                                <SfDropDownList TItem="UsuarioDTO" TValue="string" PopupHeight="200px" @bind-Index="@indexAtendente" DataSource="listaAtendentes">
+                                                <SfDropDownList TItem="UsuarioDTO" TValue="string" PopupHeight="200px" @bind-Index="@indexAtendente" DataSource="listaAtendentes" >
                                                     <DropDownListEvents TValue="string" TItem="UsuarioDTO" ValueChange="SelecaoAtendente"></DropDownListEvents>
                                                     <DropDownListFieldSettings Text=@nameof(UsuarioDTO.Nome) Value=@nameof(UsuarioDTO.IdUsuario)></DropDownListFieldSettings>
                                                 </SfDropDownList>
@@ -210,10 +210,12 @@
                         <div class="form-group col">
                             <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalCliente">Fechar</SfButton>
                         </div>
-
-                        <div class="form-group col-md-auto">
-                            <SfButton CssClass="btn-blue" OnClick="SalvarCliente">Salvar</SfButton>
-                        </div>
+                        @if (perfilGestor)
+                        {
+                            <div class="form-group col-md-auto">
+                                <SfButton CssClass="btn-blue" OnClick="SalvarCliente">Salvar</SfButton>
+                            </div>
+                        }
                     </div>
                 </CardFooter>
             </div>

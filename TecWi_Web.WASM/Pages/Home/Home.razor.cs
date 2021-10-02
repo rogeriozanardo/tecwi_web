@@ -10,6 +10,8 @@ namespace TecWi_Web.WASM.Pages.Home
     partial class Home
     {
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
+
+        private bool exibeModalTrocaSenha = false;
         public void GestaoCobranca_OnClick()
         {
             int index = Config.usuarioDTO.UsuarioAplicacaoDTO.FindIndex(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca);
@@ -47,7 +49,7 @@ namespace TecWi_Web.WASM.Pages.Home
         public void Configuracoes_OnClick()
         {
 
-            int index = Config.usuarioDTO.UsuarioAplicacaoDTO.FindIndex(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Configuracoes);
+            int index = Config.usuarioDTO.UsuarioAplicacaoDTO.FindIndex(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Configuracoes && x.StAtivo == true && x.IdPerfil == Domain.Enums.IdPerfil.Gestor);
 
             if (index >= 0)
             {
@@ -60,6 +62,11 @@ namespace TecWi_Web.WASM.Pages.Home
                 mensagemInformativaDTO.Exibe = true;
                 return;
             }
+        }
+
+        private void ExibeModalTrocaSenha()
+        {
+            exibeModalTrocaSenha = true;
         }
     }
 }

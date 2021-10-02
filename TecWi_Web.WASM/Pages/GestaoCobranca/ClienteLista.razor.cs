@@ -109,12 +109,14 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private void FechaModalCliente()
         {
+            indexAtendente = -1;
+            clienteDTO = new ClienteDTO();
             exibeModalCliente = false;
         }
 
         private async Task SalvarCliente()
         {
-
+            
         }
 
         private void ExibeAnotacaoContato(CommandClickEventArgs<ContatoCobrancaDTO> args)
@@ -124,7 +126,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             anotacaoDTO.exibe = true;
         }
 
-        private async Task RegistrarContato()
+        private void RegistrarContato()
         {
             exibeModalContato = true;
             indexTipoContato = -1;
@@ -224,6 +226,8 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             }
             else
             {
+                contatoCobrancaDTO.NomeAtendente = Config.usuarioDTO.Nome;
+                clienteDTO.ContatoCobrancaDTO.Add(contatoCobrancaDTO);
                 exibeModalContato = false;
                 mensagemInformativaDTO.Titulo = "Sucesso";
                 mensagemInformativaDTO.Mensagem = "Contato gravado com sucesso";
