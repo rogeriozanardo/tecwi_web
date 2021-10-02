@@ -51,5 +51,21 @@ namespace TecWi_Web.API.Controllers
                 return BadRequest(serviceResponse.Message);
             }
         }
+
+        [HttpPut]
+        [Route(nameof(UpdateAsync))]
+        public async Task<IActionResult> UpdateAsync(ClienteDTO clienteDTO)
+        {
+            ServiceResponse<bool> serviceResponse = await _iClienteService.UpdateAsync(clienteDTO);
+
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse.Message);
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace TecWi_Web.Data.Interfaces
         Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter);
         Task<bool> BulkInsertAsync(List<Cliente> cliente);
         Task<Cliente> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter);
+        Task<bool> UpdateAsync(Cliente cliente);
         Task<bool> BulkUpdateAsync(List<Cliente> cliente);
     }
 }

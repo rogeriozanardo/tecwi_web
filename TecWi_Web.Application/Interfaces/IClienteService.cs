@@ -10,5 +10,6 @@ namespace TecWi_Web.Application.Interfaces
         Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO);
         Task<ServiceResponse<List<ClienteDTO>>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter);
         Task<ServiceResponse<ClienteDTO>> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter);
+        Task<ServiceResponse<bool>> UpdateAsync(ClienteDTO clienteDTO);
     }
 }
