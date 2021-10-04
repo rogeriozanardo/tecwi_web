@@ -3,7 +3,49 @@
 @inject NavigationManager Navigation
 
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
-<TrocaSenhaUsuario exibe="exibeModalTrocaSenha"></TrocaSenhaUsuario>
+
+@*INICIO MODAL TROCA SENHA*@
+<SfDialog id="ModalSenha" Width="450" Height="400" Target="#target" IsModal="true" @bind-Visible="exibeModalTrocaSenha">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                Usuário: @Config.usuarioDTO.Nome
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid">
+                <p class="m-3" style="white-space: pre-line">
+                    A senha de ver no mínimo 6 caracteres e no máximo 15 caracteres.
+                </p>
+                <div class="row">
+                    <div class="form-group col-md-11">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <SfTextBox Placeholder="Senha atual" Type="InputType.Password"></SfTextBox>
+                            </div>
+                            <div class="form-group">
+                                <SfTextBox Placeholder="Nova senha" Type="InputType.Password"></SfTextBox>
+                            </div>
+                            <div class="form-group">
+                                <SfTextBox Placeholder="Confirme nova senha" Type="InputType.Password"></SfTextBox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton OnClick="FecharTrocaSenha">Fechar</SfButton>
+                            <SfButton CssClass="btn-blue">Atualizar senha</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+@*FIM MODAL TROCA SENHA*@
 
 <div class="text-center container-modulos">
     <h4 class="mb-5">Menu de aplicações.</h4>
@@ -39,6 +81,9 @@
 
 
     <style>
+        #ModalSenha {
+            max-height: none !important;
+        }
         .icon-home {
             margin: 15px 0px;
         }

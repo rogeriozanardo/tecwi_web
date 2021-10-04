@@ -57,7 +57,41 @@ namespace TecWi_Web.FrontServices
 
             return serviceResponse;
         }
+        public async Task<ServiceResponse<bool>> UpdateJustInfoAsync(UsuarioDTO usuarioDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
 
+            try
+            {
+                if (string.IsNullOrEmpty(usuarioDTO.Login))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Informe o Login do usuário.";
+                    return serviceResponse;
+                }
+
+                if (string.IsNullOrEmpty(usuarioDTO.Nome))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Informe o Nome do usuário.";
+                    return serviceResponse;
+                }
+
+                string url = $"{Config.ApiUrl}Usuario/UpdateJustInfoAsync";
+
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, usuarioDTO);
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            }
+            catch (Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.Message;
+            }
+
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<bool>> SalvarUsuario(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
@@ -94,6 +128,8 @@ namespace TecWi_Web.FrontServices
 
             return serviceResponse;
         }
+
+
 
         private ServiceResponse<bool> ValidaCadastroUsuario(UsuarioDTO usuarioDTO)
         {

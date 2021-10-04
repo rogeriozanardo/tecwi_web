@@ -13,5 +13,6 @@ namespace TecWi_Web.Application.Interfaces
         Task<ServiceResponse<bool>> InsertAsync(UsuarioDTO UsuarioDTO);
         Task<ServiceResponse<UsuarioDTO>> GetByIdAsync(Guid Idusuario);
         Task<ServiceResponse<UsuarioDTO>> GetByLoginAsync(string Login);
+        Task<ServiceResponse<bool>> UpdateJustInfoAsync(UsuarioDTO usuarioDTO);
     }
 }

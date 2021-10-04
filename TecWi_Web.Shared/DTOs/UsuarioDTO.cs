@@ -11,6 +11,7 @@ namespace TecWi_Web.Shared.DTOs
         public string Email { get; set; }
         public string Senha { get; set; }
         public string Token { get; set; }
+        public bool Ativo { get; set; } 
         public List<UsuarioAplicacaoDTO> UsuarioAplicacaoDTO { get; set; }
 
         public UsuarioDTO()

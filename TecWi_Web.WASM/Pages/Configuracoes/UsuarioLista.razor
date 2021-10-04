@@ -6,8 +6,44 @@
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
-<!-- Inicio do Modal Inclui/Edita usuário -->
-<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="630" Target="#target" @bind-Visible="exibeModalIncluiAlteraUsuario">
+<!-- Inicio do Modal altera aplicações -->
+<SfDialog id="modalAplicacoes" IsModal="true" CssClass="modal-form" Width="990" Height="450" Target="#target" @bind-Visible="exibeModalAplicacoes">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                Usuário: @usuarioDTO.Nome
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid">
+                <SfGrid DataSource="usuarioDTO.UsuarioAplicacaoDTO" Height="210" AllowPaging="false">
+                    <GridEvents CommandClicked="EditaAplicacoesUsuario" TValue="UsuarioAplicacaoDTO"></GridEvents>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(UsuarioAplicacaoDTO.DsAplicacao) HeaderText="Aplicação"></GridColumn>
+                        <GridColumn Field=@nameof(UsuarioAplicacaoDTO.IdPerfil) HeaderText="Perfil"></GridColumn>
+                        <GridColumn Field=@nameof(UsuarioAplicacaoDTO.StAtivo) HeaderText="Status"></GridColumn>
+                        <GridColumn HeaderText="" Width="130">
+                            <GridCommandColumns>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
+                            </GridCommandColumns>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton OnClick="FecharAlteraApicacoes">Fechar</SfButton>
+                            <SfButton CssClass="btn-blue" OnClick="SalvarAplicacoes">Salvar</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+<!-- Fim do Modal altera aplicações -->
+<!-- Inicio do Modal Inclui usuário -->
+<SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="350" Target="#target" @bind-Visible="exibeModalIncluiUsuario">
     <DialogTemplates>
         <Header>
             <div class="row mt-1">
@@ -30,18 +66,10 @@
                         </div>
                     </div>
 
-                    @if (usuarioDTO.IdUsuario.ToString() == "00000000-0000-0000-0000-000000000000")
-                    {
-                        habilitaCampoLogin = true;
-                    }else
-                    {
-                        habilitaCampoLogin = false;
-                    }
-
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="login">Login</label>
-                            <SfTextBox ID="login" @bind-value="usuarioDTO.Login" Enabled="habilitaCampoLogin" />
+                            <SfTextBox ID="login" @bind-value="usuarioDTO.Login" />
                         </div>
 
                         <div class="form-group col-md-4">
@@ -54,21 +82,6 @@
                             <SfTextBox ID="confirmesenha" @bind-value="confirmaSenha" Type="InputType.Password" />
                         </div>
                     </div>
-                    <hr>
-                    <SfGrid DataSource="usuarioDTO.UsuarioAplicacaoDTO" Height="210" AllowPaging="false">
-                        <GridEvents CommandClicked="EditaAplicacoesUsuario" TValue="UsuarioAplicacaoDTO"></GridEvents>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.DsAplicacao) HeaderText="Aplicação"></GridColumn>
-                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.IdPerfil) HeaderText="Perfil"></GridColumn>
-                            <GridColumn Field=@nameof(UsuarioAplicacaoDTO.StAtivo) HeaderText="Status"></GridColumn>
-                            <GridColumn HeaderText="" Width="130">
-                                <GridCommandColumns>
-                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
-                                </GridCommandColumns>
-                            </GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-
                     <CardFooter>
                         <div class="form-row mt-5 mb-3">
                             <div class="form-group col">
@@ -85,8 +98,96 @@
         </Content>
     </DialogTemplates>
 </SfDialog>
+<!-- Fim do Modal Inclui usuário -->
+<!-- Inicio do Modal altera usuário -->
+<SfDialog id="modaEditaUsuario" IsModal="true" CssClass="modal-form" Width="500" Height="350" Target="#target" @bind-Visible="exibeModalAlteraUsuario">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                Altera Usuario
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid container-modal-form bg-white">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="login">Login</label>
+                        <SfTextBox ID="login" @bind-value="usuarioDTO.Login" Enabled="false" />
+                    </div>
 
-<!-- Fim do Modal Inclui/Edita usuário -->
+                    <div class="form-group col-md-2">
+                        <label for="ativo">Ativo</label>
+                        <SfSwitch id="ativo" @bind-Checked="StAtivo" ValueChange="AlteraStAtivo" TChecked="bool?"></SfSwitch>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nome">Nome</label>
+                        <SfTextBox ID="nome" @bind-value="usuarioDTO.Nome" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="email">e-mail</label>
+                        <SfTextBox ID="email" @bind-value="usuarioDTO.Email" />
+                    </div>
+                </div>
+                <CardFooter>
+                    <div class="form-row mt-5 mb-3">
+                        <div class="form-group col">
+                            <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalAlteraUsuario">Fechar</SfButton>
+                        </div>
+
+                        <div class="form-group col-md-auto">
+                            <SfButton CssClass="btn-blue" OnClick="SalvarDadosUsuario">Salvar</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+<!-- Fim do Modal altera usuário -->
+<!-- Inicio do Modal altera senha -->
+<SfDialog id="modalTrocaSenha" Width="400" Height="350" Target="#target" IsModal="true" @bind-Visible="exibeModalTrocaSenha">
+    <DialogTemplates>
+        <Header>
+            <div class="row mt-1">
+                Usuário: @usuarioDTO.Nome
+            </div>
+        </Header>
+        <Content>
+            <div class="container-fluid">
+                <p class="m-3" style="white-space: pre-line">
+                    A senha de ver no mínimo 6 caracteres e no máximo 15 caracteres.
+                </p>
+                <div class="row">
+                    <div class="form-group col-md-11">
+                        <div class="container-fluid">
+
+                            <div class="form-group">
+                                <SfTextBox Placeholder="Nova senha" Type="InputType.Password" @bind-Value="usuarioDTO.Senha"></SfTextBox>
+                            </div>
+                            <div class="form-group">
+                                <SfTextBox Placeholder="Confirme nova senha" Type="InputType.Password" @bind-Value="@confirmaSenha"></SfTextBox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton OnClick="FecharTrocaSenha">Fechar</SfButton>
+                            <SfButton CssClass="btn-blue" OnClick="SalvarUsuario">Atualizar senha</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+<!-- Fim do Modal altera senha -->
+
 
 <div class="container-fluid">
     <SfCard CssClass="card-tela">
@@ -116,13 +217,16 @@
             {
                 <SfGrid DataSource="@listaUsuarioDTO" AllowPaging="true">
                     <GridPageSettings PageCount="5" PageSizes="true" PageSize="20"></GridPageSettings>
-                    <GridEvents CommandClicked="ModalEditaUsuario" TValue="UsuarioDTO"></GridEvents>
+                    <GridEvents CommandClicked="EditaUsuario" TValue="UsuarioDTO"></GridEvents>
                     <GridColumns>
                         <GridColumn Field=@nameof(UsuarioDTO.Nome) HeaderText="Nome" Width="200"></GridColumn>
                         <GridColumn Field=@nameof(UsuarioDTO.Login) HeaderText="Login" Width="120"></GridColumn>
-                        <GridColumn HeaderText="" Width="80">
+                        <GridColumn HeaderText="" Width="180">
                             <GridCommandColumns>
                                 <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Aplicações" })"></GridCommandColumn>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Senha" })"></GridCommandColumn>
+
                             </GridCommandColumns>
 
                         </GridColumn>
@@ -137,7 +241,19 @@
 
 
 <style>
+    #modalAplicacoes {
+        max-height: none !important;
+    }
+
     #modalUsuario {
+        max-height: none !important;
+    }
+
+    #modaEditaUsuario {
+        max-height: none !important;
+    }
+
+    #modalTrocaSenha {
         max-height: none !important;
     }
 </style>

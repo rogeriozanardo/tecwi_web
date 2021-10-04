@@ -66,7 +66,20 @@ namespace TecWi_Web.WASM.Pages.Home
 
         private void ExibeModalTrocaSenha()
         {
-            exibeModalTrocaSenha = true;
+            if(Config.usuarioDTO.Login=="admin")
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Opção não disponível para o usuário admim";
+                mensagemInformativaDTO.Exibe = true;
+            }else
+            {
+                exibeModalTrocaSenha = true;
+            }
+        }
+
+        private void FecharTrocaSenha()
+        {
+            exibeModalTrocaSenha = false;
         }
     }
 }

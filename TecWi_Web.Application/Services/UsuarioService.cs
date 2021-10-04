@@ -133,6 +133,28 @@ namespace TecWi_Web.Application.Services
 
                 Usuario usuario = await _iUsuarioRepository.GetByIdAsync(usuarioDTO.IdUsuario);
                 usuario.Update(usuarioDTO.IdUsuario, usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, senhaHash, senhaSalt);
+                
+                _iUsuarioRepository.Update(usuario);
+
+                await _iUnitOfWork.CommitAsync();
+                serviceResponse.Data = true;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateJustInfoAsync(UsuarioDTO usuarioDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                Usuario usuario = await _iUsuarioRepository.GetByIdAsync(usuarioDTO.IdUsuario);
+                usuario.Update(usuarioDTO.IdUsuario, usuarioDTO.Login, usuarioDTO.Nome, usuarioDTO.Email, usuario.SenhaHash, usuario.SenhaSalt);
+                usuario.Ativo = usuarioDTO.Ativo;
                 _iUsuarioRepository.Update(usuario);
 
                 await _iUnitOfWork.CommitAsync();
