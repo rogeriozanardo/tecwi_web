@@ -17,17 +17,24 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         private bool exibeModalAlteraUsuario = false;
         private bool exibeModalTrocaSenha = false;
         private bool exibeModalAplicacoes = false;
+        private bool exibeModalEdicaoAplicacao = false;
+
         private bool? StAtivo = false;
+        private bool? StAplicacaoAtiva = false;
 
         private string pesquisa = string.Empty;
 
         private UsuarioDTO usuarioDTO = new UsuarioDTO();
+        private List<UsuarioAplicacaoDTO> listaUsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+
+        private UsuarioAplicacaoDTO usuarioAplicacaoDTO = new UsuarioAplicacaoDTO();
+
         private string confirmaSenha = "";
 
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
         private List<UsuarioDTO> listaUsuarioDTO = new List<UsuarioDTO>();
 
-        
+        private int? indexPerfil { get; set; } = 0;
         private void EditaUsuario(CommandClickEventArgs<UsuarioDTO> args)
         {
             usuarioDTO = args.RowData;
@@ -69,6 +76,18 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             }
         }
 
+        private void AlteraStAtivoAplicacao(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool?> args)
+        {
+            if(!args.Checked.Value)
+            {
+                usuarioAplicacaoDTO.StAtivo = false;
+            }
+            else
+            {
+                usuarioAplicacaoDTO.StAtivo = true;
+            }
+        }
+
         private async Task PesquisaUsuarios()
         {
             ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
@@ -77,6 +96,13 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             usurioFilter.Nome = pesquisa;
             serviceResponse = await usuarioFrontService.GetAllAsync(usurioFilter);
 
+            if(listaUsuarioAplicacaoDTO.Count ==0)
+            {
+                foreach(var item in Enum.GetValues(typeof(IdPerfil)))
+                {
+        
+                }
+            }
             exibeSpinner = false;
             if(serviceResponse.Success)
             {
@@ -161,6 +187,7 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         private void EditaAplicacoesUsuario()
         {
 
+            exibeModalEdicaoAplicacao = true;
         }
 
         private void FecharTrocaSenha()
@@ -209,6 +236,10 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
 
         }
 
+        private void FechaAlteracaoAplicacao()
+        {
+            exibeModalEdicaoAplicacao = false;
+        }
 
     }
 }
