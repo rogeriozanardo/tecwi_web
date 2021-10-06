@@ -116,7 +116,27 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private async Task SalvarCliente()
         {
-            
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            exibeSpinner = true;
+            serviceResponse = await clienteFrontService.SalvaCliente(clienteDTO);
+
+            if(serviceResponse.Success)
+            {
+                await PesquisaCliente();
+                exibeSpinner = false;
+                exibeModalCliente = false;
+                mensagemInformativaDTO.Titulo = "Sucesso";
+                mensagemInformativaDTO.Mensagem = "Alterações salvas com sucesso.";
+                mensagemInformativaDTO.Exibe = true;
+            }
+            else
+            {
+                exibeSpinner = false;
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
         }
 
         private void ExibeAnotacaoContato(CommandClickEventArgs<ContatoCobrancaDTO> args)

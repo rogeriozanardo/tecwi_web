@@ -35,6 +35,16 @@ namespace TecWi_Web.Data.Repositories
             return true;
         }
 
+        public async Task<bool> BulkUpdateIndividualAsync(Cliente cliente)
+        {
+            await Task.Run(() =>
+            {
+                _dataContext.Update(cliente);
+            });
+
+            return true;
+        }
+
         public async Task<List<Cliente>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
             IQueryable<Cliente> _cliente = _dataContext.Cliente
