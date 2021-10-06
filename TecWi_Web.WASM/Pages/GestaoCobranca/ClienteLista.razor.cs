@@ -69,7 +69,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
                 if (serviceResponseAtendentes.Success)
                 {
-                    listaAtendentes = serviceResponseAtendentes.Data;
+                    listaAtendentes = serviceResponseAtendentes.Data.Where(x => x.Ativo == true).ToList();
                 }
             }
 
