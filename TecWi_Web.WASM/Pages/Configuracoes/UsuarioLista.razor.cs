@@ -6,34 +6,114 @@ using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
+using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.WASM.Pages.Configuracoes
 {
     public partial class UsuarioLista
     {
-        bool exibeSpinner = false;
-        bool exibeModalIncluiAlteraUsuario = false;
+        private bool exibeSpinner = false;
+        private bool exibeModalIncluiUsuario = false;
+        private bool exibeModalAlteraUsuario = false;
+        private bool exibeModalTrocaSenha = false;
+        private bool exibeModalAplicacoes = false;
+        private bool exibeModalEdicaoAplicacao = false;
+
+        private bool? StAtivo = false;
+        private bool? StAplicacaoAtiva = false;
+
+        private string pesquisa = string.Empty;
 
         private UsuarioDTO usuarioDTO = new UsuarioDTO();
+        private List<UsuarioAplicacaoDTO> listaUsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
+
+        private UsuarioAplicacaoDTO usuarioAplicacaoDTO = new UsuarioAplicacaoDTO();
+
         private string confirmaSenha = "";
 
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
         private List<UsuarioDTO> listaUsuarioDTO = new List<UsuarioDTO>();
 
-        
-        private void ModalEditaUsuario(CommandClickEventArgs<UsuarioDTO> args)
+        private int? indexPerfil { get; set; } = 0;
+        private void EditaUsuario(CommandClickEventArgs<UsuarioDTO> args)
         {
+            usuarioDTO = args.RowData;
+            if(usuarioDTO.Login == "admin")
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "O usuário admin não pode ser alterado.";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
 
+            if (args.CommandColumn.ButtonOption.Content == "Senha")
+            {
+                exibeModalTrocaSenha = true;
+            } else if (args.CommandColumn.ButtonOption.Content == "Aplicações")
+            {
+
+                foreach (var item in usuarioDTO.UsuarioAplicacaoDTO)
+                {
+                    item.DsAplicacao = item.IdAplicacao.GetDisplayName();
+                }
+
+                exibeModalAplicacoes = true;
+            }else if(args.CommandColumn.ButtonOption.Content == "Editar")
+            {
+                StAtivo = usuarioDTO.Ativo;
+                exibeModalAlteraUsuario = true;
+            }
         }
 
-        protected override async Task OnInitializedAsync()
+        private void AlteraStAtivo(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool?> args)
         {
+            if(!args.Checked.Value)
+            {
+                usuarioDTO.Ativo = false;
+            }else
+            {
+                usuarioDTO.Ativo = true;
+            }
+        }
 
-
+        private void AlteraStAtivoAplicacao(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool?> args)
+        {
+            if(!args.Checked.Value)
+            {
+                usuarioAplicacaoDTO.StAtivo = false;
+            }
+            else
+            {
+                usuarioAplicacaoDTO.StAtivo = true;
+            }
         }
 
         private async Task PesquisaUsuarios()
         {
+            ServiceResponse<List<UsuarioDTO>> serviceResponse = new ServiceResponse<List<UsuarioDTO>>();
+            exibeSpinner = true;
+            UsuarioFilter usurioFilter = new UsuarioFilter();
+            usurioFilter.Nome = pesquisa;
+            serviceResponse = await usuarioFrontService.GetAllAsync(usurioFilter);
+
+            if(listaUsuarioAplicacaoDTO.Count ==0)
+            {
+                foreach(var item in Enum.GetValues(typeof(IdPerfil)))
+                {
+        
+                }
+            }
+            exibeSpinner = false;
+            if(serviceResponse.Success)
+            {
+                listaUsuarioDTO = serviceResponse.Data;
+            }else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
+
 
         }
 
@@ -48,18 +128,13 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Operador, StAtivo = false });
             usuarioDTO.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Operador, StAtivo = false });
 
-            foreach(var item in usuarioDTO.UsuarioAplicacaoDTO)
-            {
-                item.DsAplicacao = item.IdAplicacao.GetDisplayName();
-            }
-
             confirmaSenha = string.Empty;
-            exibeModalIncluiAlteraUsuario = true;
+            exibeModalIncluiUsuario = true;
         }
 
         private void FechaModalCadastro()
         {
-            exibeModalIncluiAlteraUsuario = false;
+            exibeModalIncluiUsuario = false;
         }
 
         private async Task SalvarUsuario()
@@ -97,7 +172,8 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             {
                 mensagemInformativaDTO.Titulo = "Sucesso";
                 mensagemInformativaDTO.Mensagem = "Cadastro salvo";
-                exibeModalIncluiAlteraUsuario = false;
+                exibeModalTrocaSenha = false;
+                exibeModalIncluiUsuario = false;
             }
             else
             {
@@ -111,6 +187,59 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         private void EditaAplicacoesUsuario()
         {
 
+            exibeModalEdicaoAplicacao = true;
         }
+
+        private void FecharTrocaSenha()
+        {
+            exibeModalTrocaSenha = false;
+        }
+
+        private void FechaModalAlteraUsuario()
+        {
+            exibeModalAlteraUsuario = false;
+        }
+
+        private async Task SalvarDadosUsuario()
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            exibeSpinner = true;
+            serviceResponse = await usuarioFrontService.UpdateJustInfoAsync(usuarioDTO);
+
+            
+            if(serviceResponse.Success)
+            {
+                mensagemInformativaDTO.Titulo = "Sucesso";
+                mensagemInformativaDTO.Mensagem = "Cadastro salvo com sucesso";
+                await PesquisaUsuarios();
+                exibeSpinner = false;
+                exibeModalAlteraUsuario = false;
+                mensagemInformativaDTO.Exibe = true;
+            }else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                exibeSpinner = false;
+                mensagemInformativaDTO.Exibe = true;
+            }
+
+        }
+
+        private void FecharAlteraApicacoes()
+        {
+            exibeModalAplicacoes = false;
+        }
+
+        private async Task SalvarAplicacoes()
+        {
+
+        }
+
+        private void FechaAlteracaoAplicacao()
+        {
+            exibeModalEdicaoAplicacao = false;
+        }
+
     }
 }

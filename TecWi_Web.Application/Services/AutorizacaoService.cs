@@ -48,6 +48,11 @@ namespace TecWi_Web.Application.Services
                     serviceResponse.Success = false;
                     serviceResponse.Message = ServiceMessages.UsuarioSenhaInvalida;
                 }
+                else if (!usuario.Ativo)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = ServiceMessages.UsuarioInativo;
+                }
                 else
                 {
                     serviceResponse.Data.IdUsuario = usuario.IdUsuario;
@@ -56,20 +61,20 @@ namespace TecWi_Web.Application.Services
                     serviceResponse.Data.Email = usuario.Email;
                     serviceResponse.Data.Token = CreateTokem(usuario);
 
-                    if(usuario.Login == "admin")
+                    if (usuario.Login == "admin")
                     {
-                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Cobranca, IdPerfil = IdPerfil.Gestor });
-                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Comercial, IdPerfil = IdPerfil.Gestor });
-                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Configuracoes, IdPerfil = IdPerfil.Gestor });
-                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Gestor });
-                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Gestor });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Cobranca, IdPerfil = IdPerfil.Gestor, StAtivo = true });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Comercial, IdPerfil = IdPerfil.Gestor, StAtivo = true });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Configuracoes, IdPerfil = IdPerfil.Gestor, StAtivo = true });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Financeiro, IdPerfil = IdPerfil.Gestor, StAtivo = true });
+                        serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO() { IdAplicacao = IdAplicacao.Logistica, IdPerfil = IdPerfil.Gestor, StAtivo = true });
                     }
                     else
                     {
                         serviceResponse.Data.UsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
                         List<UsuarioAplicacao> usuarioAplicacao = await _iUsuarioAplicacaoRepository.GetByIdUsuario(usuario.IdUsuario);
 
-                        foreach(var item in usuarioAplicacao)
+                        foreach (var item in usuarioAplicacao)
                         {
                             serviceResponse.Data.UsuarioAplicacaoDTO.Add(new UsuarioAplicacaoDTO()
                             {

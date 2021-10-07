@@ -48,7 +48,23 @@ namespace TecWi_Web.API.Controllers
             }
             else
             {
-                return BadRequest(serviceResponse.Message);
+                return BadRequest(serviceResponse);
+            }
+        }
+
+        [HttpPost]
+        [Route(nameof(BulkInsertOrUpdateAsyncIndividual))]
+        public async Task<IActionResult> BulkInsertOrUpdateAsyncIndividual(ClienteDTO clienteDTO)
+        {
+
+            ServiceResponse<bool> serviceResponse = await _iClienteService.UpdateAsync(clienteDTO);
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse);
             }
         }
 

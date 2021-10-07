@@ -87,11 +87,29 @@ namespace TecWi_Web.API.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route(nameof(UpdateAsync))]
         public async Task<IActionResult> UpdateAsync(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<bool> serviceResponse = await _iUsuarioService.UpdateAsync(usuarioDTO);
+
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse);
+            }
+        }
+
+        [HttpPost]
+        [Route(nameof(UpdateJustInfoAsync))]
+        public async Task<IActionResult> UpdateJustInfoAsync(UsuarioDTO usuarioDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            serviceResponse = await _iUsuarioService.UpdateJustInfoAsync(usuarioDTO);
 
             if (serviceResponse.Success)
             {

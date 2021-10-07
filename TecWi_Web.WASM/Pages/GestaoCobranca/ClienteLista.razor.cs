@@ -69,7 +69,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
                 if (serviceResponseAtendentes.Success)
                 {
-                    listaAtendentes = serviceResponseAtendentes.Data;
+                    listaAtendentes = serviceResponseAtendentes.Data.Where(x => x.Ativo == true).ToList();
                 }
             }
 
@@ -109,12 +109,34 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private void FechaModalCliente()
         {
+            indexAtendente = -1;
+            clienteDTO = new ClienteDTO();
             exibeModalCliente = false;
         }
 
         private async Task SalvarCliente()
         {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
 
+            exibeSpinner = true;
+            serviceResponse = await clienteFrontService.SalvaCliente(clienteDTO);
+
+            if(serviceResponse.Success)
+            {
+                await PesquisaCliente();
+                exibeSpinner = false;
+                exibeModalCliente = false;
+                mensagemInformativaDTO.Titulo = "Sucesso";
+                mensagemInformativaDTO.Mensagem = "Alterações salvas com sucesso.";
+                mensagemInformativaDTO.Exibe = true;
+            }
+            else
+            {
+                exibeSpinner = false;
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
         }
 
         private void ExibeAnotacaoContato(CommandClickEventArgs<ContatoCobrancaDTO> args)
@@ -124,7 +146,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             anotacaoDTO.exibe = true;
         }
 
-        private async Task RegistrarContato()
+        private void RegistrarContato()
         {
             exibeModalContato = true;
             indexTipoContato = -1;
@@ -224,6 +246,8 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             }
             else
             {
+                contatoCobrancaDTO.NomeAtendente = Config.usuarioDTO.Nome;
+                clienteDTO.ContatoCobrancaDTO.Add(contatoCobrancaDTO);
                 exibeModalContato = false;
                 mensagemInformativaDTO.Titulo = "Sucesso";
                 mensagemInformativaDTO.Mensagem = "Contato gravado com sucesso";

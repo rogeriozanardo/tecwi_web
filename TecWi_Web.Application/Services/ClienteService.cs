@@ -47,6 +47,26 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<bool>> UpdateAsync(ClienteDTO clienteDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                Cliente cliente = _iMapper.Map<Cliente>(clienteDTO);
+                cliente.IdUsuario = clienteDTO.UsuarioDTO.IdUsuario;
+
+                await _iClienteRepository.BulkUpdateIndividualAsync(cliente);
+                await _iUnitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+   
+        }
+
         public async Task<ServiceResponse<List<ClienteDTO>>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
             ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();

@@ -13,5 +13,6 @@ namespace TecWi_Web.FrontServices.Interfaces
         Task<ServiceResponse<UsuarioDTO>> Login(UsuarioDTO usuarioDTO);
         Task<ServiceResponse<bool>> SalvarUsuario(UsuarioDTO usuarioDTO);
         Task<ServiceResponse<List<UsuarioDTO>>> GetAllAsync(UsuarioFilter usuarioFilter);
+        Task<ServiceResponse<bool>> UpdateJustInfoAsync(UsuarioDTO usuarioDTO);
     }
 }
