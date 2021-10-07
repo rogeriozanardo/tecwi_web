@@ -3,7 +3,7 @@
 
 @inject IClienteFrontservice clienteFrontService
 @inject ICobrancaFrontService cobrancaFrontService
-@inject IUsuarioFrontService usuarioFrontService 
+@inject IUsuarioFrontService usuarioFrontService
 
 
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
@@ -20,7 +20,7 @@
             </div>
         </Header>
         <Content>
-            <div class="container-fluid container-modal-form">
+            <div class="container-modal-form">
                 <div class="form">
                     <div class="form-row">
                         <div class="form-group col-md-2">
@@ -77,7 +77,7 @@
             </div>
         </Header>
         <Content>
-            <div class="container-fluid container-modal-form bg-white">
+            <div class="container-modal-form bg-white">
                 <SfTab Height="430" CssClass="tabcontrol-modal" @ref="tabCliente">
                     <TabItems>
                         <TabItem>
@@ -85,7 +85,7 @@
                                 <TabHeader Text="Informações do cliente"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
-                                <div class="container-fluid container-modal-form">
+                                <div class="container-fluid container-modal-form mt-3">
                                     <div class="form">
                                         <div class="form-row">
                                             <div class="form-group col-md">
@@ -106,7 +106,7 @@
 
                                         <div class="form-row">
                                             <div class="form-group col-md">
-                                                <label for="email">e-mail</label>
+                                                <label for="email">E-mail</label>
                                                 <SfTextBox id="email" @bind-Value="clienteDTO.email" Enabled="false"></SfTextBox>
                                             </div>
 
@@ -130,13 +130,13 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
                                                 <label for="atendente">Atendente responsável: </label>
-                                                <SfDropDownList TItem="UsuarioDTO" TValue="string" PopupHeight="200px" @bind-Index="@indexAtendente" DataSource="listaAtendentes" >
+                                                <SfDropDownList TItem="UsuarioDTO" TValue="string" PopupHeight="200px" @bind-Index="@indexAtendente" DataSource="listaAtendentes">
                                                     <DropDownListEvents TValue="string" TItem="UsuarioDTO" ValueChange="SelecaoAtendente"></DropDownListEvents>
                                                     <DropDownListFieldSettings Text=@nameof(UsuarioDTO.Nome) Value=@nameof(UsuarioDTO.IdUsuario)></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
-                                            <div class="form-group col-md-2 text-right">
-                                                <SfButton IsPrimary="true" OnClick="RegistrarContato" Content="Registrar Contato"></SfButton>
+                                            <div class="form-group pt-1 col-md-2">
+                                                <SfButton IsPrimary="true" OnClick="RegistrarContato" CssClass="mt-4" Content="Registrar Contato"></SfButton>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +148,7 @@
                                 <TabHeader Text="Lançamentos"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
-                                <div class="container-fluid container-modal-form">
+                                <div class="container-fluid container-modal-form mt-3">
                                     @if (clienteDTO.PagarReceberDTO.Count > 0)
                                     {
                                         <SfGrid DataSource="clienteDTO.PagarReceberDTO" Height="350">
@@ -177,7 +177,7 @@
                                 <TabHeader Text="Histórico de contatos"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
-                                <div class="container-fluid container-modal-form">
+                                <div class="container-fluid container-modal-form mt-3">
                                     @if (clienteDTO.ContatoCobrancaDTO.Count > 0)
                                     {
                                         <SfGrid DataSource="clienteDTO.ContatoCobrancaDTO" Height="350">
@@ -204,16 +204,15 @@
                         </TabItem>
                     </TabItems>
                 </SfTab>
-
                 <CardFooter>
-                    <div class="form-row mt-5 mb-3">
+                    <div class="form-row" style="margin-top: 64px;">
                         <div class="form-group col">
-                            <SfButton CssClass="btn-outline-blue" type="reset" OnClick="FechaModalCliente">Fechar</SfButton>
+                            <SfButton CssClass="btn-blue" type="reset" OnClick="FechaModalCliente">Fechar</SfButton>
                         </div>
                         @if (perfilGestor)
                         {
                             <div class="form-group col-md-auto">
-                                <SfButton CssClass="btn-blue" OnClick="SalvarCliente">Salvar</SfButton>
+                                <SfButton CssClass="e-primary" OnClick="SalvarCliente">Salvar</SfButton>
                             </div>
                         }
                     </div>
