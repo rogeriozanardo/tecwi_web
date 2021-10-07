@@ -28,8 +28,6 @@ namespace TecWi_Web.Application.Services
             _ihttpContextAccessor = iHttpContextAccessor;
         }
 
-        private Guid GetUserId() => Guid.Parse(_ihttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
         public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
@@ -47,26 +45,6 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> UpdateAsync(ClienteDTO clienteDTO)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                Cliente cliente = _iMapper.Map<Cliente>(clienteDTO);
-                cliente.IdUsuario = clienteDTO.UsuarioDTO.IdUsuario;
-
-                await _iClienteRepository.BulkUpdateIndividualAsync(cliente);
-                await _iUnitOfWork.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Message = ex.GetBaseException().Message;
-                serviceResponse.Success = false;
-            }
-            return serviceResponse;
-   
-        }
-
         public async Task<ServiceResponse<List<ClienteDTO>>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
             ServiceResponse<List<ClienteDTO>> serviceResponse = new ServiceResponse<List<ClienteDTO>>();
@@ -75,10 +53,10 @@ namespace TecWi_Web.Application.Services
                 List<Cliente> cliente = await _iClienteRepository.GetAllAsync(clientePagarReceberFilter);
                 List<ClienteDTO> clienteDTO = _iMapper.Map<List<ClienteDTO>>(cliente);
 
-                foreach(var item in clienteDTO)
+                foreach (var item in clienteDTO)
                 {
                     item.totalLancamentos = item.PagarReceberDTO.Sum(x => x.valorr);
-                    foreach(var lancamento in item.PagarReceberDTO)
+                    foreach (var lancamento in item.PagarReceberDTO)
                     {
                         lancamento.qtdDiasVencido = DateTime.Now.Subtract(lancamento.dtvencto).Days;
                     }
@@ -104,12 +82,29 @@ namespace TecWi_Web.Application.Services
 
                 clienteDTO.totalLancamentos = clienteDTO.PagarReceberDTO.Sum(x => x.valorr);
 
-                foreach(var item in clienteDTO.PagarReceberDTO)
+                foreach (var item in clienteDTO.PagarReceberDTO)
                 {
                     item.qtdDiasVencido = DateTime.Now.Subtract(item.dtvencto).Days;
                 }
 
                 serviceResponse.Data = clienteDTO;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Message = ex.GetBaseException().Message;
+                serviceResponse.Success = false;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateAsync(ClienteDTO clienteDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                Cliente cliente = _iMapper.Map<Cliente>(clienteDTO);
+                await _iClienteRepository.UpdateAsync(cliente);
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
