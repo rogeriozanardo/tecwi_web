@@ -28,8 +28,6 @@ namespace TecWi_Web.Application.Services
             _ihttpContextAccessor = iHttpContextAccessor;
         }
 
-        private Guid GetUserId() => Guid.Parse(_ihttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
         public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
@@ -45,26 +43,6 @@ namespace TecWi_Web.Application.Services
                 serviceResponse.Success = false;
             }
             return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<bool>> UpdateAsync(ClienteDTO clienteDTO)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                Cliente cliente = _iMapper.Map<Cliente>(clienteDTO);
-                cliente.IdUsuario = clienteDTO.UsuarioDTO.IdUsuario;
-
-                await _iClienteRepository.BulkUpdateIndividualAsync(cliente);
-                await _iUnitOfWork.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Message = ex.GetBaseException().Message;
-                serviceResponse.Success = false;
-            }
-            return serviceResponse;
-   
         }
 
         public async Task<ServiceResponse<List<ClienteDTO>>> GetAllAsync(ClientePagarReceberFilter clientePagarReceberFilter)

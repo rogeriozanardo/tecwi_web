@@ -25,15 +25,6 @@ namespace TecWi_Web.Data.Repositories
             return true;
         }
 
-        public async Task<bool> UpdateAsync(Cliente cliente)
-        {
-            await Task.Run(() =>
-            {
-                _dataContext.Update(cliente);
-            });
-            return true;
-        }
-
         public async Task<bool> BulkUpdateAsync(List<Cliente> cliente)
         {
             await Task.Run(() =>
@@ -44,7 +35,7 @@ namespace TecWi_Web.Data.Repositories
             return true;
         }
 
-        public async Task<bool> BulkUpdateIndividualAsync(Cliente cliente)
+        public async Task<bool> UpdateAsync(Cliente cliente)
         {
             await Task.Run(() =>
             {

@@ -12,6 +12,5 @@ namespace TecWi_Web.Data.Interfaces
         Task<Cliente> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter);
         Task<bool> UpdateAsync(Cliente cliente);
         Task<bool> BulkUpdateAsync(List<Cliente> cliente);
-        Task<bool> BulkUpdateIndividualAsync(Cliente cliente);
     }
 }
