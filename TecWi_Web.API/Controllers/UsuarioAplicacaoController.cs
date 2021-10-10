@@ -51,6 +51,22 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpPost]
+        [Route(nameof(UpdateAsync))]
+        public async Task<IActionResult> UpdateAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
+        {
+            ServiceResponse<bool> serviceResponse = await _iUsuarioAplicacaoService.UpdateAsync(usuarioAplicacaoDTO);
+
+            if (serviceResponse.Success)
+            {
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                return BadRequest(serviceResponse.Message);
+            }
+        }
+
+        [HttpPost]
         [Route(nameof(DeleteAsync))]
         public async Task<IActionResult> DeleteAsync(UsuarioAplicacaoFilter usuarioAplicacaoFilter)
         {

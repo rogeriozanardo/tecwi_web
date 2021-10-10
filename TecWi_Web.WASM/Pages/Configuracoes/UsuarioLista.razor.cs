@@ -27,6 +27,8 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
         private UsuarioDTO usuarioDTO = new UsuarioDTO();
         private List<UsuarioAplicacaoDTO> listaUsuarioAplicacaoDTO = new List<UsuarioAplicacaoDTO>();
 
+        private SfGrid<UsuarioAplicacaoDTO> sfGridAplicacoesUsuario = new SfGrid<UsuarioAplicacaoDTO>();
+
         private UsuarioAplicacaoDTO usuarioAplicacaoDTO = new UsuarioAplicacaoDTO();
 
         private string confirmaSenha = "";
@@ -96,13 +98,7 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             usurioFilter.Nome = pesquisa;
             serviceResponse = await usuarioFrontService.GetAllAsync(usurioFilter);
 
-            if(listaUsuarioAplicacaoDTO.Count ==0)
-            {
-                foreach(var item in Enum.GetValues(typeof(IdPerfil)))
-                {
-        
-                }
-            }
+          
             exibeSpinner = false;
             if(serviceResponse.Success)
             {
@@ -184,9 +180,10 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
             mensagemInformativaDTO.Exibe = true;
         }
 
-        private void EditaAplicacoesUsuario()
+        private void EditaAplicacoesUsuario(CommandClickEventArgs<UsuarioAplicacaoDTO> args)
         {
-
+            usuarioAplicacaoDTO = args.RowData;
+            StAplicacaoAtiva = usuarioAplicacaoDTO.StAtivo;
             exibeModalEdicaoAplicacao = true;
         }
 
@@ -233,11 +230,41 @@ namespace TecWi_Web.WASM.Pages.Configuracoes
 
         private async Task SalvarAplicacoes()
         {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            exibeSpinner = true;
 
+            serviceResponse = await usuarioFrontService.AtualizaAplicacoesUsuario(usuarioDTO.UsuarioAplicacaoDTO);
+
+            exibeSpinner = false;
+            if(serviceResponse.Success)
+            {
+                mensagemInformativaDTO.Titulo = "Sucesso";
+                mensagemInformativaDTO.Mensagem = "Aplicações do usuário atualizadas com sucesso.";
+                await PesquisaUsuarios();
+                exibeModalAplicacoes = false;
+                mensagemInformativaDTO.Exibe = true;
+            }else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
         }
 
         private void FechaAlteracaoAplicacao()
         {
+            exibeModalEdicaoAplicacao = false;
+        }
+
+        private void AtualizaListaAplicao()
+        {
+            int index = usuarioDTO.UsuarioAplicacaoDTO.FindIndex(x => x.IdAplicacao == usuarioAplicacaoDTO.IdAplicacao);
+            if(index >= 0)
+            {
+                usuarioDTO.UsuarioAplicacaoDTO[index].StAtivo = (bool)StAplicacaoAtiva;
+                usuarioDTO.UsuarioAplicacaoDTO[index].IdPerfil = usuarioAplicacaoDTO.IdPerfil;
+            }
+            sfGridAplicacoesUsuario.Refresh();
             exibeModalEdicaoAplicacao = false;
         }
 

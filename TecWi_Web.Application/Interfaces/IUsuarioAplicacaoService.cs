@@ -11,5 +11,6 @@ namespace TecWi_Web.Application.Interfaces
         Task<ServiceResponse<bool>> BulkInsertAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO);
         Task<ServiceResponse<bool>> DeleteAsync(Guid idUsuario);
         Task<ServiceResponse<List<UsuarioAplicacaoDTO>>> GetByIdUsuarioAsync(Guid idUsuario);
+        Task<ServiceResponse<bool>> UpdateAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO);
     }
 }

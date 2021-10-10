@@ -7,11 +7,11 @@
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
 <!-- Inicio do Modal altera aplicação do usuário -->
-<SfDialog id="modalAplicaoUsuario" IsModal="true" CssClass="modal-form" Width="300" Height="300" @bind-Visible="exibeModalEdicaoAplicacao">
+<SfDialog id="modalAplicaoUsuario" IsModal="true" CssClass="modal-form" Width="400" Height="300" @bind-Visible="exibeModalEdicaoAplicacao">
     <DialogTemplates>
         <Header>
             <div class="row mt-1">
-                Aplicação: @usuarioAplicacaoDTO.DsAplicacao;
+                Aplicação: @usuarioAplicacaoDTO.DsAplicacao
             </div>
         </Header>
         <Content>
@@ -22,16 +22,26 @@
                             <div class="radio-control">
                                 <h6 class="row">Perfil de acesso:</h6>
                                 <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label for="perfil">Perfil: </label>
-                                        @*<SfDropDownList TItem="UsuarioAplicacaoDTO" TValue="string" PopupHeight="100" @bind-Index="@indexPerfil" DataSource="listaPerfil">
-
-                                        </SfDropDownList>*@
+                                    <div class="form-group col-md">
+                                        <div class="form-group col-md">
+                                            <div class="control-section">
+                                                <div class="radio-control">
+                                                    <div class="row">
+                                                        <SfRadioButton Label="Gestor" Name="IdPerfil" Value="1" @bind-Checked="@usuarioAplicacaoDTO.IdPerfil"></SfRadioButton>
+                                                    </div>
+                                                    <div class="row">
+                                                        <SfRadioButton Label="Operador" Name="IdPerfil" Value="2" @bind-Checked="@usuarioAplicacaoDTO.IdPerfil"></SfRadioButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <label for="ativo">Ativo</label>
-                                    <SfSwitch id="ativo" @bind-Checked="StAplicacaoAtiva" ValueChange="AlteraStAtivoAplicacao" TChecked="bool?"></SfSwitch>
+                                    <div class="form-group col-md-4">
+                                        <label for="ativo">Ativo</label>
+                                        <SfSwitch id="ativo" @bind-Checked="StAplicacaoAtiva" ValueChange="AlteraStAtivoAplicacao" TChecked="bool?"></SfSwitch>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +51,7 @@
                     <div class="row mt-3 text-right">
                         <div class="form-group col">
                             <SfButton OnClick="FechaAlteracaoAplicacao">Fechar</SfButton>
-                            <SfButton CssClass="btn-blue">Ok</SfButton>
+                            <SfButton OnClick="AtualizaListaAplicao" CssClass="btn-blue">Ok</SfButton>
                         </div>
                     </div>
                 </CardFooter>
@@ -50,6 +60,8 @@
     </DialogTemplates>
 </SfDialog>
 <!-- Fim do Modal altera aplicação do usuário -->
+
+
 <!-- Inicio do Modal altera aplicações -->
 <SfDialog id="modalAplicacoes" IsModal="true" CssClass="modal-form" Width="990" Height="450" Target="#target" @bind-Visible="exibeModalAplicacoes">
     <DialogTemplates>
@@ -60,12 +72,26 @@
         </Header>
         <Content>
             <div class="container-fluid">
-                <SfGrid DataSource="usuarioDTO.UsuarioAplicacaoDTO" Height="210" AllowPaging="false">
+                <SfGrid @ref="sfGridAplicacoesUsuario" DataSource="usuarioDTO.UsuarioAplicacaoDTO" Height="260" AllowPaging="false">
                     <GridEvents CommandClicked="EditaAplicacoesUsuario" TValue="UsuarioAplicacaoDTO"></GridEvents>
                     <GridColumns>
                         <GridColumn Field=@nameof(UsuarioAplicacaoDTO.DsAplicacao) HeaderText="Aplicação"></GridColumn>
                         <GridColumn Field=@nameof(UsuarioAplicacaoDTO.IdPerfil) HeaderText="Perfil"></GridColumn>
-                        <GridColumn Field=@nameof(UsuarioAplicacaoDTO.StAtivo) HeaderText="Status"></GridColumn>
+                        <GridColumn Field=@nameof(UsuarioAplicacaoDTO.StAtivo) HeaderText="Status">
+                            <Template>
+                                @{
+                                    var aplicacao = (context as UsuarioAplicacaoDTO);
+                                    if (aplicacao.StAtivo)
+                                    {
+                                        <p class="text-success">Ativo</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text=danger">Inativo</p>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
                         <GridColumn HeaderText="" Width="130">
                             <GridCommandColumns>
                                 <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
@@ -86,6 +112,8 @@
     </DialogTemplates>
 </SfDialog>
 <!-- Fim do Modal altera aplicações -->
+
+
 <!-- Inicio do Modal Inclui usuário -->
 <SfDialog id="modalUsuario" IsModal="true" CssClass="modal-form" Width="990" Height="350" Target="#target" @bind-Visible="exibeModalIncluiUsuario">
     <DialogTemplates>

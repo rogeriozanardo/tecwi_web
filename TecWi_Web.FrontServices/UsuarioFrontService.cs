@@ -129,8 +129,6 @@ namespace TecWi_Web.FrontServices
             return serviceResponse;
         }
 
-
-
         private ServiceResponse<bool> ValidaCadastroUsuario(UsuarioDTO usuarioDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
@@ -175,6 +173,25 @@ namespace TecWi_Web.FrontServices
                 serviceResponse.Message = e.Message;
             }
 
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<bool>> AtualizaAplicacoesUsuario(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            string url = $"{Config.ApiUrl}UsuarioAplicacao/UpdateAsync";
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(url, usuarioAplicacaoDTO);
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.GetBaseException().Message;
+            }
             return serviceResponse;
         }
     }

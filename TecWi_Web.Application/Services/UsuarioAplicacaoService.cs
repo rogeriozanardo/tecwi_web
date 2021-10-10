@@ -24,6 +24,22 @@ namespace TecWi_Web.Application.Services
             _iUsuarioAplicacaoRepository = iUsuarioAplicacaoRepository;
         }
 
+        public async Task<ServiceResponse<bool>> UpdateAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+
+            try
+            {
+                await DeleteAsync(usuarioAplicacaoDTO[0].IdUsuario);
+                serviceResponse = await BulkInsertAsync(usuarioAplicacaoDTO);
+            }catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.GetBaseException().Message;
+            }
+
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<bool>> BulkInsertAsync(List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
