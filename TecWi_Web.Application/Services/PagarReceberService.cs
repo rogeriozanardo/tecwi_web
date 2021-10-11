@@ -102,6 +102,8 @@ namespace TecWi_Web.Application.Services
                     List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
                     List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { IdUsuario = Guid.Empty } );
 
+                    clienteEFCore.ForEach(x => x.Usuario = null);
+
                     await InsertCliente(pagarReceberPending, clienteEFCore);
                     await UpdateCliente(pagarReceberPending, clienteEFCore);
                     await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
