@@ -100,10 +100,9 @@ namespace TecWi_Web.Application.Services
                     List<PagarReceber> pagarReceberPending = await _iPagarReceberRepository.GetPendingPagarReceber();
                     List<PagarReceber> pagarReceberPaid = await _iPagarReceberRepository.GetPaidPagarReceber();
                     List<PagarReceber> pagarReceberEfCore = await _iPagarReceberRepository.GetAllEfCore(new PagarReceberFilter { Stcobranca = true });
-                    List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { IdUsuario = Guid.Empty } );
+                    List<Cliente> clienteEFCore = await _iClienteRepository.GetAllAsync(new ClientePagarReceberFilter { IdUsuario = Guid.Empty });
 
-                    clienteEFCore.ForEach(x => x.Usuario = null);
-
+                    await RemoveDependenciesToUpdate(clienteEFCore);
                     await InsertCliente(pagarReceberPending, clienteEFCore);
                     await UpdateCliente(pagarReceberPending, clienteEFCore);
                     await InsertPagarReceber(pagarReceberEfCore, pagarReceberPending);
@@ -139,6 +138,19 @@ namespace TecWi_Web.Application.Services
         {
             List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter { });
             return usuario.Where(x => x.UsuarioAplicacao.Any(y => y.IdAplicacao == IdAplicacao.Cobranca && y.IdPerfil == IdPerfil.Operador && y.StAtivo)).ToList();
+        }
+
+        private async Task RemoveDependenciesToUpdate(List<Cliente> clienteEFCore)
+        {
+            await Task.Run(() =>
+            {
+                clienteEFCore.ForEach(x =>
+                {
+                    x.Usuario = null;
+                    x.PagarReceber = null;
+                    x.ContatoCobranca = null;
+                });
+            });
         }
 
         private async Task InsertCliente(List<PagarReceber> pagarReceberPending, List<Cliente> clienteEFCore)

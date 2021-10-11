@@ -27,6 +27,7 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<bool> BulkUpdateAsync(List<Cliente> cliente)
         {
+            cliente.ForEach(x => x.Usuario = null);
             await Task.Run(() =>
             {
                 _dataContext.UpdateRange(cliente);
