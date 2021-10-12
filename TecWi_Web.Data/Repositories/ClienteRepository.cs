@@ -22,6 +22,7 @@ namespace TecWi_Web.Data.Repositories
         public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
         {
             await _dataContext.AddRangeAsync(cliente);
+
             return true;
         }
 
@@ -51,6 +52,7 @@ namespace TecWi_Web.Data.Repositories
             IQueryable<Cliente> _cliente = _dataContext.Cliente
                 .Include(x => x.Usuario)
                 .Include(x => x.PagarReceber)
+                .Include(x => x.ClienteContato)
                 .Include(x => x.ContatoCobranca).ThenInclude(x => x.Usuario).ThenInclude(x => x.ContatoCobrancaLancamento)
                 .Where(x => clientePagarReceberFilter.IdUsuario != Guid.Empty ? x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null) : true)
                 .Where(x => clientePagarReceberFilter.IdUsuario != Guid.Empty ? (x.IdUsuario == clientePagarReceberFilter.IdUsuario || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date)) : true)

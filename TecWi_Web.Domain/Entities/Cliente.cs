@@ -33,6 +33,7 @@ namespace TecWi_Web.Domain.Entities
         public Usuario Usuario { get; set; }
         public List<PagarReceber> PagarReceber { get; set; }
         public List<ContatoCobranca> ContatoCobranca { get; set; }
+        public List<ClienteContato> ClienteContato { get; set; }
 
         private string CdcliforInvalido = "Campo 'Cdclifor' inválido!";
         private void ValidateDomain(int cdclifor, string inscrifed, string fantasia, string razao, string ddd, string fone1, string fone2, string email, string cidade)

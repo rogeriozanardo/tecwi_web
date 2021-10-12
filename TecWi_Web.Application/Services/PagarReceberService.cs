@@ -149,6 +149,7 @@ namespace TecWi_Web.Application.Services
                     x.Usuario = null;
                     x.PagarReceber = null;
                     x.ContatoCobranca = null;
+                    x.ClienteContato = null;
                 });
             });
         }

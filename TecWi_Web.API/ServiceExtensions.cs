@@ -34,6 +34,7 @@ namespace TecWi_Web.API
             services.AddScoped<IContatoCobrancaRepository, ContatoCobrancaRepository>();
             services.AddScoped<IContatoCobrancaLancamentoRepository, ContatoCobrancaLancamentoRepository>();
             services.AddScoped<ILogOperacaoRepository, LogOperacaoRepository>();
+            services.AddScoped<IClienteContatoReposiry, ClienteContatoRepository>();
             return services;
         }
 
@@ -46,6 +47,7 @@ namespace TecWi_Web.API
             services.AddScoped<IClienteService, ClienteService>();
             services.AddScoped<IContatoCobrancaService, ContatoCobrancaService>();
             services.AddScoped<ILogOperacaoService, LogOperacaoService>();
+            services.AddScoped<IClienteContatoService, ClienteContatoService>();
             return services;
         }
 

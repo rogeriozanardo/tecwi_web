@@ -17,5 +17,6 @@ namespace TecWi_Web.Shared.DTOs
         public UsuarioDTO UsuarioDTO { get; set; }
         public List<PagarReceberDTO> PagarReceberDTO { get; set; } = new List<PagarReceberDTO>();
         public List<ContatoCobrancaDTO> ContatoCobrancaDTO { get; set; } = new List<ContatoCobrancaDTO>();
+        public List<ClienteContatoDTO> ClienteContatoDTO { get; set; } = new List<ClienteContatoDTO>();
     }
 }

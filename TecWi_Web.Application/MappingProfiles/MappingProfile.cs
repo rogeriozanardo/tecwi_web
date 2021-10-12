@@ -22,7 +22,10 @@ namespace TecWi_Web.Application.MappingProfiles
             CreateMap<Cliente, ClienteDTO>()
                 .ForMember(dest => dest.ContatoCobrancaDTO, opt => opt.MapFrom(src => src.ContatoCobranca))
                 .ForMember(dest => dest.PagarReceberDTO, opt => opt.MapFrom(src => src.PagarReceber))
-                .ForMember(dest => dest.UsuarioDTO, opt => opt.MapFrom(src => src.Usuario));
+                .ForMember(dest => dest.UsuarioDTO, opt => opt.MapFrom(src => src.Usuario))
+                .ForMember(dest => dest.ClienteContatoDTO, opt => opt.MapFrom(src => src.ClienteContato));
+
+            CreateMap<ClienteContato, ClienteContatoDTO>().ReverseMap();
 
             CreateMap<ContatoCobranca, ContatoCobrancaDTO>()
                 .ForMember(dest => dest.UsuarioDTO, opt => opt.MapFrom(src => src.Usuario))

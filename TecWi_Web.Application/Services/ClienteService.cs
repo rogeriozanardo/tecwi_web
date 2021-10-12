@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
@@ -19,13 +17,12 @@ namespace TecWi_Web.Application.Services
         private readonly IMapper _iMapper;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IClienteRepository _iClienteRepository;
-        private readonly IHttpContextAccessor _ihttpContextAccessor;
-        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository, IHttpContextAccessor iHttpContextAccessor)
+
+        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iClienteRepository = iClienteRepository;
-            _ihttpContextAccessor = iHttpContextAccessor;
         }
 
         public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
