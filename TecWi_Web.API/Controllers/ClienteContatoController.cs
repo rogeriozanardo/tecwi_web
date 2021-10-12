@@ -41,7 +41,7 @@ namespace TecWi_Web.API.Controllers
         [Route(nameof(UpdateAsync))]
         public async Task<IActionResult> UpdateAsync([FromBody] ClienteContatoDTO clienteContatoDTO)
         {
-            ServiceResponse<bool> serviceResponse = await _IClienteContatoService.UpdateAsync(clienteContatoDTO);
+            ServiceResponse<Guid> serviceResponse = await _IClienteContatoService.UpdateAsync(clienteContatoDTO);
 
             if (serviceResponse.Success)
             {

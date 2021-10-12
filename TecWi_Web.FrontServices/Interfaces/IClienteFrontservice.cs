@@ -13,5 +13,6 @@ namespace TecWi_Web.FrontServices.Interfaces
         Task<ServiceResponse<ClienteDTO>> BuscaProximoClienteFilaPorUsuario();
         Task<ServiceResponse<List<ClienteDTO>>> PesquisaCliente(string pesquisa);
         Task<ServiceResponse<bool>> SalvaCliente(ClienteDTO clienteDTO);
+        Task<ServiceResponse<Guid>> SalvaContatoCliente(ClienteContatoDTO clienteContatoDTO);
     }
 }

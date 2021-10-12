@@ -10,6 +10,47 @@
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 <Anotacao anotacaoDTO="anotacaoDTO"></Anotacao>
 
+@*INICIO MODAL PESSOA CONTATO*@
+<SfDialog id="pessoaContatoModal" Width="500px" Height="330px" Target="#target" IsModal="true" @bind-Visible="exibeModalPessoaContato">
+    <DialogTemplates>
+        <Content>
+            <div class="container-fluid">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="nome">Nome:</label>
+                            <SfTextBox id="nome" @bind-Value="clienteContatoDTO.Nome"></SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="telefone">Telefone:</label>
+                            <SfTextBox id="telefone" @bind-Value="clienteContatoDTO.Telefone"></SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="email">e-mail:</label>
+                            <SfTextBox id="email" @bind-Value="clienteContatoDTO.Email"></SfTextBox>
+                        </div>
+                    </div>
+                </div>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton CssClass="btn-blue" OnClick="FecharModalPessoaContato">Fechar</SfButton>
+                            <SfButton IsPrimary="true" OnClick="SalvarPessoaContato">Salvar</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+@*FIM MODAL PESSOA CONTATO*@
+
+
+
 
 @*INICIO MODAL REGISTRO CONTATO*@
 <SfDialog id="modalContato" IsModal="true" CssClass="modal-form" Width="900" Height="500" Target="#target" @bind-Visible="exibeModalContato">
@@ -145,6 +186,39 @@
                         </TabItem>
                         <TabItem>
                             <ChildContent>
+                                <TabHeader Text="Pessoas de contato"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                <div class="container-fluid container-modal-form mt-3">
+                                    <div class="form-row">
+                                        <div class="form-group col text-right">
+                                            <SfButton OnClick="IncluirPessoaContato" CssClass="e-primary" Content="Incluir pessoa de contato"></SfButton>
+                                        </div>
+                                    </div>
+                                    @if (clienteDTO.ClienteContatoDTO.Count > 0)
+                                    {
+                                        <SfGrid @ref="sfGridPessoasContato" DataSource="clienteDTO.ClienteContatoDTO" Height="300">
+                                            <GridPageSettings></GridPageSettings>
+                                            <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
+                                            <GridEvents CommandClicked="EditaExcluiPessoaContato" TValue="ClienteContatoDTO"></GridEvents>
+                                            <GridColumns>
+                                                <GridColumn Field=@nameof(ClienteContatoDTO.Nome) HeaderText="Nome" Width="90"></GridColumn>
+                                                <GridColumn Field=@nameof(ClienteContatoDTO.Telefone) HeaderText="Telefone" Width="90"></GridColumn>
+                                                <GridColumn Field=@nameof(ClienteContatoDTO.Email) HeaderText="e-mail" Width="90"></GridColumn>
+                                                <GridColumn HeaderText="" Width="80">
+                                                    <GridCommandColumns>
+                                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Editar" })"></GridCommandColumn>
+                                                    </GridCommandColumns>
+                                                </GridColumn>
+                                            </GridColumns>
+                                        </SfGrid>
+                                    }
+
+                                </div>
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                            <ChildContent>
                                 <TabHeader Text="Lançamentos"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
@@ -270,6 +344,10 @@
     }
 
     #modalContato {
+        max-height: none !important;
+    }
+
+    #pessoaContatoModal {
         max-height: none !important;
     }
 </style>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -90,6 +91,40 @@ namespace TecWi_Web.FrontServices
                 serviceResponse.Success = false;
                 serviceResponse.Message = e.GetBaseException().Message;
             }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<Guid>> SalvaContatoCliente(ClienteContatoDTO clienteContatoDTO)
+        {
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            string url = string.Empty;
+            
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", Config.usuarioDTO.Token);
+
+            try
+            {
+                if(clienteContatoDTO.IdClienteContato.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    url = $"{Config.ApiUrl}ClienteContato/InsertAsync";
+                    httpResponseMessage = await httpClient.PostAsJsonAsync(url, clienteContatoDTO);
+                }
+                else
+                {
+                    url = $"{Config.ApiUrl}ClienteContato/UpdateAsync";
+                    httpResponseMessage = await httpClient.PutAsJsonAsync(url, clienteContatoDTO);
+                }
+
+                serviceResponse = await httpResponseMessage.Content.ReadFromJsonAsync<ServiceResponse<Guid>>();
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.GetBaseException().Message;
+            }
+
 
             return serviceResponse;
         }

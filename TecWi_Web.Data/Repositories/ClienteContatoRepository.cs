@@ -47,7 +47,7 @@ namespace TecWi_Web.Data.Repositories
             return clienteContato.IdClienteContato;
         }
 
-        public async Task<bool> UpdateAsync(ClienteContato clienteContato)
+        public async Task<Guid> UpdateAsync(ClienteContato clienteContato)
         {
 
             await Task.Run(() =>
@@ -55,7 +55,14 @@ namespace TecWi_Web.Data.Repositories
                _dataContext.Set<ClienteContato>().Update(clienteContato);
            });
 
-            return true;
+            return clienteContato.IdClienteContato;
+        }
+
+        public async Task<ClienteContato> GetByIdContato(Guid idContato)
+        {
+            ClienteContato clienteContato =  _dataContext.ClienteContato.Where(x => x.IdClienteContato == idContato).FirstOrDefault();
+
+            return clienteContato;
         }
     }
 }

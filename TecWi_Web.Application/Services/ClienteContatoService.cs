@@ -74,15 +74,30 @@ namespace TecWi_Web.Application.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<bool>> UpdateAsync(ClienteContatoDTO clienteContatoDTO)
+        public async Task<ServiceResponse<Guid>> UpdateAsync(ClienteContatoDTO clienteContatoDTO)
         {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
             try
             {
-                ClienteContato clienteContato = new ClienteContato(clienteContatoDTO.IdClienteContato, clienteContatoDTO.Cdclifor, clienteContatoDTO.Nome, clienteContatoDTO.Telefone, clienteContatoDTO.Email);
-                bool resul = await _iClienteContatoReposiry.UpdateAsync(clienteContato);
-                await _iUnitOfWork.CommitAsync();
-                serviceResponse.Data = resul;
+                ClienteContato clienteContato = await  _iClienteContatoReposiry.GetByIdContato(clienteContatoDTO.IdClienteContato);
+                if(clienteContato is not null)
+                {
+                    clienteContato.Nome = clienteContatoDTO.Nome;
+                    clienteContato.Telefone = clienteContatoDTO.Telefone;
+                    clienteContato.Email = clienteContatoDTO.Email;
+
+                    Guid resul = await _iClienteContatoReposiry.UpdateAsync(clienteContato);
+                    await _iUnitOfWork.CommitAsync();
+                    serviceResponse.Data = resul;
+                }
+                else
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Problema ao atualizar a pessoa de contato.";
+                }
+                                
+                
+                
             }
             catch (Exception ex)
             {

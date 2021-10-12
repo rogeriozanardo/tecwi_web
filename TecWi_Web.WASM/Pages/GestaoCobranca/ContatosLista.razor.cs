@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syncfusion.Blazor.Grids;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,11 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
 
         private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
 
+
+        private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
+
+        private ClienteContatoDTO clienteContatoDTO = new ClienteContatoDTO();
+        private bool exibeModalPessoaContato = false;
 
 
 
@@ -208,6 +214,74 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             {
                 habilitaAgenda = true;
             }
+        }
+
+        private void IncluirPessoaContato()
+        {
+            clienteContatoDTO = new ClienteContatoDTO();
+            clienteContatoDTO.Cdclifor = clienteDTO.cdclifor;
+            exibeModalPessoaContato = true;
+        }
+
+        private async Task EditaExcluiPessoaContato(CommandClickEventArgs<ClienteContatoDTO> args)
+        {
+            clienteContatoDTO = args.RowData;
+
+            if (args.CommandColumn.ButtonOption.Content == "Editar")
+            {
+                exibeModalPessoaContato = true;
+            }
+
+        }
+
+
+        private async Task SalvarPessoaContato()
+        {
+            if (string.IsNullOrEmpty(clienteContatoDTO.Nome))
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Campo nome é obrigatório";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            exibeSpinner = true;
+
+            serviceResponse = await clienteFrontService.SalvaContatoCliente(clienteContatoDTO);
+
+            exibeSpinner = false;
+            if (serviceResponse.Success)
+            {
+                int index = clienteDTO.ClienteContatoDTO.FindIndex(x => x.IdClienteContato == serviceResponse.Data);
+                if (index >= 0)
+                {
+                    clienteDTO.ClienteContatoDTO[index] = clienteContatoDTO;
+                    clienteDTO.ClienteContatoDTO[index].IdClienteContato = serviceResponse.Data;
+                    sfGridPessoasContato.Refresh();
+                }
+                else
+                {
+                    clienteContatoDTO.IdClienteContato = serviceResponse.Data;
+                    clienteDTO.ClienteContatoDTO.Add(clienteContatoDTO);
+                }
+
+                exibeModalPessoaContato = false;
+
+                mensagemInformativaDTO.Titulo = "Sucesso.";
+                mensagemInformativaDTO.Mensagem = "Pessoa de contato salvo com sucesso.";
+                mensagemInformativaDTO.Exibe = true;
+            }
+            else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
+
+        }
+        private void FecharModalPessoaContato()
+        {
+            exibeModalPessoaContato = false;
         }
     }
 }

@@ -8,8 +8,9 @@ namespace TecWi_Web.Data.Interfaces
     public interface IClienteContatoReposiry
     {
         Task<Guid> InsertAsync(ClienteContato clienteContato);
-        Task<bool> UpdateAsync(ClienteContato clienteContato);
+        Task<Guid> UpdateAsync(ClienteContato clienteContato);
         Task<List<ClienteContato>> GetByClienteAsync(int Cdclifor);
         Task<bool> DeleteAsync(Guid IdClienteContato);
+        Task<ClienteContato> GetByIdContato(Guid idContato);
     }
 }

@@ -17,6 +17,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private ClienteDTO clienteDTO = new ClienteDTO();
         private bool perfilGestor = false;
         private List<UsuarioDTO> listaAtendentes = new List<UsuarioDTO>();
+        private ClienteContatoDTO clienteContatoDTO = new ClienteContatoDTO();
 
         bool habilitaAgenda = false;
 
@@ -27,10 +28,12 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private AnotacaoDTO anotacaoDTO = new AnotacaoDTO();
 
         private SfTab tabCliente = new SfTab();
+        private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
 
         private string pesquisa = string.Empty;
         private bool exibeSpinner = false;
         private bool exibeModalContato = false;
+        private bool exibeModalPessoaContato = false;
 
         private MensagemInformativaDTO mensagemInformativaDTO = new MensagemInformativaDTO();
         private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
@@ -255,6 +258,71 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             }
         }
 
+        private async Task EditaExcluiPessoaContato(CommandClickEventArgs<ClienteContatoDTO> args)
+        {
+            clienteContatoDTO = args.RowData;
+
+            if(args.CommandColumn.ButtonOption.Content=="Editar")
+            {
+                exibeModalPessoaContato = true;
+            }
+
+        }
+
+        private void FecharModalPessoaContato()
+        {
+            exibeModalPessoaContato = false;
+        }
+
+        private async Task SalvarPessoaContato()
+        {
+            if (string.IsNullOrEmpty(clienteContatoDTO.Nome))
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Campo nome é obrigatório";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
+            ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
+            exibeSpinner = true;
+
+            serviceResponse = await clienteFrontService.SalvaContatoCliente(clienteContatoDTO);
+
+            exibeSpinner = false;
+            if (serviceResponse.Success)
+            {
+                int index = clienteDTO.ClienteContatoDTO.FindIndex(x => x.IdClienteContato == serviceResponse.Data);
+                if(index >= 0)
+                {
+                    clienteDTO.ClienteContatoDTO[index] = clienteContatoDTO;
+                    clienteDTO.ClienteContatoDTO[index].IdClienteContato = serviceResponse.Data;
+                }else
+                {
+                    clienteContatoDTO.IdClienteContato = serviceResponse.Data;
+                    clienteDTO.ClienteContatoDTO.Add(clienteContatoDTO);
+                }
+
+                sfGridPessoasContato.Refresh();
+                exibeModalPessoaContato = false;
+
+                mensagemInformativaDTO.Titulo = "Sucesso.";
+                mensagemInformativaDTO.Mensagem = "Pessoa de contato salvo com sucesso.";
+                mensagemInformativaDTO.Exibe = true;
+            }
+            else
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = serviceResponse.Message;
+                mensagemInformativaDTO.Exibe = true;
+            }
+
+        }
+        private void IncluirPessoaContato()
+        {
+            clienteContatoDTO = new ClienteContatoDTO();
+            clienteContatoDTO.Cdclifor = clienteDTO.cdclifor;
+            exibeModalPessoaContato = true;
+        }
         protected override async Task OnInitializedAsync()
         {
             var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault(); ;
@@ -276,5 +344,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             indexTipoContato = -1;
 
         }
+
+
     }
 }

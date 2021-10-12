@@ -79,6 +79,7 @@ namespace TecWi_Web.Data.Repositories
         {
             IQueryable<Cliente> _cliente = _dataContext.Cliente
                .Include(x => x.PagarReceber)
+               .Include(x => x.ClienteContato)
                .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
                .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
                .Where(x => x.IdUsuario == clientePagarReceberFilter.IdUsuario || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));

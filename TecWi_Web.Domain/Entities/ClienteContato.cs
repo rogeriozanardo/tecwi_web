@@ -20,11 +20,11 @@ namespace TecWi_Web.Domain.Entities
             ValidateDomain(idClienteContato, cdclifor, nome, telefone, email);
         }
 
-        public Guid IdClienteContato { get; private set; }
-        public int Cdclifor { get; private set; }
-        public string Nome { get; private set; }
-        public string Telefone { get; private set; }
-        public string Email { get; private set; }
+        public Guid IdClienteContato { get; set; }
+        public int Cdclifor { get;  set; }
+        public string Nome { get;  set; }
+        public string Telefone { get;  set; }
+        public string Email { get;  set; }
         public Cliente Cliente { get; set; }
 
         public string IdClienteContatoInvalido = "IdClienteContato inválido!";
@@ -44,12 +44,12 @@ namespace TecWi_Web.Domain.Entities
             DomainValidadorException.Whem(string.IsNullOrWhiteSpace(nome), NomeInvalido);
             Nome = nome;
 
-            DomainValidadorException.Whem(string.IsNullOrWhiteSpace(telefone), TelefoneInvalido);
-            Telefone = telefone;
+            //DomainValidadorException.Whem(string.IsNullOrWhiteSpace(telefone), TelefoneInvalido);
+            //Telefone = telefone;
 
-            bool isValidEmail = !string.IsNullOrWhiteSpace(email) && ValidateEmail.IsValidEmail(email);
-            DomainValidadorException.Whem(!isValidEmail, EmailInvalido);
-            Email = email;
+            //bool isValidEmail = !string.IsNullOrWhiteSpace(email) && ValidateEmail.IsValidEmail(email);
+            //DomainValidadorException.Whem(!isValidEmail, EmailInvalido);
+            //Email = email;
         }
     }
 }
