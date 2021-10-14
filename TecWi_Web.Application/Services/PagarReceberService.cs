@@ -190,7 +190,7 @@ namespace TecWi_Web.Application.Services
 
         private async Task InsertPagarReceber(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)
         {
-            List<PagarReceber> PagarReceberToInsert = pagarReceberPending.Where(x => !pagarReceberEfCore.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
+            List<PagarReceber> PagarReceberToInsert = pagarReceberPending.Where(x => !pagarReceberEfCore.Where(x => x.Stcobranca).ToList().Any(y => y.SeqID == x.SeqID && y.Numlancto == x.Numlancto)).ToList();
             if (PagarReceberToInsert.Count > 0)
             {
                 await _iPagarReceberRepository.BulkInsertEfCore(PagarReceberToInsert);
@@ -201,9 +201,9 @@ namespace TecWi_Web.Application.Services
         {
             List<PagarReceber> PagarReceberToUpdate = pagarReceberEfCore.Where(x => !pagarReceberPending.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
             PagarReceberToUpdate.ForEach(x =>
-             {
+            {
                  x.Stcobranca = false;
-             });
+            });
 
             if (PagarReceberToUpdate.Count > 0)
             {

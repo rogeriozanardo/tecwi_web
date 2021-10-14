@@ -55,8 +55,8 @@ namespace TecWi_Web.Application.Services
             {
                 List<LogOperacao> logOperacao = await _iLogOperacaoRepository.GetLogOperacaoAsync(logOperacaoFilter);
                 List<LogOperacaoDTO> logOperacaoDTO = _iMapper.Map<List<LogOperacaoDTO>>(logOperacao);
-
                 serviceResponse.Data = logOperacaoDTO;
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -84,6 +84,8 @@ namespace TecWi_Web.Application.Services
                     LogOperacaoDTO logOperacaoDTO = _iMapper.Map<LogOperacaoDTO>(_logOperacao);
                     serviceResponse.Data = logOperacaoDTO;
                 }
+
+                await _iUnitOfWork.CommitAsync();
 
             }
             catch (Exception ex)

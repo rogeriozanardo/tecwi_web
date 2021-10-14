@@ -103,21 +103,14 @@ namespace TecWi_Web.Data.Repositories
 
             string sql = GetPaidPagarReceberSQL();
             List<string> connectionString = GetConnectionString();
-            List<Task<List<PagarReceber>>> tasks = new List<Task<List<PagarReceber>>>();
 
             foreach (string _connectionString in connectionString)
             {
-                tasks.Add(_iDapper.GetAll<PagarReceber>(sql, dynamicParameters, _connectionString));
+                List<PagarReceber> _pagarReceber = await _iDapper.GetAll<PagarReceber>(sql, dynamicParameters, _connectionString);
+                pagarReceber.AddRange(_pagarReceber);
             }
 
-            await Task.WhenAll(tasks);
-
-            foreach (Task<List<PagarReceber>> _task in tasks)
-            {
-                pagarReceber.AddRange(_task.Result);
-            }
-
-            return pagarReceber; ;
+            return pagarReceber;
         }
 
         private string GetPaidPagarReceberSQL()

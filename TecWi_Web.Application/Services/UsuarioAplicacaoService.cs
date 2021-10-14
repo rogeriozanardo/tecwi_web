@@ -32,7 +32,9 @@ namespace TecWi_Web.Application.Services
             {
                 await DeleteAsync(usuarioAplicacaoDTO[0].IdUsuario);
                 serviceResponse = await BulkInsertAsync(usuarioAplicacaoDTO);
-            }catch(Exception e)
+                await _iUnitOfWork.CommitAsync();
+            }
+            catch (Exception e)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = e.GetBaseException().Message;
@@ -65,7 +67,6 @@ namespace TecWi_Web.Application.Services
             {
                 serviceResponse.Data = await _iUsuarioAplicacaoRepository.Delete(idUsuario);
                 await _iUnitOfWork.CommitAsync();
-                serviceResponse.Message = ServiceMessages.OperacaoConculidaComSucesso;
             }
             catch (Exception ex)
             {
@@ -83,7 +84,7 @@ namespace TecWi_Web.Application.Services
                 List<UsuarioAplicacao> usuarioAplicacao = await _iUsuarioAplicacaoRepository.GetByIdUsuario(idUsuario);
                 List<UsuarioAplicacaoDTO> usuarioAplicacaoDTO = _iMapper.Map<List<UsuarioAplicacaoDTO>>(usuarioAplicacao);
                 serviceResponse.Data = usuarioAplicacaoDTO;
-                serviceResponse.Message = ServiceMessages.OperacaoConculidaComSucesso;
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -101,7 +102,6 @@ namespace TecWi_Web.Application.Services
                 UsuarioAplicacao usuarioAplicacao = _iMapper.Map<UsuarioAplicacao>(usuarioAplicacaoDTO);
                 serviceResponse.Data = await _iUsuarioAplicacaoRepository.Insert(usuarioAplicacao);
                 await _iUnitOfWork.CommitAsync();
-                serviceResponse.Message = ServiceMessages.OperacaoConculidaComSucesso;
             }
             catch (Exception ex)
             {

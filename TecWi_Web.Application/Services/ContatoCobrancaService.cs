@@ -33,11 +33,13 @@ namespace TecWi_Web.Application.Services
                 List<ContatoCobranca> contatoCobranca = await _iContatoCobrancaRepository.GetAllAsync(contatoCobrancaFilter);
                 List<ContatoCobrancaDTO> contatoCobrancaDTO = _iMapper.Map<List<ContatoCobrancaDTO>>(contatoCobranca);
                 serviceResponse.Data = contatoCobrancaDTO;
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
                 serviceResponse.Message = ex.GetBaseException().Message;
                 serviceResponse.Success = false;
+                _iUnitOfWork.Rollback();
             }
             return serviceResponse;
         }

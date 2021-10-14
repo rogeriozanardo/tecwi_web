@@ -60,6 +60,7 @@ namespace TecWi_Web.Application.Services
                 }
 
                 serviceResponse.Data = clienteDTO;
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -85,6 +86,7 @@ namespace TecWi_Web.Application.Services
                 }
 
                 serviceResponse.Data = clienteDTO;
+                await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
