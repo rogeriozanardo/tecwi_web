@@ -22,7 +22,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
 
 
-        private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
+        //private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
 
         private ClienteContatoDTO clienteContatoDTO = new ClienteContatoDTO();
         private bool exibeModalPessoaContato = false;
@@ -257,7 +257,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
                 {
                     clienteDTO.ClienteContatoDTO[index] = clienteContatoDTO;
                     clienteDTO.ClienteContatoDTO[index].IdClienteContato = serviceResponse.Data;
-                    sfGridPessoasContato.Refresh();
+                    //sfGridPessoasContato.Refresh();
                 }
                 else
                 {

@@ -122,7 +122,7 @@ namespace TecWi_Web.Data.Repositories
 
         private string GetPaidPagarReceberSQL()
         {
-            return @"select p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.valorr, p.cdclifor
+            return @"select p.SeqID,  p.numlancto, p.sq, p.cdfilial, p.dtemissao, p.dtvencto, p.dtpagto,  p.valorr, p.cdclifor
             from PagarReceber p with(nolock)
             left join ntfiscal nf with(nolock) on nf.NumPedido=p.numpedido
             where p.tppagrec='R'

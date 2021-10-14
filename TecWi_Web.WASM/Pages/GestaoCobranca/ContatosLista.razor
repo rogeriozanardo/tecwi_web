@@ -178,7 +178,7 @@
                                     </div>
                                     @if (clienteDTO.ClienteContatoDTO.Count > 0)
                                     {
-                                        <SfGrid @ref="sfGridPessoasContato" DataSource="clienteDTO.ClienteContatoDTO" Height="300">
+                                        <SfGrid  DataSource="clienteDTO.ClienteContatoDTO" Height="300">
                                             <GridPageSettings></GridPageSettings>
                                             <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
                                             <GridEvents CommandClicked="EditaExcluiPessoaContato" TValue="ClienteContatoDTO"></GridEvents>

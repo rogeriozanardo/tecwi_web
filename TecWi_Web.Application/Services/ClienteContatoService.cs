@@ -61,7 +61,13 @@ namespace TecWi_Web.Application.Services
             ServiceResponse<Guid> serviceResponse = new ServiceResponse<Guid>();
             try
             {
-                ClienteContato clienteContato = new ClienteContato(Guid.NewGuid(), clienteContatoDTO.Cdclifor, clienteContatoDTO.Nome, clienteContatoDTO.Telefone, clienteContatoDTO.Email);
+                ClienteContato clienteContato = new ClienteContato();
+                clienteContato.Cdclifor = clienteContatoDTO.Cdclifor;
+                clienteContato.Email = clienteContatoDTO.Email;
+                clienteContato.IdClienteContato = Guid.NewGuid();
+                clienteContato.Nome = clienteContatoDTO.Nome;
+                clienteContato.Telefone = clienteContatoDTO.Telefone;
+
                 Guid resul = await _iClienteContatoReposiry.InsertAsync(clienteContato);
                 await _iUnitOfWork.CommitAsync();
                 serviceResponse.Data = resul;

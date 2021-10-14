@@ -28,7 +28,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private AnotacaoDTO anotacaoDTO = new AnotacaoDTO();
 
         private SfTab tabCliente = new SfTab();
-        private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
+        //private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
 
         private string pesquisa = string.Empty;
         private bool exibeSpinner = false;
@@ -302,7 +302,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
                     clienteDTO.ClienteContatoDTO.Add(clienteContatoDTO);
                 }
 
-                sfGridPessoasContato.Refresh();
+                //sfGridPessoasContato.Refresh();
                 exibeModalPessoaContato = false;
 
                 mensagemInformativaDTO.Titulo = "Sucesso.";
