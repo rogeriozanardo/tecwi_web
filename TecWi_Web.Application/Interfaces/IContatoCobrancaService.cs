@@ -9,7 +9,9 @@ namespace TecWi_Web.Application.Interfaces
 {
     public interface IContatoCobrancaService
     {
+
         Task<ServiceResponse<bool>> InsertAsync(ContatoCobrancaDTO contatoCobrancaDTO);
+
 
         Task<ServiceResponse<List<ContatoCobrancaDTO>>> GetAllAsync(ContatoCobrancaFilter contatoCobrancaFilter);
         
