@@ -25,7 +25,8 @@ namespace TecWi_Web.Application.Services
         private readonly IUsuarioRepository _iUsuarioRepository;
         private readonly ILogOperacaoRepository _iLogOperacaoRepository;
         private readonly IHttpContextAccessor _iHttpContextAccessor;
-        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository, ILogOperacaoRepository iLogOperacaoRepository, IHttpContextAccessor iHttpContextAccessor)
+        private readonly IClienteService _iClienteService;
+        public PagarReceberService(IMapper iMapper, IUnitOfWork iUnitOfWork, IPagarReceberRepository iPagarReceberRepository, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository, ILogOperacaoRepository iLogOperacaoRepository, IHttpContextAccessor iHttpContextAccessor, IClienteService iClienteService)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
@@ -34,6 +35,7 @@ namespace TecWi_Web.Application.Services
             _iUsuarioRepository = iUsuarioRepository;
             _iLogOperacaoRepository = iLogOperacaoRepository;
             _iHttpContextAccessor = iHttpContextAccessor;
+            _iClienteService = iClienteService;
         }
 
         private Guid GetUserId() => Guid.Parse(_iHttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -282,6 +284,61 @@ namespace TecWi_Web.Application.Services
                 _cliente.IdUsuario = _usuarioTemp.IdUsuario;
                 usuarioTemp.Remove(_usuarioTemp);
             }
+        }
+
+        public async Task<ServiceResponse<DateTime>> AtualizarPagarReceber()
+        {
+            ServiceResponse<DateTime> serviceResponse = new ServiceResponse<DateTime>();
+            List<PagarReceber> pagarReceberSymphony = new List<PagarReceber>();
+            List<PagarReceber> pagarReceberZ4 = new List<PagarReceber>();
+            try
+            {
+                pagarReceberZ4 = await _iPagarReceberRepository.BuscaListaReceberZ4();
+
+                pagarReceberSymphony = await _iPagarReceberRepository.BuscaListaReceberSymphony();
+
+                await _iClienteService.AtualizaBaseClientesByReceber(pagarReceberSymphony);
+
+                List<PagarReceber> pagarReceberNovos = new List<PagarReceber>();
+                List<PagarReceber> pagarReceberAtualizar = new List<PagarReceber>();
+
+                foreach (var item in pagarReceberSymphony)
+                {
+                    int index = pagarReceberZ4.FindIndex(x => x.Cdfilial == item.Cdfilial && x.Numlancto == item.Numlancto && x.Sq == item.Sq && x.SeqID == item.SeqID);
+                    if(index >= 0)
+                    {
+                        pagarReceberAtualizar.Add(item);
+                    }
+                    else
+                    {
+                        pagarReceberNovos.Add(item);
+                    }
+
+                  
+
+                }
+
+                if (pagarReceberAtualizar.Count > 0)
+                {
+                    await _iPagarReceberRepository.AtualizaReceberPorLista(pagarReceberAtualizar);
+                }
+
+                if (pagarReceberNovos.Count > 0)
+                {
+                    await _iPagarReceberRepository.InsereReceberPorLista(pagarReceberNovos);
+                }
+
+
+                await InsertLog();
+                serviceResponse.Data = DateTime.Now;
+            }
+            catch(Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.GetBaseException().Message;
+            }
+
+            return serviceResponse;
         }
     }
 }

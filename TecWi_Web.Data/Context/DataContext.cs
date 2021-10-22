@@ -3,6 +3,10 @@ using TecWi_Web.Domain.Entities;
 
 namespace TecWi_Web.Data.Context
 {
+
+//    add-migration InitialCreate -Context DataContext
+
+//update-database -Context DataContext
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> dbContextOptions) : base(dbContextOptions)

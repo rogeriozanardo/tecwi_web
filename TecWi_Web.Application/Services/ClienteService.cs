@@ -7,6 +7,7 @@ using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.UoW;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Filters;
 
@@ -17,12 +18,14 @@ namespace TecWi_Web.Application.Services
         private readonly IMapper _iMapper;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IClienteRepository _iClienteRepository;
+        private readonly IUsuarioRepository _iUsuarioRepository;
 
-        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository)
+        public ClienteService(IMapper iMapper, IUnitOfWork iUnitOfWork, IClienteRepository iClienteRepository, IUsuarioRepository iUsuarioRepository)
         {
             _iMapper = iMapper;
             _iUnitOfWork = iUnitOfWork;
             _iClienteRepository = iClienteRepository;
+            _iUsuarioRepository = iUsuarioRepository;
         }
 
         public async Task<ServiceResponse<bool>> BulkInsertOrUpdateAsync(List<ClienteDTO> clienteDTO)
@@ -102,6 +105,7 @@ namespace TecWi_Web.Application.Services
             try
             {
                 Cliente cliente = _iMapper.Map<Cliente>(clienteDTO);
+                cliente.IdUsuario = clienteDTO.UsuarioDTO.IdUsuario;
                 await _iClienteRepository.UpdateAsync(cliente);
                 await _iUnitOfWork.CommitAsync();
             }
@@ -111,6 +115,93 @@ namespace TecWi_Web.Application.Services
                 serviceResponse.Success = false;
             }
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<bool>> AtualizaBaseClientesByReceber(List<PagarReceber> pagarReceber)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                List<Cliente> clientesMatriz = new List<Cliente>();
+
+                var clientesZ4 = await _iClienteRepository.BuscaListaClienteTotalZ4();
+
+                clientesMatriz = pagarReceber.GroupBy(p => new
+                {
+                    p.Cdclifor,
+                    p.Cdfilial,
+                    p.Cidade,
+                    p.DDD,
+                    p.Email,
+                    p.Fantasia,
+                    p.Fone1,
+                    p.Fone2,
+                    p.Inscrifed,
+                    p.Razao
+                }).Select(c => new Cliente()
+                {
+                    Cdclifor = c.First().Cdclifor,
+                    Cidade = c.First().Cidade,
+                    DDD = c.First().DDD,
+                    Email = c.First().Email,
+                    Fantasia = c.First().Fantasia,
+                    Fone1 = c.First().Fone1,
+                    Fone2 = c.First().Fone2,
+                    Razao = c.First().Razao
+                }).ToList();
+                
+                foreach (var item in clientesZ4)
+                {
+                    int index = clientesMatriz.FindIndex(x => x.Cdclifor == item.Cdclifor);
+                    if (index >= 0)
+                    {
+                        clientesMatriz.RemoveAt(index);
+                    }
+                }
+
+                if (clientesMatriz.Count == 0)
+                {
+                    return serviceResponse;
+                }
+
+                List<Usuario> usuario = await GetUsuarioWithPermission();
+
+                AssingUsuarioToClienteRandonly(clientesMatriz, usuario);
+
+                await _iClienteRepository.InsereCliente(clientesMatriz);
+
+            }
+            catch (Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.GetBaseException().Message;
+            }
+
+            return serviceResponse;
+        }
+
+        public void AssingUsuarioToClienteRandonly(List<Cliente> cliente, List<Usuario> usuario)
+        {
+            Random random = new Random();
+            List<Usuario> usuarioTemp = new List<Usuario>();
+
+            foreach (Cliente _cliente in cliente)
+            {
+                if (usuarioTemp.Count == 0)
+                {
+                    usuarioTemp.AddRange(usuario);
+                }
+
+                Usuario _usuarioTemp = usuarioTemp.OrderBy(x => random.Next()).FirstOrDefault();
+                _cliente.IdUsuario = _usuarioTemp.IdUsuario;
+                usuarioTemp.Remove(_usuarioTemp);
+            }
+        }
+
+        private async Task<List<Usuario>> GetUsuarioWithPermission()
+        {
+            List<Usuario> usuario = await _iUsuarioRepository.GetAllAsync(new UsuarioFilter { });
+            return usuario.Where(x => x.UsuarioAplicacao.Any(y => y.IdAplicacao == IdAplicacao.Cobranca && y.IdPerfil == IdPerfil.Operador && y.StAtivo)).ToList();
         }
     }
 }

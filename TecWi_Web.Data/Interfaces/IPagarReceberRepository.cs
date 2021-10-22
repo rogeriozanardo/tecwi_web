@@ -13,5 +13,9 @@ namespace TecWi_Web.Data.Interfaces
         Task<PagarReceber> GetPagarReceber(PagarReceberFilter pagarReceberFilter);
         Task<bool> BulkUpdateEfCore(List<PagarReceber> pagarReceber);
         Task<bool> BulkInsertEfCore(List<PagarReceber> pagarReceber);
+        Task<List<PagarReceber>> BuscaListaReceberSymphony();
+        Task<List<PagarReceber>> BuscaListaReceberZ4();
+        Task<bool> InsereReceberPorLista(List<PagarReceber> pagarReceber);
+        Task<bool> AtualizaReceberPorLista(List<PagarReceber> pagarReceber);
     }
 }

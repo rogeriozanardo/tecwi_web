@@ -59,7 +59,7 @@
         </Header>
         <Content>
             <div class="container-modal-form bg-white">
-                <SfTab Height="430" CssClass="tabcontrol-modal">
+                <SfTab Height="430" CssClass="tabcontrol-modal" @ref="sfTabContato">
                     <TabItems>
                         <TabItem>
                             <ChildContent>
@@ -178,7 +178,7 @@
                                     </div>
                                     @if (clienteDTO.ClienteContatoDTO.Count > 0)
                                     {
-                                        <SfGrid  DataSource="clienteDTO.ClienteContatoDTO" Height="300">
+                                        <SfGrid  @ref="sfGridPessoasContato" DataSource="clienteDTO.ClienteContatoDTO" Height="300">
                                             <GridPageSettings></GridPageSettings>
                                             <GridEditSettings AllowDeleting="true" AllowEditing="true"></GridEditSettings>
                                             <GridEvents CommandClicked="EditaExcluiPessoaContato" TValue="ClienteContatoDTO"></GridEvents>

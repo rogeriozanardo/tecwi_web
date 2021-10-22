@@ -29,7 +29,8 @@ namespace TecWi_Web.API.Controllers
         public async Task<IActionResult> PopulateDataAsync()
         {
             ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateDataAsync();
-
+            
+            
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);

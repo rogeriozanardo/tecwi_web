@@ -1,11 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Data.Context;
+using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
+using TecWi_Web.Data.Repositories.Querys;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Shared.DTOs;
 using TecWi_Web.Shared.Filters;
 
 namespace TecWi_Web.Data.Repositories
@@ -13,10 +19,12 @@ namespace TecWi_Web.Data.Repositories
     public class ClienteRepository : IClienteRepository
     {
         private readonly DataContext _dataContext;
+        private readonly IConfiguration _iConfiguration;
 
-        public ClienteRepository(DataContext dataContext)
+        public ClienteRepository(DataContext dataContext, IConfiguration iConfiguration)
         {
             _dataContext = dataContext;
+            _iConfiguration = iConfiguration;
         }
 
         public async Task<bool> BulkInsertAsync(List<Cliente> cliente)
@@ -42,6 +50,7 @@ namespace TecWi_Web.Data.Repositories
             await Task.Run(() =>
             {
                 _dataContext.Update(cliente);
+                
             });
 
             return true;
@@ -88,5 +97,45 @@ namespace TecWi_Web.Data.Repositories
 
             return cliente;
         }
+
+        
+
+        public async Task<List<Cliente>> BuscaListaClienteTotalZ4()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            try
+            {
+                string stringConexao = _iConfiguration.GetConnectionString("DefaultConnection");
+                using (var connection = new SqlConnection(stringConexao))
+                {
+                    connection.Open();
+                    string query = ClienteQuerys.BuscaListaClienteTotalZ4();
+                    var result = await connection.QueryAsync<Cliente>(query);
+                    clientes = result.ToList();
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                
+            }
+
+            return clientes;
+        }
+
+        public async Task<bool> InsereCliente(List<Cliente> cliente)
+        {
+            bool retorno = true;
+            try
+            {
+                await _dataContext.Cliente.AddRangeAsync(cliente);
+                await _dataContext.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                retorno = false;
+            }
+            return retorno;
+        }
+
     }
 }

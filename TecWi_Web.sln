@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Data", "TecWi_Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Shared", "TecWi_Web.Shared\TecWi_Web.Shared.csproj", "{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.Tests", "TecWi_Web.Tests\TecWi_Web.Tests.csproj", "{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.WASM", "TecWi_Web.WASM\TecWi_Web.WASM.csproj", "{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TecWi_Web.FrontServices", "TecWi_Web.FrontServices\TecWi_Web.FrontServices.csproj", "{058F9AAA-5B4C-4A43-AA54-1732F2B2FC70}"
@@ -45,10 +43,6 @@ Global
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C82F26B3-99FB-4CC5-89AC-EC943C01AFAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A6E0925-3CAB-4A03-AFCB-9C93CF3D3CC2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB0DD84A-E8EE-4E27-A41C-3E54A800A55A}.Release|Any CPU.ActiveCfg = Release|Any CPU

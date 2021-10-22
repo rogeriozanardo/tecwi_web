@@ -20,6 +20,7 @@ namespace TecWi_Web.Domain.Entities
         public DateTime Dtvencto { get; private set; }
         public DateTime? Dtpagto { get; private set; }
         public decimal Valorr { get; private set; }
+        public string NumTransf { get; set; }
         public string NotasFiscais { get; private set; }
         public string Inscrifed { get; private set; }
         public string Fantasia { get; private set; }

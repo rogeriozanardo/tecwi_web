@@ -48,7 +48,9 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<Guid> InsertAsync(LogOperacao logOperacao)
         {
-            await _dataContext.Set<LogOperacao>().AddAsync(logOperacao);
+            
+            await _dataContext.LogOperacao.AddAsync(logOperacao);
+            await _dataContext.SaveChangesAsync();
             return logOperacao.IdLogOperacao;
         }
     }

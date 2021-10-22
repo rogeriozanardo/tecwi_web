@@ -20,16 +20,16 @@ namespace TecWi_Web.Domain.Entities
             ValidateDomain(cdclifor, inscrifed, fantasia, razao, ddd, fone1, fone2, email, cidade);
         }
 
-        public int Cdclifor { get; private set; }
+        public int Cdclifor { get;  set; }
         public Guid IdUsuario { get; set; }
-        public string Inscrifed { get; private set; }
-        public string Fantasia { get; private set; }
-        public string Razao { get; private set; }
-        public string DDD { get; private set; }
-        public string Fone1 { get; private set; }
-        public string Fone2 { get; private set; }
-        public string Email { get; private set; }
-        public string Cidade { get; private set; }
+        public string Inscrifed { get;  set; }
+        public string Fantasia { get;  set; }
+        public string Razao { get;  set; }
+        public string DDD { get;  set; }
+        public string Fone1 { get;  set; }
+        public string Fone2 { get;  set; }
+        public string Email { get;  set; }
+        public string Cidade { get;  set; }
         public Usuario Usuario { get; set; }
         public List<PagarReceber> PagarReceber { get; set; }
         public List<ContatoCobranca> ContatoCobranca { get; set; }

@@ -1,12 +1,15 @@
 ﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Data.Context;
 using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
+using TecWi_Web.Data.Repositories.Querys;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Shared.Filters;
 
@@ -134,6 +137,86 @@ namespace TecWi_Web.Data.Repositories
                 x.Numlancto == pagarReceberFilter.Numlancto
                 && x.Sq == pagarReceberFilter.Sq);
             return pagarReceber;
+        }
+
+        public async Task<List<PagarReceber>> BuscaListaReceberSymphony()
+        {
+            List<PagarReceber> pagarReceber = new List<PagarReceber>();
+            try
+            {
+                List<string> connectionString = GetConnectionString();
+                string query = PagarReceberQuerys.BuscaListaPagarReceberSymphony(); 
+                
+                foreach (string _connectionString in connectionString)
+                {
+                    using (var connection = new SqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        var result = await connection.QueryAsync<PagarReceber>(query);
+                        pagarReceber.AddRange(result.ToList());
+                        connection.Close();
+                    }
+                }
+
+                }catch(Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return pagarReceber;
+        }
+
+        public async Task<List<PagarReceber>> BuscaListaReceberZ4()
+        {
+            List<PagarReceber> pagarReceber = new List<PagarReceber>();
+            string query = "select * from PagarReceber with(nolock)";
+            try
+            {
+                using (var connection = new SqlConnection(_iConfiguration.GetConnectionString("DefaultConnection")))
+                {
+                    connection.Open();
+                    var result = await connection.QueryAsync<PagarReceber>(query);
+                    pagarReceber = result.ToList();
+                    connection.Close();
+
+                }
+            }catch(Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return pagarReceber;
+        }
+
+        public async Task<bool> AtualizaReceberPorLista(List<PagarReceber> pagarReceber)
+        {
+            bool retorno = true;
+            try
+            {
+                _dataContext.PagarReceber.UpdateRange(pagarReceber);
+                await _dataContext.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return retorno;
+        }
+
+        public async Task<bool> InsereReceberPorLista(List<PagarReceber> pagarReceber)
+        {
+            bool retorno = true;
+            try
+            {
+                await _dataContext.PagarReceber.AddRangeAsync(pagarReceber);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return retorno;
         }
     }
 }

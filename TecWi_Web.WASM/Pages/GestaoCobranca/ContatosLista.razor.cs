@@ -1,4 +1,5 @@
 ﻿using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Navigations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
 
 
-        //private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
+        private SfGrid<ClienteContatoDTO> sfGridPessoasContato = new SfGrid<ClienteContatoDTO>();
+        private SfTab sfTabContato = new SfTab();
 
         private ClienteContatoDTO clienteContatoDTO = new ClienteContatoDTO();
         private bool exibeModalPessoaContato = false;
@@ -255,16 +257,17 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
                 int index = clienteDTO.ClienteContatoDTO.FindIndex(x => x.IdClienteContato == serviceResponse.Data);
                 if (index >= 0)
                 {
-                    clienteDTO.ClienteContatoDTO[index] = clienteContatoDTO;
-                    clienteDTO.ClienteContatoDTO[index].IdClienteContato = serviceResponse.Data;
-                    //sfGridPessoasContato.Refresh();
+                    clienteDTO.ClienteContatoDTO.RemoveAt(index);
+                    clienteDTO.ClienteContatoDTO.Add(clienteContatoDTO);
+                    sfGridPessoasContato.Refresh();
                 }
                 else
                 {
                     clienteContatoDTO.IdClienteContato = serviceResponse.Data;
                     clienteDTO.ClienteContatoDTO.Add(clienteContatoDTO);
+                    sfGridPessoasContato.Refresh();
                 }
-
+                await sfTabContato.GetTabItem(0);
                 exibeModalPessoaContato = false;
 
                 mensagemInformativaDTO.Titulo = "Sucesso.";
