@@ -49,6 +49,20 @@
                         </ul>
                     </ContentTemplate>
                 </AccordionItem>
+                @{
+                    var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault();
+                    if (perfil.IdPerfil == Domain.Enums.IdPerfil.Gestor)
+                    {
+                        <AccordionItem Header="Análise" CssClass="accordeon-option" IconCss="icon-cadastro sidebar-icon">
+                            <ContentTemplate>
+                                <ul class="menu-item">
+                                    <li><a href="AnaliseAtendenteLista">Performance Atendentes</a></li>
+                                </ul>
+                            </ContentTemplate>
+                        </AccordionItem>
+                    }
+                }
+
             </AccordionItems>
         </SfAccordion>
     </ChildContent>
@@ -134,14 +148,14 @@
         border-bottom: 1px solid #255E9B
     }
 
-                .button-inicio:hover {
-                    background: #F58634
-                }
+        .button-inicio:hover {
+            background: #F58634
+        }
 
-            .button-inicio a {
-                text-decoration: none;
-                color: #fff;
-                font-size: 14px;
-                margin-left: 15px;
-            }
+        .button-inicio a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            margin-left: 15px;
+        }
 </style>

@@ -1,0 +1,81 @@
+﻿@layout GestaoCobrancaLayout
+@page "/AnaliseAtendenteLista"
+
+@inject NavigationManager Navigation
+@inject IAtendenteFronService atendenteFrontService
+
+<SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
+<MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
+
+<div class="container-fluid">
+    <SfCard CssClass="card-tela mb-2">
+        <CardContent>
+            <div class="row mt-2 mb-4">
+                <div class="col">
+                    <h6 class="display-4 mb-0" style="font-size:2.0rem"><span class="arrow-title">» </span>Performance dos Atendentes</h6>
+                </div>
+            </div>
+            <hr />
+            <div class="form">
+                <div class="form-row mb-3 mt-4">
+                    <div class="form-group col-2">
+                        <label for="dtinicio">Data Inicial</label>
+                        <SfDatePicker id="dtinicio" TValue="DateTime?" Value="@dtInicio" Format="dd/MM/yyyy">
+                            <DatePickerEvents TValue="DateTime?" ValueChange="AlteraDtInicio"></DatePickerEvents>
+                        </SfDatePicker>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label for="dtfim">Data Final</label>
+                        <SfDatePicker id="dtfim" TValue="DateTime?" Value="@dtFim" Format="dd/MM/yyyy">
+                            <DatePickerEvents TValue="DateTime?" ValueChange="AlteraDtFim"></DatePickerEvents>
+                        </SfDatePicker>
+                    </div>
+                    <div class="form-group col-2 mt-4">
+                        <SfButton IsPrimary="true" OnClick="PesquisaAtendentes" Content="Pesquisar"></SfButton>
+                    </div>
+                </div>
+                <hr />
+                @if (listaAtendenteDTO.Count > 0)
+                {
+                    <SfGrid DataSource="@listaAtendenteDTO">
+                        <GridTemplates>
+                            <DetailTemplate>
+                                @{
+                                    var atendente = (context as AtendenteDTO);
+                                    <SfGrid TValue="ClienteDTO" DataSource="@listaClienteDTO" Query="@GetClientesQuery(atendente)" AllowPaging="true">
+                                        <GridPageSettings PageSize="10"></GridPageSettings>
+                                        <GridTemplates>
+                                            <DetailTemplate Context="ClienteContexto">
+                                                @{
+                                                    var cliente = (ClienteContexto as ClienteDTO);
+                                                    <SfGrid TValue="ContatoCobrancaDTO" DataSource="@listaContatoCobrancaDTO" Query="@GetContatosCobranca(cliente)" AllowPaging="true">
+                                                        <GridPageSettings PageSize="10"></GridPageSettings>
+                                                        <GridColumns>
+                                                            <GridColumn Field=@nameof(ContatoCobrancaDTO.DtContato) HeaderText="Dt. Contato" Format="dd/MM/yyyy" Width="80"></GridColumn>
+                                                            <GridColumn Field=@nameof(ContatoCobrancaDTO.TipoContato) HeaderText="Tipo" Width="80"></GridColumn>
+                                                        </GridColumns>
+                                                    </SfGrid>
+                                                }
+                                            </DetailTemplate>
+                                        </GridTemplates>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razão" Width="150"></GridColumn>
+                                            <GridColumn Field=@nameof(ClienteDTO.totalContatos) HeaderText="Contatos" Width="80"></GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                }
+                            </DetailTemplate>
+                        </GridTemplates>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(AtendenteDTO.Nome) HeaderText="Atendente" Width="150"></GridColumn>
+                            <GridColumn Field=@nameof(AtendenteDTO.TotalContatos) HeaderText="Contatos" Format="N0" Width="80"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </CardContent>
+    </SfCard>
+</div>
