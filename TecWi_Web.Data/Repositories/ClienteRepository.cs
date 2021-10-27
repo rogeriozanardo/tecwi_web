@@ -90,15 +90,13 @@ namespace TecWi_Web.Data.Repositories
                .Include(x => x.PagarReceber)
                .Include(x => x.ClienteContato)
                .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
+               .Where(x => x.IdUsuario == clientePagarReceberFilter.IdUsuario)
                .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
-               .Where(x => x.IdUsuario == clientePagarReceberFilter.IdUsuario || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));
+               .Where(x => x.ContatoCobranca == null || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));
 
             Cliente cliente = await _cliente.OrderBy(x => x.IdUsuario).ThenBy(x => x.ContatoCobranca.Count).ThenBy(x => x.ContatoCobranca.OrderBy(x => x.DtAgenda).FirstOrDefault()).FirstOrDefaultAsync();
-
             return cliente;
         }
-
-        
 
         public async Task<List<Cliente>> BuscaListaClienteTotalZ4()
         {
@@ -115,7 +113,7 @@ namespace TecWi_Web.Data.Repositories
                     connection.Close();
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 
             }
@@ -130,12 +128,11 @@ namespace TecWi_Web.Data.Repositories
             {
                 await _dataContext.Cliente.AddRangeAsync(cliente);
                 await _dataContext.SaveChangesAsync();
-            }catch(Exception e)
+            }catch
             {
                 retorno = false;
             }
             return retorno;
         }
-
     }
 }
