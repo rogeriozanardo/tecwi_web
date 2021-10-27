@@ -94,7 +94,7 @@ namespace TecWi_Web.Data.Repositories
                .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
                .Where(x => x.ContatoCobranca == null || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));
 
-            Cliente cliente = await _cliente.OrderBy(x => x.IdUsuario).ThenBy(x => x.ContatoCobranca.Count).ThenBy(x => x.ContatoCobranca.OrderBy(x => x.DtAgenda).FirstOrDefault()).FirstOrDefaultAsync();
+            Cliente cliente = await _cliente.OrderBy(x => x.ContatoCobranca.Count).ThenBy(x => x.ContatoCobranca.OrderByDescending(x => x.DtAgenda).FirstOrDefault()).FirstOrDefaultAsync();
             return cliente;
         }
 
