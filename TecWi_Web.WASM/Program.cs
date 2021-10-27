@@ -25,9 +25,11 @@ namespace TecWi_Web.WASM
             builder.Services.AddSyncfusionBlazor();
             builder.Services.AddBlazoredLocalStorage();
 
+            builder.Services.AddSingleton<IAtendenteFronService, AtendenteFronService>();
             builder.Services.AddSingleton<IClienteFrontservice, ClienteFrontservice>();
             builder.Services.AddSingleton<ICobrancaFrontService, CobrancaFrontService>();
             builder.Services.AddSingleton<IUsuarioFrontService, UsuarioFrontService>();
+            
 
 
             await builder.Build().RunAsync();

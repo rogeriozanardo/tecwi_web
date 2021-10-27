@@ -325,7 +325,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         }
         protected override async Task OnInitializedAsync()
         {
-            var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault(); ;
+            var perfil = Config.usuarioDTO.UsuarioAplicacaoDTO.Where(x => x.IdAplicacao == Domain.Enums.IdAplicacao.Cobranca).FirstOrDefault();
 
             if (perfil.IdPerfil == Domain.Enums.IdPerfil.Gestor)
             {

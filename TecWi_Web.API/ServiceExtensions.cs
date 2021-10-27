@@ -27,6 +27,7 @@ namespace TecWi_Web.API
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IAtendenteRepository, AtendenteRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioAplicacaoRepository, UsuarioAplicacaoRepository>();
             services.AddScoped<IPagarReceberRepository, PagarReceberRepository>();
@@ -40,6 +41,7 @@ namespace TecWi_Web.API
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IAtendenteService, AtendenteService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAutorizacaoService, AutorizacaoService>();
             services.AddScoped<IUsuarioAplicacaoService, UsuarioAplicacaoService>();
