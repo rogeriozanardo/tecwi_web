@@ -30,6 +30,7 @@ namespace TecWi_Web.Data.Repositories.Querys
 
                     where IdUsuario = '{idUsuario.ToString()}'
                     and pr.Stcobranca = 1 and pr.Dtpagto is null
+                    and DATEDIFF(DAY,pr.Dtvencto, getdate()) < 90
 
                     and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda > getdate())
 

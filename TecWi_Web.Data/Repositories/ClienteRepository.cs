@@ -110,7 +110,7 @@ namespace TecWi_Web.Data.Repositories
                 return cliente;
             }
 
-            cliente.PagarReceber = _dataContext.PagarReceber.Where(p => p.Cdclifor == cliente.Cdclifor && p.Stcobranca == true && p.Dtpagto == null).ToList();
+            cliente.PagarReceber = _dataContext.PagarReceber.Where(p => p.Cdclifor == cliente.Cdclifor && p.Stcobranca == true && p.Dtpagto == null && p.Dtvencto >= DateTime.Now.AddDays(-90)).ToList();
             cliente.ClienteContato = _dataContext.ClienteContato.Where(x => x.Cdclifor == cliente.Cdclifor).ToList();
 
             //IQueryable<Cliente> _cliente = _dataContext.Cliente
