@@ -102,6 +102,14 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
                 return;
             }
 
+            if(string.IsNullOrEmpty(contatoCobrancaDTO.Anotacao))
+            {
+                mensagemInformativaDTO.Titulo = "Atenção";
+                mensagemInformativaDTO.Mensagem = "Preencha o campo Anotação.";
+                mensagemInformativaDTO.Exibe = true;
+                return;
+            }
+
             exibeSpinner = true;
 
             contatoCobrancaDTO.Cdclifor = clienteDTO.cdclifor;
@@ -124,6 +132,8 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
 
             serviceResponse = await cobrancaFrontService.GravaContato(contatoCobrancaDTO);
+
+            
             if(!serviceResponse.Success)
             {
                 mensagemInformativaDTO.Titulo = "Atenção";
@@ -154,7 +164,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
                     mensagemInformativaDTO.Titulo = "Atenção";
                     mensagemInformativaDTO.Mensagem = "Não há clientes na sua fila de contados";
                     mensagemInformativaDTO.Exibe = true;
-                    
+
                     return;
                 }
 

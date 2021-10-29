@@ -86,15 +86,42 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<Cliente> GetNextInQueueAsync(ClientePagarReceberFilter clientePagarReceberFilter)
         {
-            IQueryable<Cliente> _cliente = _dataContext.Cliente
-               .Include(x => x.PagarReceber)
-               .Include(x => x.ClienteContato)
-               .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
-               .Where(x => x.IdUsuario == clientePagarReceberFilter.IdUsuario)
-               .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
-               .Where(x => x.ContatoCobranca == null || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));
+            Cliente cliente = new Cliente();
+            
+            try
+            {
+                string stringConexao = _iConfiguration.GetConnectionString("DefaultConnection");
+                using (var connection = new SqlConnection(stringConexao))
+                {
+                    connection.Open();
+                    string query = ClienteQuerys.BuscaProximoClienteNaFilaPorIdUsuario(clientePagarReceberFilter.IdUsuario);
+                    var result = await connection.QueryAsync<Cliente>(query);
+                    cliente = result.FirstOrDefault();
+                    connection.Close();
+                }
+            }
+            catch(Exception e)
+            {
+                cliente = null;
+            }
 
-            Cliente cliente = await _cliente.OrderBy(x => x.ContatoCobranca.Count).ThenBy(x => x.ContatoCobranca.OrderBy(x => x.DtAgenda).FirstOrDefault()).FirstOrDefaultAsync();
+            if(cliente == null)
+            {
+                return cliente;
+            }
+
+            cliente.PagarReceber = _dataContext.PagarReceber.Where(p => p.Cdclifor == cliente.Cdclifor && p.Stcobranca == true && p.Dtpagto == null).ToList();
+            cliente.ClienteContato = _dataContext.ClienteContato.Where(x => x.Cdclifor == cliente.Cdclifor).ToList();
+
+            //IQueryable<Cliente> _cliente = _dataContext.Cliente
+            //   .Include(x => x.PagarReceber)
+            //   .Include(x => x.ClienteContato)
+            //   .Include(x => x.ContatoCobranca).ThenInclude(x => x.ContatoCobrancaLancamento)
+            //   .Where(x => x.IdUsuario == clientePagarReceberFilter.IdUsuario)
+            //   .Where(x => x.PagarReceber.Any(y => y.Stcobranca && y.Dtpagto == null))
+            //   .Where(x => x.ContatoCobranca == null || x.ContatoCobranca.Any(y => y.DtAgenda.Date <= DateTime.Now.Date));
+
+            //Cliente cliente = await _cliente.OrderBy(x => x.ContatoCobranca.Count).ThenBy(x => x.ContatoCobranca.OrderBy(x => x.DtAgenda).FirstOrDefault()).FirstOrDefaultAsync();
             return cliente;
         }
 

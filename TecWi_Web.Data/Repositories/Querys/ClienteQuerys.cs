@@ -21,5 +21,19 @@ namespace TecWi_Web.Data.Repositories.Querys
         {
             return @"select * from cliente with(nolock)";
         }
+
+        public static string BuscaProximoClienteNaFilaPorIdUsuario(Guid idUsuario)
+        {
+            return $@"select top 1 * from Cliente c with(nolock)
+
+                    inner join pagarreceber pr with(nolock)  on pr.Cdclifor = c.Cdclifor
+
+                    where IdUsuario = '{idUsuario.ToString()}'
+                    and pr.Stcobranca = 1 and pr.Dtpagto is null
+
+                    and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda > getdate())
+
+                    order by c.Razao";
+        }
     }
 }
