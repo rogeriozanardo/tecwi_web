@@ -16,9 +16,9 @@ namespace TecWi_Web.Domain.Entities
         public string Cdfilial { get; private set; }
         public int Cdclifor { get; private set; }
         public bool Stcobranca { get; set; } = true;
-        public DateTime Dtemissao { get; private set; }
-        public DateTime Dtvencto { get; private set; }
-        public DateTime? Dtpagto { get; private set; }
+        public DateTime Dtemissao { get;  set; }
+        public DateTime Dtvencto { get;  set; }
+        public DateTime? Dtpagto { get;  set; }
         public decimal Valorr { get; private set; }
         public string NumTransf { get; set; }
         public string NotasFiscais { get; private set; }

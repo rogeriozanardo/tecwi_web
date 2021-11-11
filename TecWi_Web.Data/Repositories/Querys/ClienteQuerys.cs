@@ -29,10 +29,10 @@ namespace TecWi_Web.Data.Repositories.Querys
                     inner join pagarreceber pr with(nolock)  on pr.Cdclifor = c.Cdclifor
 
                     where IdUsuario = '{idUsuario.ToString()}'
-                    and pr.Stcobranca = 1 and pr.Dtpagto is null
+                    and pr.Dtpagto is null
                     and DATEDIFF(DAY,pr.Dtvencto, getdate()) < 90
 
-                    and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda > getdate())
+                    and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda > FORMAT(GETDATE(), 'yyyy-MM-dd 00:00:00'))
 
                     order by c.Razao";
         }

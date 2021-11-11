@@ -117,7 +117,7 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
             contatoCobrancaDTO.DtContato = DateTime.Now;
             contatoCobrancaDTO.UsuarioDTO = Config.usuarioDTO;
             contatoCobrancaDTO.ClienteDTO = clienteDTO;
-            contatoCobrancaDTO.DtAgenda = DataAgenda;
+            contatoCobrancaDTO.DtAgenda = DataAgenda.Date;
             
             foreach(var item in clienteDTO.PagarReceberDTO)
             {

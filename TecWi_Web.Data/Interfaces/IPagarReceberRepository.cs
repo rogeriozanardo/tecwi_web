@@ -17,5 +17,7 @@ namespace TecWi_Web.Data.Interfaces
         Task<List<PagarReceber>> BuscaListaReceberZ4();
         Task<bool> InsereReceberPorLista(List<PagarReceber> pagarReceber);
         Task<bool> AtualizaReceberPorLista(List<PagarReceber> pagarReceber);
+        Task<bool> InsereReceber(PagarReceber pagarReceber);
+        Task<bool> ExcluiReceber(PagarReceber pagarReceber);
     }
 }

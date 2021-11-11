@@ -25,12 +25,14 @@ namespace TecWi_Web.API.Controllers
         }
 
         [HttpGet]
+        
         [Route(nameof(PopulateDataAsync))]
         public async Task<IActionResult> PopulateDataAsync()
         {
-            ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateDataAsync();
-            
-            
+            // ServiceResponse<DateTime> serviceResponse =  await _iPagarReceberService.PopulateDataAsync();
+            ServiceResponse<DateTime> serviceResponse = await _iPagarReceberService.AtualizarPagarReceber();
+
+
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);

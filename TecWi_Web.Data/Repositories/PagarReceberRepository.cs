@@ -89,8 +89,8 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<List<PagarReceber>> GetAllEfCore(PagarReceberFilter pagarReceberFilter)
         {
-            IQueryable<PagarReceber> _pagarReceber = _dataContext.PagarReceber
-                .Where(x => pagarReceberFilter.Stcobranca != null ? x.Stcobranca == pagarReceberFilter.Stcobranca : true);
+            IQueryable<PagarReceber> _pagarReceber = _dataContext.PagarReceber;
+                //.Where(x => pagarReceberFilter.Stcobranca != null ? x.Stcobranca == pagarReceberFilter.Stcobranca : true);
 
             List<PagarReceber> pagarReceber = await _pagarReceber
                 .AsNoTracking()
@@ -168,22 +168,7 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<List<PagarReceber>> BuscaListaReceberZ4()
         {
-            List<PagarReceber> pagarReceber = new List<PagarReceber>();
-            string query = "select * from PagarReceber with(nolock)";
-            try
-            {
-                using (var connection = new SqlConnection(_iConfiguration.GetConnectionString("DefaultConnection")))
-                {
-                    connection.Open();
-                    var result = await connection.QueryAsync<PagarReceber>(query);
-                    pagarReceber = result.ToList();
-                    connection.Close();
-
-                }
-            }catch(Exception e)
-            {
-                string erro = e.GetBaseException().Message;
-            }
+            List<PagarReceber> pagarReceber = await _dataContext.PagarReceber.ToListAsync();
 
             return pagarReceber;
         }
@@ -209,6 +194,48 @@ namespace TecWi_Web.Data.Repositories
             try
             {
                 await _dataContext.PagarReceber.AddRangeAsync(pagarReceber);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return retorno;
+        }
+
+        public async Task<bool> InsereReceber(PagarReceber pagarReceber)
+        {
+            bool retorno = true;
+            try
+            {
+                await _dataContext.PagarReceber.AddAsync(pagarReceber);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string erro = e.GetBaseException().Message;
+            }
+
+            return retorno;
+        }
+
+        public async Task<bool> ExcluiReceber(PagarReceber pagarReceber)
+        {
+            bool retorno = true;
+            try
+            {
+                ContatoCobrancaLancamento contatoCobrancaLancamento = await _dataContext.ContatoCobrancaLancamento
+                    .Where(x => x.CdFilial.Trim() == pagarReceber.Cdfilial.Trim()
+                    && x.Numlancto.Trim() == pagarReceber.Numlancto.Trim()
+                    && x.Sq == pagarReceber.Sq).FirstOrDefaultAsync();
+
+                if(contatoCobrancaLancamento != null)
+                {
+                    _dataContext.ContatoCobrancaLancamento.Remove(contatoCobrancaLancamento);
+                    await _dataContext.SaveChangesAsync();
+                }
+                _dataContext.PagarReceber.Remove(pagarReceber);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception e)

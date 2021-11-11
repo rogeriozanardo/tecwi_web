@@ -79,17 +79,21 @@ namespace TecWi_Web.Application.Services
             try
             {
                 Cliente cliente = await _iClienteRepository.GetNextInQueueAsync(clientePagarReceberFilter);
-                ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
-
-                clienteDTO.totalLancamentos = clienteDTO.PagarReceberDTO.Sum(x => x.valorr);
-
-                foreach (var item in clienteDTO.PagarReceberDTO)
+                if(cliente != null)
                 {
-                    item.qtdDiasVencido = DateTime.Now.Subtract(item.dtvencto).Days;
-                }
+                    ClienteDTO clienteDTO = _iMapper.Map<ClienteDTO>(cliente);
 
-                serviceResponse.Data = clienteDTO;
-                await _iUnitOfWork.CommitAsync();
+                    clienteDTO.totalLancamentos = clienteDTO.PagarReceberDTO.Sum(x => x.valorr);
+
+                    foreach (var item in clienteDTO.PagarReceberDTO)
+                    {
+                        item.qtdDiasVencido = DateTime.Now.Subtract(item.dtvencto).Days;
+                    }
+
+                    serviceResponse.Data = clienteDTO;
+                    await _iUnitOfWork.CommitAsync();
+                }
+                
             }
             catch (Exception ex)
             {
@@ -152,11 +156,7 @@ namespace TecWi_Web.Application.Services
                 
                 foreach (var item in clientesZ4)
                 {
-                    int index = clientesMatriz.FindIndex(x => x.Cdclifor == item.Cdclifor);
-                    if (index >= 0)
-                    {
-                        clientesMatriz.RemoveAt(index);
-                    }
+                     clientesMatriz.RemoveAll(x => x.Cdclifor == item.Cdclifor);
                 }
 
                 if (clientesMatriz.Count == 0)

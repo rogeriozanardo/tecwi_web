@@ -192,7 +192,7 @@ namespace TecWi_Web.Application.Services
 
         private async Task InsertPagarReceber(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)
         {
-            List<PagarReceber> PagarReceberToInsert = pagarReceberPending.Where(x => !pagarReceberEfCore.Where(x => x.Stcobranca).ToList().Any(y => y.SeqID == x.SeqID && y.Numlancto == x.Numlancto)).ToList();
+            List<PagarReceber> PagarReceberToInsert = pagarReceberPending.Where(x => !pagarReceberEfCore.Where(y => y.SeqID == x.SeqID && y.Numlancto == x.Numlancto).Any()).ToList();
             if (PagarReceberToInsert.Count > 0)
             {
                 await _iPagarReceberRepository.BulkInsertEfCore(PagarReceberToInsert);
@@ -201,7 +201,7 @@ namespace TecWi_Web.Application.Services
 
         private async Task UpdatePagarReceberDifferent(List<PagarReceber> pagarReceberEfCore, List<PagarReceber> pagarReceberPending)
         {
-            List<PagarReceber> PagarReceberToUpdate = pagarReceberEfCore.Where(x => !pagarReceberPending.Any(y => y.SeqID == x.SeqID && y.Stcobranca == x.Stcobranca && y.Numlancto == x.Numlancto)).ToList();
+            List<PagarReceber> PagarReceberToUpdate = pagarReceberEfCore.Where(x => !pagarReceberPending.Any(y => y.SeqID == x.SeqID && y.Numlancto == x.Numlancto)).ToList();
             PagarReceberToUpdate.ForEach(x =>
             {
                  x.Stcobranca = false;
@@ -297,37 +297,33 @@ namespace TecWi_Web.Application.Services
 
                 pagarReceberSymphony = await _iPagarReceberRepository.BuscaListaReceberSymphony();
 
-                await _iClienteService.AtualizaBaseClientesByReceber(pagarReceberSymphony);
+                var processaClientes = await _iClienteService.AtualizaBaseClientesByReceber(pagarReceberSymphony);
 
-                List<PagarReceber> pagarReceberNovos = new List<PagarReceber>();
-                List<PagarReceber> pagarReceberAtualizar = new List<PagarReceber>();
+                if(!processaClientes.Success)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = processaClientes.Message;
+                    return serviceResponse;
+                }
+              
 
                 foreach (var item in pagarReceberSymphony)
                 {
-                    int index = pagarReceberZ4.FindIndex(x => x.Cdfilial == item.Cdfilial && x.Numlancto == item.Numlancto && x.Sq == item.Sq && x.SeqID == item.SeqID);
-                    if(index >= 0)
+                    int index = pagarReceberZ4.FindIndex(x => x.SeqID == item.SeqID && x.Cdfilial.Trim() == item.Cdfilial.Trim());
+                    if(index < 0)
                     {
-                        pagarReceberAtualizar.Add(item);
+                        await _iPagarReceberRepository.InsereReceber(item);
                     }
-                    else
+                }
+
+                foreach(var item in pagarReceberZ4)
+                {
+                    int index = pagarReceberSymphony.FindIndex(x => x.SeqID == item.SeqID && x.Cdfilial.Trim() == item.Cdfilial.Trim());
+                    if(index < 0)
                     {
-                        pagarReceberNovos.Add(item);
+                        await _iPagarReceberRepository.ExcluiReceber(item);
                     }
-
-                  
-
                 }
-
-                if (pagarReceberAtualizar.Count > 0)
-                {
-                    await _iPagarReceberRepository.AtualizaReceberPorLista(pagarReceberAtualizar);
-                }
-
-                if (pagarReceberNovos.Count > 0)
-                {
-                    await _iPagarReceberRepository.InsereReceberPorLista(pagarReceberNovos);
-                }
-
 
                 await InsertLog();
                 serviceResponse.Data = DateTime.Now;

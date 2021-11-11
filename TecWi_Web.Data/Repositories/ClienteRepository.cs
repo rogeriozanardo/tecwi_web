@@ -127,23 +127,7 @@ namespace TecWi_Web.Data.Repositories
 
         public async Task<List<Cliente>> BuscaListaClienteTotalZ4()
         {
-            List<Cliente> clientes = new List<Cliente>();
-            try
-            {
-                string stringConexao = _iConfiguration.GetConnectionString("DefaultConnection");
-                using (var connection = new SqlConnection(stringConexao))
-                {
-                    connection.Open();
-                    string query = ClienteQuerys.BuscaListaClienteTotalZ4();
-                    var result = await connection.QueryAsync<Cliente>(query);
-                    clientes = result.ToList();
-                    connection.Close();
-                }
-            }
-            catch 
-            {
-                
-            }
+            List<Cliente> clientes = await _dataContext.Cliente.ToListAsync();
 
             return clientes;
         }
@@ -153,8 +137,15 @@ namespace TecWi_Web.Data.Repositories
             bool retorno = true;
             try
             {
-                await _dataContext.Cliente.AddRangeAsync(cliente);
-                await _dataContext.SaveChangesAsync();
+                foreach(var item in cliente)
+                {
+                    Cliente registro = await _dataContext.Cliente.Where(x => x.Cdclifor == item.Cdclifor).FirstOrDefaultAsync();
+                    if(registro == null)
+                    {
+                        await _dataContext.Cliente.AddAsync(item);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                }
             }catch
             {
                 retorno = false;
