@@ -225,16 +225,14 @@ namespace TecWi_Web.Data.Repositories
             bool retorno = true;
             try
             {
-                ContatoCobrancaLancamento contatoCobrancaLancamento = await _dataContext.ContatoCobrancaLancamento
-                    .Where(x => x.CdFilial.Trim() == pagarReceber.Cdfilial.Trim()
-                    && x.Numlancto.Trim() == pagarReceber.Numlancto.Trim()
-                    && x.Sq == pagarReceber.Sq).FirstOrDefaultAsync();
+                List<ContatoCobrancaLancamento> contatoCobrancaLancamento = await _dataContext.ContatoCobrancaLancamento.ToListAsync();
 
-                if(contatoCobrancaLancamento != null)
+                if(contatoCobrancaLancamento.Any())
                 {
-                    _dataContext.ContatoCobrancaLancamento.Remove(contatoCobrancaLancamento);
+                    _dataContext.RemoveRange(contatoCobrancaLancamento);
                     await _dataContext.SaveChangesAsync();
                 }
+                
                 _dataContext.PagarReceber.Remove(pagarReceber);
                 await _dataContext.SaveChangesAsync();
             }
