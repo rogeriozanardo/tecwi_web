@@ -53,21 +53,20 @@ namespace TecWi_Web.Application.Services
                 
                 contatoCobrancaDTO.IdContato = await _iContatoCobrancaRepository.InsertAsync(contatoCobranca);
 
-                contatoCobrancaDTO.ContatoCobrancaLancamentoDTO.ForEach(x =>
-                {
-                    x.IdContato = contatoCobrancaDTO.IdContato;
-                    x.Idusuario = contatoCobrancaDTO.IdUsuario;
-                });
-                List<ContatoCobrancaLancamento> contatoCobrancaLancamento = _iMapper.Map<List<ContatoCobrancaLancamento>>(contatoCobrancaDTO.ContatoCobrancaLancamentoDTO);
-                await _iContatoCobrancaLancamentoRepository.BulkInsertAsync(contatoCobrancaLancamento);
+                //contatoCobrancaDTO.ContatoCobrancaLancamentoDTO.ForEach(x =>
+                //{
+                //    x.IdContato = contatoCobrancaDTO.IdContato;
+                //    x.Idusuario = contatoCobrancaDTO.IdUsuario;
+                //});
+                //List<ContatoCobrancaLancamento> contatoCobrancaLancamento = _iMapper.Map<List<ContatoCobrancaLancamento>>(contatoCobrancaDTO.ContatoCobrancaLancamentoDTO);
+                //await _iContatoCobrancaLancamentoRepository.BulkInsertAsync(contatoCobrancaLancamento);
 
-                await _iUnitOfWork.CommitAsync();
+                //await _iUnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
                 serviceResponse.Message = ex.GetBaseException().Message;
                 serviceResponse.Success = false;
-                _iUnitOfWork.Rollback();
             }
             return serviceResponse;
         }
