@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TecWi_Web.Data.Context;
 
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220123152933_Add_Tabelas_Sincronizacao_E_Produto")]
+    partial class Add_Tabelas_Sincronizacao_E_Produto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,8 +332,8 @@ namespace TecWi_Web.Data.Migrations
                         .HasColumnType("nvarchar(7)");
 
                     b.Property<string>("CdContabilCpr")
-                        .HasMaxLength(7)
-                        .HasColumnType("nvarchar(7)");
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("CdFornecPadrao")
                         .HasMaxLength(7)
