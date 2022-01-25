@@ -24,17 +24,29 @@ namespace TecWi_Web.Data.Repositories.Querys
 
         public static string BuscaProximoClienteNaFilaPorIdUsuario(Guid idUsuario)
         {
-            return $@"select top 1 * from Cliente c with(nolock)
+            string dtAgenda = DateTime.Now.ToString("yyyy-MM-dd 00:00:00");
+            return $@"select * from 
+                    (
+                    select distinct null as DtUltimoContato, c.* from Cliente c with(nolock)
 
                     inner join pagarreceber pr with(nolock)  on pr.Cdclifor = c.Cdclifor
 
-                    where IdUsuario = '{idUsuario.ToString()}'
+                    where c.IdUsuario = '{idUsuario.ToString()}'
                     and pr.Dtpagto is null
                     and DATEDIFF(DAY,pr.Dtvencto, getdate()) < 90
 
-                    and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda > FORMAT(GETDATE(), 'yyyy-MM-dd 00:00:00'))
+                    and c.Cdclifor not in(select Cdclifor from ContatoCobranca with(nolock) where DtAgenda >='{dtAgenda}')
 
-                    order by c.Razao";
+					union all
+
+					select distinct 
+					(select max(cnt.DtContato) from ContatoCobranca cnt with(nolock) where cnt.Cdclifor = c.Cdclifor) as DtUltimoContato,
+					c.* from Cliente c with(nolock)
+
+					inner join ContatoCobranca cc with(nolock) on cc.Cdclifor = c.Cdclifor
+					where cc.DtAgenda = '{dtAgenda}'
+					and c.Cdclifor not in(select Cdclifor from ContatoCobranca  with(nolock) where DtAgenda >'{dtAgenda}')
+					) x order by x.DtUltimoContato asc";
         }
     }
 }
