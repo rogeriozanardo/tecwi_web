@@ -40,6 +40,7 @@ namespace TecWi_Web.API
             services.AddScoped<IClienteContatoReposiry, ClienteContatoRepository>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IParametroSincronizacaoProdutoRepository, ParametroSincronizacaoProdutoRepository>();
+            services.AddScoped<ILogSincronizacaoProdutoMercoCampRepository, LogSincronizacaoProdutoMercoCampRepository>();
             return services;
         }
 
@@ -55,6 +56,7 @@ namespace TecWi_Web.API
             services.AddScoped<ILogOperacaoService, LogOperacaoService>();
             services.AddScoped<IClienteContatoService, ClienteContatoService>();
             services.AddScoped<IProdutoSincronizacaoService, ProdutoSincronizacaoService>();
+            services.AddScoped<ILogSincronizacaoProdutoMercoCampService, LogSincronizacaoProdutoMercoCampService>();
             return services;
         }
 

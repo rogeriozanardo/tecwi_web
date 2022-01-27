@@ -58,6 +58,7 @@ namespace TecWi_Web.API
                 }));
 
             services.AddHangfireServer();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,9 +90,12 @@ namespace TecWi_Web.API
 
             app.UseHangfireDashboard();
 
-            // recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), CRON_JOB_DUAS_HORAS);
-            recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), "*/2 * * * *");
-            recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), CRON_JOB_DUAS_HORAS);
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), CRON_JOB_VINTE_MINUTOS);
+
+            //#### Usado para teste de 1 e 2 minutos o job do hang fire
+            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), "*/1 * * * *");
+            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
         }
     }
 }

@@ -9,6 +9,7 @@ using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.Repositories.Sincronizacao.Interfaces;
 using TecWi_Web.Data.Repositories.Sincronizacao.Repositorios;
 using TecWi_Web.Domain.Entities;
+using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.Application.Services.JobsSincronizacao
 {
@@ -18,11 +19,13 @@ namespace TecWi_Web.Application.Services.JobsSincronizacao
         private readonly IProdutoSincronizacaoRepository _ProdutoSincronizacaoRepository;
         private readonly IParametroSincronizacaoProdutoRepository _ParametroSincronizacaoProdutoRepository;
         private readonly IDapper _Dapper;
+        private readonly ILogSincronizacaoProdutoMercoCampRepository _LogSincronizacaoProdutoMercoCampRepository;
 
         public ProdutoSincronizacaoService(IConfiguration configuration,
                                            IProdutoRepository produtoRepository,
                                            IParametroSincronizacaoProdutoRepository parametroSincronizacaoRepository,
-                                           IDapper dapper)
+                                           IDapper dapper,
+                                           ILogSincronizacaoProdutoMercoCampRepository logSincronizacaoProdutoMercoCampRepository)
         {
             _ProdutoRepository = produtoRepository;
             _Dapper = dapper;
@@ -47,6 +50,11 @@ namespace TecWi_Web.Application.Services.JobsSincronizacao
                     UltimoUpdateDate = produtosMatriz.Max(t => t.updregistro) ?? DateTime.MinValue,
                 });
             }
+        }
+
+        public async Task<IEnumerable<ProdutoMercoCampDTO>> BuscarProdutosPorUltimoPeriodoEnviado(LogSincronizacaoProdutoMercoCamp logSincronicaoProdutoMercoCamp)
+        {
+            return await _ProdutoRepository.BuscarProdutosPorPeriodoSincronizacao(logSincronicaoProdutoMercoCamp.PeriodoFinalEnvio);
         }
     }
 }
