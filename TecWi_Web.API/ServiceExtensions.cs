@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TecWi_Web.Application.Interfaces;
+using TecWi_Web.Application.Interfaces.JobsSincronizacao;
 using TecWi_Web.Application.Services;
+using TecWi_Web.Application.Services.JobsSincronizacao;
 using TecWi_Web.Data.Context;
 using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
@@ -36,6 +38,9 @@ namespace TecWi_Web.API
             services.AddScoped<IContatoCobrancaLancamentoRepository, ContatoCobrancaLancamentoRepository>();
             services.AddScoped<ILogOperacaoRepository, LogOperacaoRepository>();
             services.AddScoped<IClienteContatoReposiry, ClienteContatoRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IParametroSincronizacaoProdutoRepository, ParametroSincronizacaoProdutoRepository>();
+            services.AddScoped<ILogSincronizacaoProdutoMercoCampRepository, LogSincronizacaoProdutoMercoCampRepository>();
             return services;
         }
 
@@ -50,6 +55,8 @@ namespace TecWi_Web.API
             services.AddScoped<IContatoCobrancaService, ContatoCobrancaService>();
             services.AddScoped<ILogOperacaoService, LogOperacaoService>();
             services.AddScoped<IClienteContatoService, ClienteContatoService>();
+            services.AddScoped<IProdutoSincronizacaoService, ProdutoSincronizacaoService>();
+            services.AddScoped<ILogSincronizacaoProdutoMercoCampService, LogSincronizacaoProdutoMercoCampService>();
             return services;
         }
 

@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,12 +16,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TecWi_Web.API.HangFireJobs;
 using TecWi_Web.Application.MappingProfiles;
 
 namespace TecWi_Web.API
 {
     public class Startup
     {
+        const string CRON_JOB_DUAS_HORAS = "0 */2 * * *";
+        const string CRON_JOB_TRES_HORAS = "0 */3 * * *";
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -37,10 +43,26 @@ namespace TecWi_Web.API
             services.AddHttpContextAcessors();
             services.AddAuthentication(_configuration);
             services.AddServices();
+
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
         {
             if (env.IsDevelopment())
             {
@@ -66,7 +88,14 @@ namespace TecWi_Web.API
                 endpoints.MapControllers();
             });
 
-           
+            app.UseHangfireDashboard();
+
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), CRON_JOB_DUAS_HORAS);
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), CRON_JOB_TRES_HORAS);
+
+            //#### Usado para teste de 1 e 2 minutos o job do hang fire
+            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), "*/1 * * * *");
+            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
         }
     }
 }
