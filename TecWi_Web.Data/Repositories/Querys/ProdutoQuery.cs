@@ -6,7 +6,7 @@
             @"
                 SELECT P.* 
                     FROM 
-                        PRODUTO P
+                        PRODUTO  P WITH(NOLOCK)
                 WHERE 1=1
                     AND 
                         P.updregistro > @UPDATE_DATE AND P.updregistro <= @DATA_ATUAL
