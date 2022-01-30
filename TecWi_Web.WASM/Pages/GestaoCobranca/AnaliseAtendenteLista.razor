@@ -7,6 +7,51 @@
 <SpinnerWorking exibe="exibeSpinner"></SpinnerWorking>
 <MensagemInformativa mensagemInformativaDTO="mensagemInformativaDTO"></MensagemInformativa>
 
+
+@*Inicio modal de contato*@
+<SfDialog id="modalContato" IsModal="true" CssClass="modal-form" Width="800" Height="370" Target="#target" @bind-Visible="exibeModalContato">
+    <DialogTemplates>
+        <Content>
+            <div class="container-fluid">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="dtcontato">Data do Contato:</label>
+                            <SfDatePicker id="dtcontato" TValue="DateTime?" Value="contatoCobrancaDTO.DtContato" Format="dd/MM/yyyy" Enabled="false"></SfDatePicker>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="dtagenda">Data Agenda:</label>
+                            <SfDatePicker id="dtagenda" TValue="DateTime?" Value="contatoCobrancaDTO.DtAgenda" Format="dd/MM/yyyy" Enabled="false"></SfDatePicker>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="tipocontato">Tipo Contato:</label>
+                            <SfTextBox id="tipocontato" @bind-Value="contatoCobrancaDTO.DsTipoContato" Enabled=false></SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                            <div class="form-group col-md-12" style="margin-right: 80px">
+                                <label for="observacoes">Anotação do contato</label>
+                                <SfTextBox CssClass="multiline-input" Multiline=true rows="7" id="observacoes" @bind-Value="contatoCobrancaDTO.Anotacao" style="resize:none" Enabled=false />
+                            </div>
+                        </div>
+                </div>
+                <CardFooter>
+                    <div class="row mt-3 text-right">
+                        <div class="form-group col">
+                            <SfButton CssClass="btn-blue" OnClick="FechaModalContato">Fechar</SfButton>
+                        </div>
+                    </div>
+                </CardFooter>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+@*Inicio modal de contato*@
+
+
+
 <div class="container-fluid">
     <SfCard CssClass="card-tela mb-2">
         <CardContent>
@@ -42,36 +87,42 @@
                         <GridTemplates>
                             <DetailTemplate>
                                 @{
-                                    var atendente = (context as AtendenteDTO);
-                                    <SfGrid TValue="ClienteDTO" DataSource="@listaClienteDTO" Query="@GetClientesQuery(atendente)" AllowPaging="true">
-                                        <GridPageSettings PageSize="10"></GridPageSettings>
-                                        <GridTemplates>
-                                            <DetailTemplate Context="ClienteContexto">
-                                                @{
-                                                    var cliente = (ClienteContexto as ClienteDTO);
-                                                    <SfGrid TValue="ContatoCobrancaDTO" DataSource="@listaContatoCobrancaDTO" Query="@GetContatosCobranca(cliente)" AllowPaging="true">
-                                                        <GridPageSettings PageSize="10"></GridPageSettings>
-                                                        <GridColumns>
-                                                            <GridColumn Field=@nameof(ContatoCobrancaDTO.DtContato) HeaderText="Dt. Contato" Format="dd/MM/yyyy" Width="80"></GridColumn>
-                                                            <GridColumn Field=@nameof(ContatoCobrancaDTO.TipoContato) HeaderText="Tipo" Width="80"></GridColumn>
-                                                        </GridColumns>
-                                                    </SfGrid>
-                                                }
-                                            </DetailTemplate>
-                                        </GridTemplates>
-                                        <GridColumns>
-                                            <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razão" Width="150"></GridColumn>
-                                            <GridColumn Field=@nameof(ClienteDTO.totalContatos) HeaderText="Contatos" Width="80"></GridColumn>
-                                        </GridColumns>
-                                    </SfGrid>
-                                }
-                            </DetailTemplate>
-                        </GridTemplates>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(AtendenteDTO.Nome) HeaderText="Atendente" Width="150"></GridColumn>
-                            <GridColumn Field=@nameof(AtendenteDTO.TotalContatos) HeaderText="Contatos" Format="N0" Width="80"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
+                                var atendente = (context as AtendenteDTO);
+                                <SfGrid TValue="ClienteDTO" DataSource="@listaClienteDTO" Query="@GetClientesQuery(atendente)" AllowPaging="true">
+                                    <GridPageSettings PageSize="10"></GridPageSettings>
+                                    <GridTemplates>
+                                        <DetailTemplate Context="ClienteContexto">
+                                            @{
+                                                var cliente = (ClienteContexto as ClienteDTO);
+                                                <SfGrid TValue="ContatoCobrancaDTO" DataSource="@listaContatoCobrancaDTO" Query="@GetContatosCobranca(cliente)" AllowPaging="true">
+                                                    <GridPageSettings PageSize="10"></GridPageSettings>
+                                                    <GridEvents CommandClicked="ExibeDetalhesContato" TValue="ContatoCobrancaDTO"></GridEvents>
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(ContatoCobrancaDTO.DtContato) HeaderText="Dt. Contato" Format="dd/MM/yyyy" Width="80"></GridColumn>
+                                                        <GridColumn Field=@nameof(ContatoCobrancaDTO.TipoContato) HeaderText="Tipo" Width="80"></GridColumn>
+                                                        <GridColumn HeaderText="" Width="80">
+                                                            <GridCommandColumns>
+                                                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() {IsPrimary=true, Content="Detalhes" })"></GridCommandColumn>
+                                                            </GridCommandColumns>
+                                                        </GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            }
+                                        </DetailTemplate>
+                                    </GridTemplates>
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(ClienteDTO.razao) HeaderText="Razão" Width="150"></GridColumn>
+                                        <GridColumn Field=@nameof(ClienteDTO.totalContatos) HeaderText="Contatos" Width="80"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
+                            }
+                        </DetailTemplate>
+                    </GridTemplates>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(AtendenteDTO.Nome) HeaderText="Atendente" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(AtendenteDTO.TotalContatos) HeaderText="Contatos" Format="N0" Width="80"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
                 }
 
             </div>
@@ -79,3 +130,17 @@
         </CardContent>
     </SfCard>
 </div>
+
+<style>
+    #modalcliente {
+        max-height: none !important;
+    }
+
+    #modalContato {
+        max-height: none !important;
+    }
+
+    #pessoaContatoModal {
+        max-height: none !important;
+    }
+</style>

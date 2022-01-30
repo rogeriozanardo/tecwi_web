@@ -11,7 +11,7 @@ namespace TecWi_Web.Data.Repositories.Querys
         public static string ListaPerformanceAtendentes(DateTime dtInicio, DateTime dtFim)
         {
   
-            return $@"select cc.IdUsuario, u.Nome as NomeUsuario, c.Cdclifor, Razao, cc.IdContato, cc.DtContato, cc.TipoContato, cc.Anotacao
+            return $@"select cc.IdUsuario, u.Nome as NomeUsuario, c.Cdclifor, Razao, cc.IdContato, cc.DtAgenda, cc.DtContato, cc.TipoContato, cc.Anotacao
 
                      from ContatoCobranca cc with(nolock) 
 

@@ -12,6 +12,7 @@ namespace TecWi_Web.Shared.DTOs
         public DateTime DtContato { get; set; }
         public string Anotacao { get; set; }
         public TipoContatoEnum TipoContato { get; set; }
+        public string DsTipoContato { get; set; }
         public DateTime DtAgenda { get; set; }
         public string NomeAtendente { get; set; }
              

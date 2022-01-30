@@ -51,6 +51,7 @@ namespace TecWi_Web.Application.Services
                                 Cdclifor = c.Cdclifor,
                                 IdContato = c.IdContato,
                                 DtContato = c.DtContato,
+                                DtAgenda = c.DtAgenda,
                                 TipoContato = c.TipoContato,
                                 Anotacao = c.Anotacao
                             }).ToList();

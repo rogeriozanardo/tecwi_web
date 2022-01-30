@@ -1,4 +1,5 @@
 ﻿using Syncfusion.Blazor.Data;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,16 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private PesquisaDTO pesquisaDTO = new PesquisaDTO();
 
         private List<AtendenteDTO> listaAtendenteDTO = new List<AtendenteDTO>();
+        private bool exibeModalContato = false;
 
         public List<ClienteDTO> listaClienteDTO = new List<ClienteDTO>();
         public List<ContatoCobrancaDTO> listaContatoCobrancaDTO = new List<ContatoCobrancaDTO>();
+        private ContatoCobrancaDTO contatoCobrancaDTO = new ContatoCobrancaDTO();
+
+        public AnaliseAtendenteLista()
+        {
+            contatoCobrancaDTO.ClienteDTO = new ClienteDTO();
+        }
 
         private void AlteraDtInicio(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> args)
         {
@@ -98,6 +106,18 @@ namespace TecWi_Web.WASM.Pages.GestaoCobranca
         private Query GetContatosCobranca(ClienteDTO cliente)
         {
             return  new Query().Where("Cdclifor", "equal", cliente.cdclifor).Where("IdUsuario", "equal", cliente.IdUsuario);
+        }
+
+        private void ExibeDetalhesContato(CommandClickEventArgs<ContatoCobrancaDTO> args)
+        {
+            contatoCobrancaDTO = args.RowData;
+            contatoCobrancaDTO.DsTipoContato = contatoCobrancaDTO.TipoContato.ToString();
+            exibeModalContato = true;
+        }
+
+        private void FechaModalContato()
+        {
+            exibeModalContato = false;
         }
     }
 }
