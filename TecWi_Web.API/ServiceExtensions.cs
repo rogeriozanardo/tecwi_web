@@ -13,6 +13,8 @@ using TecWi_Web.Data.Context;
 using TecWi_Web.Data.Dapper;
 using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.Repositories;
+using TecWi_Web.Data.Repositories.Sincronizacao.Interfaces;
+using TecWi_Web.Data.Repositories.Sincronizacao.Repositorios;
 using TecWi_Web.Data.UoW;
 
 namespace TecWi_Web.API
@@ -41,6 +43,8 @@ namespace TecWi_Web.API
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IParametroSincronizacaoProdutoRepository, ParametroSincronizacaoProdutoRepository>();
             services.AddScoped<ILogSincronizacaoProdutoMercoCampRepository, LogSincronizacaoProdutoMercoCampRepository>();
+            services.AddScoped<IPedidoSincronizacaoRepository, PedidoSincronizacaoRepository>();
+            services.AddScoped<IPedidoMercoCampRepository, PedidoMercoCampRepository>();
             return services;
         }
 
@@ -57,6 +61,8 @@ namespace TecWi_Web.API
             services.AddScoped<IClienteContatoService, ClienteContatoService>();
             services.AddScoped<IProdutoSincronizacaoService, ProdutoSincronizacaoService>();
             services.AddScoped<ILogSincronizacaoProdutoMercoCampService, LogSincronizacaoProdutoMercoCampService>();
+            services.AddScoped<IPedidoSincronizacaoService, PedidoSincronizacaoService>();
+            services.AddScoped<IPedidoMercoCampService, PedidoMercoCampService>();
             return services;
         }
 

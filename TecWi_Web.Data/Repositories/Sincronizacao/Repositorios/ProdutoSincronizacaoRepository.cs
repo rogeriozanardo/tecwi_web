@@ -16,7 +16,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
         private readonly IDapper _Dapper;
 
         public ProdutoSincronizacaoRepository(string connectionString, 
-                                                IDapper dapper)
+                                              IDapper dapper)
         {
             _ConnectionString = connectionString;
             _Dapper = dapper;

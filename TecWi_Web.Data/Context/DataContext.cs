@@ -36,5 +36,12 @@ namespace TecWi_Web.Data.Context
         public DbSet<Produto> Produto { get; set; }
         public DbSet<ParametroSincronizacaoProduto> ParametroSincronizacaoProduto { get; set; }
         public DbSet<LogSincronizacaoProdutoMercoCamp> LogSincronizacaoProdutoMercoCamp { get; set; }
+        public DbSet<Pedido> Pedido { get; set; }
+        public DbSet<PedidoItem> PedidoItem { get; set; }
+        public DbSet<PedidoMercoCamp> PedidoMercoCamp { get; set; }
+        public DbSet<PedidoItemMercoCamp> PedidoItemMercoCamp { get; set; }
+        public DbSet<Transportadora> Transportadora { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
+        public DbSet<Vendedor> Vendedor { get; set; }
     }
 }

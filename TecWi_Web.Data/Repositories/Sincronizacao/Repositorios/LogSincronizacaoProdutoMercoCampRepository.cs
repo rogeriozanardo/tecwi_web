@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Data.Context;
-using TecWi_Web.Data.Interfaces;
+using TecWi_Web.Data.Repositories.Sincronizacao.Interfaces;
 using TecWi_Web.Domain.Entities;
 
-namespace TecWi_Web.Data.Repositories
+namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 {
     public class LogSincronizacaoProdutoMercoCampRepository : ILogSincronizacaoProdutoMercoCampRepository
     {

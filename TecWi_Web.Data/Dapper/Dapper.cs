@@ -9,6 +9,11 @@ namespace TecWi_Web.Data.Dapper
 {
     public class Dapper : IDapper
     {
+        public Dapper()
+        {
+
+        }
+
         public void Dispose()
         {
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TecWi_Web.Data.Context;
 
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220130194401_Add_Table_PedidoMercoCamp_PedidoItemMercoCamp")]
+    partial class Add_Table_PedidoMercoCamp_PedidoItemMercoCamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,82 +144,6 @@ namespace TecWi_Web.Data.Migrations
                     b.HasIndex("Numlancto", "Sq", "CdFilial");
 
                     b.ToTable("ContatoCobrancaLancamento");
-                });
-
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.Empresa", b =>
-                {
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Bairro")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("CdCliente")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cep")
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
-
-                    b.Property<string>("Cidade")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("Complemento")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("DDD")
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Endereco")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("Fantasia")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Fone1")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("Fone2")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("InscriEst")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("InscriFed")
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
-
-                    b.Property<string>("Razao")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("StAtivo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UF")
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
-
-                    b.Property<DateTime?>("UpdRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EmpresaId");
-
-                    b.ToTable("Empresa");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.LogOperacao", b =>
@@ -1409,55 +1335,6 @@ namespace TecWi_Web.Data.Migrations
                     b.ToTable("Produto");
                 });
 
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.Transportadora", b =>
-                {
-                    b.Property<int>("IdTransportadora")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CdTransportadora")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("Cidade")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Fantasia")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("Inscrifed")
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
-
-                    b.Property<string>("Nome")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("StAtivo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tpinscricao")
-                        .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<DateTime>("UpdRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("IdTransportadora");
-
-                    b.ToTable("Transportadora");
-                });
-
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Usuario", b =>
                 {
                     b.Property<Guid>("IdUsuario")
@@ -1509,36 +1386,6 @@ namespace TecWi_Web.Data.Migrations
                     b.HasKey("IdUsuario", "IdAplicacao", "IdPerfil");
 
                     b.ToTable("UsuarioAplicacao");
-                });
-
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.Vendedor", b =>
-                {
-                    b.Property<int>("IdVendedor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Apelido")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("CdVendedor")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Nome")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<DateTime?>("UpdRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("IdVendedor");
-
-                    b.ToTable("Vendedor");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.Cliente", b =>

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
-using TecWi_Web.Data.Interfaces;
+using TecWi_Web.Data.Repositories.Sincronizacao.Interfaces;
 using TecWi_Web.Domain.Entities;
 
 namespace TecWi_Web.Application.Services

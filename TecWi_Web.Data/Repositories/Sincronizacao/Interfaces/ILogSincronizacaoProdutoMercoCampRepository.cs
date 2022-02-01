@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TecWi_Web.Domain.Entities;
 
-namespace TecWi_Web.Data.Interfaces
+namespace TecWi_Web.Data.Repositories.Sincronizacao.Interfaces
 {
     public interface ILogSincronizacaoProdutoMercoCampRepository
     {
