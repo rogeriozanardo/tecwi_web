@@ -37,12 +37,11 @@ namespace TecWi_Web.API.HangFireJobs
         public async Task EnviarPedidosMercoCampAsync()
         {
             var pedidos = await _PedidoSincronizacaoService.ListarPedidosSincronizarMercoCamp();
-            var cnpj = BuscarCNPJ("CNPJ_Matriz");
             string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
           
             foreach (var pedido in pedidos)
             {
-                string jsonPedido = PopularJson(pedido, cnpj);
+                string jsonPedido = PopularJson(pedido);
                 var request = new HttpRequestMessage(HttpMethod.Post, urlBaseMercoCamp);
 
                 using (var content = new StringContent(jsonPedido, System.Text.Encoding.UTF8, "application/json"))
@@ -72,42 +71,42 @@ namespace TecWi_Web.API.HangFireJobs
             return (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string),cnpj); 
         }
 
-        private string PopularJson(PedidoMercoCampDTO pedido, string cnpj)
+        private string PopularJson(PedidoMercoCampDTO pedido)
         {
             var jsonPedido = new
             {
                 CORPEM_ERP_DOC_SAI = new
                 {
-                    CGCCLIWMS = cnpj,
-                    CGCEMINF = pedido.CNPJEmitente,
-                    OBSPED = pedido.ObservacaoPedido,
-                    OBSROM = pedido.ObservacaoRomaneio,
-                    NUMPEDCLI = pedido.NumeroPedidoCliente,
-                    NUMPEDRCA = pedido.NumeroPedidoRCA,
+                    CGCCLIWMS = pedido.CNPJEmitente ?? string.Empty,
+                    CGCEMINF = pedido.CNPJEmitente ?? string.Empty,
+                    OBSPED = pedido.ObservacaoPedido ?? string.Empty,
+                    OBSROM = pedido.ObservacaoRomaneio ?? string.Empty,
+                    NUMPEDCLI = !string.IsNullOrEmpty(pedido.NumeroPedidoCliente) ? pedido.NumeroPedidoCliente.Trim() : string.Empty,
+                    NUMPEDRCA = !string.IsNullOrEmpty(pedido.NumeroPedidoRCA) ? pedido.NumeroPedidoRCA.Trim() : string.Empty,
                     VLTOTPED = pedido.ValorTotalPedido,
-                    CGCDEST = pedido.CNPJDestinatario,
-                    NOMEDEST = pedido.NomeDestinatario,
-                    CEPDEST = pedido.CepDestinatario,
-                    UFDEST = pedido.UFDestinatario,
-                    IBGEMUNDEST = pedido.IBGEMunicipioDestinatario,
-                    MUN_DEST = pedido.MunicipioDestinatario,
-                    BAIR_DEST = pedido.BairroDestinatario,
-                    LOGR_DEST = pedido.LogradouroDestinatario,
-                    NUM_DEST = pedido.NumeroDestinatario,
-                    COMP_DEST = pedido.ComplementoDestinatario,
+                    CGCDEST = pedido.CNPJDestinatario ?? string.Empty,
+                    NOMEDEST = !string.IsNullOrEmpty(pedido.NomeDestinatario) ? pedido.NomeDestinatario.Trim() : string.Empty,
+                    CEPDEST = !string.IsNullOrEmpty(pedido.CepDestinatario) ? pedido.CepDestinatario.Trim() : string.Empty,
+                    UFDEST = !string.IsNullOrEmpty(pedido.UFDestinatario) ? pedido.UFDestinatario.Trim() : string.Empty,
+                    IBGEMUNDEST = pedido.IBGEMunicipioDestinatario ?? string.Empty,
+                    MUN_DEST = !string.IsNullOrEmpty(pedido.MunicipioDestinatario) ? pedido.MunicipioDestinatario.Trim() : string.Empty,
+                    BAIR_DEST = !string.IsNullOrEmpty(pedido.BairroDestinatario) ? pedido.BairroDestinatario.Trim() : string.Empty,
+                    LOGR_DEST = !string.IsNullOrEmpty(pedido.LogradouroDestinatario) ? pedido.LogradouroDestinatario.Trim() : string.Empty,
+                    NUM_DEST = !string.IsNullOrEmpty(pedido.NumeroDestinatario) ? pedido.NumeroDestinatario.Trim() : string.Empty,
+                    COMP_DEST = !string.IsNullOrEmpty(pedido.ComplementoDestinatario) ? pedido.ComplementoDestinatario.Trim() : string.Empty,
                     TP_FRETE = pedido.TipoFrete,
-                    CODVENDEDOR = pedido.CodigoVendedor,
-                    NOMEVENDEDOR = pedido.NomeVendedor,
-                    DTINCLUSAOERP = pedido.DataInclusaoERP,
-                    DTLIBERACAOERP = pedido.DataLiberacaoERP,
-                    DTPREV_ENT_SITE = pedido.DataPrevisaoEntradaSite,
-                    EMAILRASTRO = pedido.EmailRastro,
-                    DDDRASTRO = pedido.DDDRastro,
-                    TELRASTRO = pedido.TelRastro,
-                    CGC_TRP = pedido.CNPJTransportadora,
-                    UF_TRP = pedido.UFTransportadora,
-                    PRIORIDADE = pedido.Prioridade,
-                    ETQCLIZPLBASE64 = pedido.Etiqueta,
+                    CODVENDEDOR = !string.IsNullOrEmpty(pedido.CodigoVendedor) ? pedido.CodigoVendedor.Trim() : string.Empty,
+                    NOMEVENDEDOR = !string.IsNullOrEmpty(pedido.NomeVendedor) ? pedido.NomeVendedor.Trim() : string.Empty,
+                    DTINCLUSAOERP = pedido.DataInclusaoERP.ToString("dd/MM/yyyy"),
+                    DTLIBERACAOERP = pedido.DataLiberacaoERP.ToString("dd/MM/yyyy"),
+                    DTPREV_ENT_SITE = pedido.DataPrevisaoEntradaSite.ToString("dd/MM/yyyy"),
+                    EMAILRASTRO = !string.IsNullOrEmpty(pedido.EmailRastro) ? pedido.EmailRastro.Trim() : string.Empty,
+                    DDDRASTRO = !string.IsNullOrEmpty(pedido.DDDRastro) ? pedido.DDDRastro.Trim() : string.Empty,
+                    TELRASTRO = !string.IsNullOrEmpty(pedido.TelRastro) ? pedido.TelRastro.Trim() : string.Empty,
+                    CGC_TRP = !string.IsNullOrEmpty(pedido.CNPJTransportadora) ? pedido.CNPJTransportadora.Trim() : string.Empty,
+                    UF_TRP = !string.IsNullOrEmpty(pedido.UFTransportadora) ? pedido.UFTransportadora.Trim() : string.Empty,
+                    PRIORIDADE = string.Empty,
+                    ETQCLIZPLBASE64 = string.Empty,
                     ITENS = pedido.Itens
                 },
             };

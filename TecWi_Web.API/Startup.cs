@@ -100,9 +100,11 @@ namespace TecWi_Web.API
             //#### Usado para teste de 1 e 2 minutos o job do hang fire
             //recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), "*/1 * * * *");
             //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
-            recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), "*/1 * * * *");
+            //recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), "*/4 * * * *");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), "*/1 * * * *");
-            //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
+            
+            
+            recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
         }
     }
 }

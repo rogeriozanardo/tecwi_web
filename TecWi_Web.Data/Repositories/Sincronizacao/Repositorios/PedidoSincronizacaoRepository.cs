@@ -26,6 +26,9 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
         const string CODIGO_FILIAL_01_BAHIA = "BA";
         const string CODIGO_FILIAL_02_ESPIRITO_SANTO = "ES";
         const string CODIGO_MATRIZ = "SP";
+        const string TIPO_FRETE_CIF = "C";
+        const string TIPO_FRETE_FOB = "F";
+        const int SEQUENCIA_ENVIO_INICIAL = 1;
 
         public PedidoSincronizacaoRepository(DataContext dataContext,
                                              IConfiguration configuration)
@@ -45,41 +48,35 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
             List<Vendedor> vendedores = new List<Vendedor>();
             List<Pedido> pedidos = new List<Pedido>();
 
-            var sincronizacaoPedidoMatriz = await BuscarPedidosMatriz(connectionStringMatriz);
+            var sincronizacaoPedidoMatriz = await BuscarPedidos(connectionStringMatriz);
             PopularDadosSincronizacaoPedidos(sincronizacaoPedidoMatriz, pedidos, empresas, transportadoras, vendedores);
 
-            var pedidosFilial01 = await SincronizarPedidosFiliais(connectionStringFilial01);
-            if (pedidosFilial01.Any())
-                pedidos.AddRange(pedidosFilial01);
+            var pedidosFilial01 = await BuscarPedidos(connectionStringFilial01);
+            PopularDadosSincronizacaoPedidos(pedidosFilial01, pedidos, empresas, transportadoras, vendedores);
 
-            var pedidosFilial02 = await SincronizarPedidosFiliais(connectionStringFilial02);
-            if (pedidosFilial02.Any())
-                pedidos.AddRange(pedidosFilial02);
+            var pedidosFilial02 = await BuscarPedidos(connectionStringFilial02);
+            PopularDadosSincronizacaoPedidos(pedidosFilial02, pedidos, empresas, transportadoras, vendedores);
 
             if (pedidos != null && pedidos.Any())
             {
-                BulkConfig bulkConfig = new BulkConfig
-                {
-                    UpdateByProperties = new List<string>() { "cdempresa", "cdfilial", "nummovimento" },
-                    PropertiesToIncludeOnUpdate = new List<string> { "" },
-                    SetOutputIdentity = true
-                };
-
-                BulkConfig bulkConfigItens = new BulkConfig
-                {
-                    UpdateByProperties = new List<string>() { "cdempresa", "cdfilial", "nummovimento", "seq" },
-                    PropertiesToIncludeOnUpdate = new List<string> { "" }
-                };
-
                 using (var transaction = _DataContext.Database.BeginTransaction())
                 {
-                    await _DataContext.BulkInsertOrUpdateAsync<Pedido>(pedidos, bulkConfig: bulkConfig);
+                    await _DataContext.BulkInsertOrUpdateAsync<Pedido>(pedidos, opt =>
+                    {
+                        opt.UpdateByProperties = new List<string>() { "cdempresa", "cdfilial", "nummovimento" };
+                        opt.PropertiesToIncludeOnUpdate = new List<string> { "" };
+                        opt.SetOutputIdentity = true;
+                    });
                     var pedidosItens = pedidos.Where(x => x.ID > 0).SelectMany(x => x.PedidoItem).ToList();
 
                     if (pedidosItens.Any())
                     {
                         pedidosItens.ForEach(item => item.IDPedido = item.Pedido.ID);
-                        await _DataContext.BulkInsertOrUpdateAsync<PedidoItem>(pedidosItens, bulkConfig: bulkConfigItens);
+                        await _DataContext.BulkInsertOrUpdateAsync<PedidoItem>(pedidosItens, opt =>
+                        {
+                            opt.UpdateByProperties = new List<string>() { "cdempresa", "cdfilial", "nummovimento", "seq" };
+                            opt.PropertiesToIncludeOnUpdate = new List<string> { "" };
+                        });
                     }
 
                     if (transportadoras.Any())
@@ -146,43 +143,73 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 
         public async Task<List<PedidoMercoCampDTO>> ListarPedidosNaoEnviadosMercoCamp()
         {
-            var pedidos = await _DataContext.Pedido
-                                     .Where(t => !_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento))
-                                     .ToListAsync();
-
-            List<PedidoMercoCampDTO> pedidosMercoCampDTO = new List<PedidoMercoCampDTO>();
-            foreach (var pedido in pedidos)
+            try
             {
-                //????? Confirmar onde recuperar os campos de transportadora, cliente e etcc...
-                //Estudar melhor a tabela de pedido.
+                var pedidos = await _DataContext.Pedido
+                                    .Include(t => t.PedidoItem)
+                                    .Where(t => !_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento))
+                                    .ToListAsync();
 
-                var pedidoMercoCampDTO = new PedidoMercoCampDTO
+                List<PedidoMercoCampDTO> pedidosMercoCampDTO = new List<PedidoMercoCampDTO>();
+                foreach (var pedido in pedidos)
                 {
-                    ID = pedido.ID,
-                    DataInclusaoERP = pedido.dtinicio.GetValueOrDefault(DateTime.Now),
-                    ValorTotalPedido = pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
-                    NumeroPedidoCliente = pedido.nummovimento.ToString()
-                };
+                    var empresa = await _DataContext.Empresa.FirstOrDefaultAsync(x => x.CdCliente == pedido.cdcliente);
+                    var transportadora = await _DataContext.Transportadora.FirstOrDefaultAsync(x => x.CdTransportadora == pedido.cdtransportadora);
+                    var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.cdvendedor);
 
-                foreach (var itemPedido in pedido.PedidoItem)
-                {
-                    pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO
+                    string cnpjEmitente = RetornarCNPJPorFilial(pedido.cdfilial);
+                    var pedidoMercoCampDTO = new PedidoMercoCampDTO
                     {
-                        CodigoProduto = itemPedido.cdproduto,
-                        Quantidade = (int)itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero),
-                        Sequencia = itemPedido.seq
-                    });
+                        ID = pedido.ID,
+                        DataInclusaoERP = pedido.dtinicio.GetValueOrDefault(DateTime.Now),
+                        ValorTotalPedido = pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
+                        NumeroPedidoCliente = pedido.nummovimento.ToString(),
+                        BairroDestinatario = empresa?.Bairro,
+                        CepDestinatario = empresa?.Cep,
+                        CNPJDestinatario = empresa?.InscriFed,
+                        CNPJEmitente = cnpjEmitente,
+                        CNPJTransportadora = transportadora?.Inscrifed,
+                        CodigoVendedor = vendedor?.CdVendedor,
+                        NomeVendedor = vendedor?.Apelido,
+                        ComplementoDestinatario = empresa?.Complemento,
+                        DataLiberacaoERP = DateTime.Now,
+                        DataPrevisaoEntradaSite = DateTime.Now,
+                        DDDRastro = empresa?.DDD,
+                        EmailRastro = empresa?.Email,
+                        LogradouroDestinatario = empresa?.Endereco,
+                        MunicipioDestinatario = empresa?.Cidade,
+                        NomeDestinatario = empresa?.Fantasia,
+                        SequenciaEnvio = SEQUENCIA_ENVIO_INICIAL,
+                        TelRastro = !string.IsNullOrEmpty(empresa?.Fone1) ? empresa?.Fone1 : empresa?.Fone2,
+                        TipoFrete = TIPO_FRETE_CIF,
+                        UFDestinatario = empresa?.UF
+                    };
+
+                    foreach (var itemPedido in pedido.PedidoItem)
+                    {
+                        pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO
+                        {
+                            CodigoProduto = itemPedido.cdproduto,
+                            Quantidade = (int)itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero),
+                            Sequencia = itemPedido.seq,
+                            LoteFabricacao = string.Empty
+                        });
+                    }
+
+                    pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
                 }
 
-                pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
+                return pedidosMercoCampDTO;
             }
-
-            return pedidosMercoCampDTO;
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         #region Helpers
 
-        private async Task<SincronizacaoPedidosViewObjects> BuscarPedidosMatriz(string connectionString)
+        private async Task<SincronizacaoPedidosViewObjects> BuscarPedidos(string connectionString)
         {
             SincronizacaoPedidosViewObjects sincronizacaoPedidos = new SincronizacaoPedidosViewObjects();
             string sql = PedidoQuery.QUERY_SELECT_PEDIDOS_COMPLETO;
@@ -264,8 +291,6 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                 if (pedidosEncerrados != null && pedidosEncerrados.Any())
                 {
                     var pedidosAtualizar = pedidos.Where(t => pedidosEncerrados.Any(x => x.nummovimento == t.nummovimento)).ToList();
-
-                    //var pedidosAtualizar = pedidosEncerrados.ToList().Intersect<Pedido>(pedidos);
                     if (pedidosAtualizar.Any())
                         return pedidosAtualizar.ToList();
                 }
@@ -287,44 +312,55 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                 pedidos.AddRange(sincronizacaoPedido.Pedidos);
 
             if (sincronizacaoPedido.Empresas != null && sincronizacaoPedido.Empresas.Any())
-                empresas.AddRange(sincronizacaoPedido.Empresas);
-
-            if (sincronizacaoPedido.Transportadoras != null && sincronizacaoPedido.Transportadoras.Any())
-                transportadoras.AddRange(sincronizacaoPedido.Transportadoras);
-
-            if (sincronizacaoPedido.Vendedores != null && sincronizacaoPedido.Vendedores.Any())
-                vendedores.AddRange(sincronizacaoPedido.Vendedores);
-        }
-
-        private async Task<IEnumerable<Pedido>> SincronizarPedidosFiliais(string connectionString)
-        {
-            SincronizacaoPedidosViewObjects sincronizacaoPedidos = new SincronizacaoPedidosViewObjects();
-            string sql = PedidoQuery.QUERY_SELECT_PEDIDOS_E_ITENS;
-            IEnumerable<Pedido> pedidos = new List<Pedido>();
-
-            var pedidosTemp = new Dictionary<string, Pedido>();
-            using (IDbConnection db = new SqlConnection(connectionString))
             {
-                pedidos = await db.QueryAsync<Pedido, PedidoItem, Pedido>(sql, (pedido, item) =>
-                {
-                    Pedido pedidoTemp;
-                    string chave = string.Concat(pedido.cdempresa, pedido.cdfilial, pedido.nummovimento);
-                    if (!pedidosTemp.TryGetValue(chave, out pedidoTemp))
-                    {
-                        pedidoTemp = pedido;
-                        pedidoTemp.PedidoItem = new List<PedidoItem>();
-                        pedidosTemp.Add(chave, pedidoTemp);
-                    }
-
-                    item.Pedido = pedidoTemp;
-                    pedidoTemp.PedidoItem.Add(item);
-                    return pedidoTemp;
-                },
-                splitOn: "PedidoId, PedidoItemId");
-                pedidos = pedidos.ToList().Distinct();
+                var empresasNaoInseridas = sincronizacaoPedido.Empresas.Where(t => !(empresas.Any(x => x.CdCliente == t.CdCliente && x.EmpresaId == t.EmpresaId)));
+                if(empresasNaoInseridas != null && empresasNaoInseridas.Any())
+                    empresas.AddRange(empresasNaoInseridas);
             }
 
-            return pedidos;
+            if (sincronizacaoPedido.Transportadoras != null && sincronizacaoPedido.Transportadoras.Any())
+            {
+                var transportadorasNaoInseridas = sincronizacaoPedido.Transportadoras.Where(t => !(transportadoras.Any(x => x.CdTransportadora == t.CdTransportadora)));
+                if (transportadorasNaoInseridas != null && transportadorasNaoInseridas.Any())
+                    transportadoras.AddRange(transportadorasNaoInseridas);
+            }
+
+            if (sincronizacaoPedido.Vendedores != null && sincronizacaoPedido.Vendedores.Any())
+            {
+                var vendedoresNaoInseridos = sincronizacaoPedido.Vendedores.Where(t => !(vendedores.Any(x => x.CdVendedor == t.CdVendedor)));
+                if (vendedoresNaoInseridos != null && vendedoresNaoInseridos.Any())
+                    vendedores.AddRange(vendedoresNaoInseridos);
+            }
+        }
+
+
+        private string RetornarCNPJPorFilial(string filial)
+        {
+            filial = filial ?? string.Empty;
+
+#if DEBUG
+            filial = "HOMOLOGACAO";
+
+#endif
+
+            filial = filial.Trim().ToUpper();
+
+            switch (filial)
+            {
+                case "BA":
+                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial01").Value;
+                case "ES":
+                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial02").Value;
+                case "SP":
+                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Matriz").Value;
+                case "HOMOLOGACAO":
+                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_HOMOLOGACAO_TESTE").Value;
+                default:
+                    break;
+            }
+
+
+            return string.Empty;
         }
 
         #endregion
