@@ -24,7 +24,9 @@ namespace TecWi_Web.API
     public class Startup
     {
         const string CRON_JOB_DUAS_HORAS = "0 */2 * * *";
-        const string CRON_JOB_TRES_HORAS = "0 */3 * * *";
+        const string CRON_JOB_TRES_HORAS = "0 */3 * * *"; 
+        const string CRON_JOB_VINTE_MINUTOS = "*/20 * * * *";
+        const string CRON_JOB_UMA_HORA = "0 */1 * * *";
 
         public Startup(IConfiguration configuration)
         {
@@ -90,10 +92,10 @@ namespace TecWi_Web.API
 
             app.UseHangfireDashboard();
 
-            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), CRON_JOB_DUAS_HORAS);
-            //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), CRON_JOB_TRES_HORAS);
-            //recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), "*/2 * * * *");
-            //recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), "*/1 * * * *");
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), CRON_JOB_DUAS_HORAS);
+            recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), CRON_JOB_TRES_HORAS);
+            recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), CRON_JOB_VINTE_MINUTOS);
+            recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), CRON_JOB_UMA_HORA);
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
 
 
@@ -102,9 +104,7 @@ namespace TecWi_Web.API
             //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), "*/4 * * * *");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), "*/1 * * * *");
-            
-            
-            recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
+            //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
         }
     }
 }
