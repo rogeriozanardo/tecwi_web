@@ -6,6 +6,10 @@ namespace TecWi_Web.Domain.Entities
 {
     public class PedidoMercoCamp
     {
+        public PedidoMercoCamp()
+        {
+            PedidoItens = new List<PedidoItemMercoCamp>();
+        }
         public int IdPedidoMercoCamp { get; set; }
         public DateTime DataEnvio { get; set; }
         public int NumPedido { get; set; }

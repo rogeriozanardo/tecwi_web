@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -38,25 +40,26 @@ namespace TecWi_Web.API.HangFireJobs
         {
             var pedidos = await _PedidoSincronizacaoService.ListarPedidosSincronizarMercoCamp();
             string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
-          
-            foreach (var pedido in pedidos)
+
+            foreach(var pedido in pedidos)
             {
-                string jsonPedido = PopularJson(pedido);
-                var request = new HttpRequestMessage(HttpMethod.Post, urlBaseMercoCamp);
-
-                using (var content = new StringContent(jsonPedido, System.Text.Encoding.UTF8, "application/json"))
+                string jsonPedido = await PopularJson(pedido);
+                using (var request = new HttpRequestMessage(HttpMethod.Post, urlBaseMercoCamp))
                 {
-                    request.Content = content;
-                    var client = _ClientFactory.CreateClient();
-                    var response = await client.SendAsync(request);
-                    response.EnsureSuccessStatusCode();
-                    string responseMessage = await response.Content.ReadAsStringAsync();
+                    using (var content = new StringContent(jsonPedido, System.Text.Encoding.UTF8, "application/json"))
+                    {
+                        request.Content = content;
+                        var client = _ClientFactory.CreateClient();
+                        var response = await client.SendAsync(request);
+                        response.EnsureSuccessStatusCode();
+                        string responseMessage = await response.Content.ReadAsStringAsync();
 
-                    if (responseMessage.Contains("CORPEM_WS_ERRO"))
-                        throw new Exception(responseMessage);
+                        if (responseMessage.Contains("CORPEM_WS_ERRO"))
+                            throw new Exception(responseMessage);
+                    }
                 }
 
-                var pedidoMercoCamp = PopularPedidoMercoCamp(pedido);
+                var pedidoMercoCamp = await PopularPedidoMercoCamp(pedido);
                 await _PedidoMercoCampService.Inserir(pedidoMercoCamp);
             }
         }
@@ -66,12 +69,7 @@ namespace TecWi_Web.API.HangFireJobs
             await _PedidoSincronizacaoService.AlterarStatusPedidoFaturadoEncerrado();
         }
 
-        private string BuscarCNPJ(string cnpj)
-        {
-            return (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string),cnpj); 
-        }
-
-        private string PopularJson(PedidoMercoCampDTO pedido)
+        private async Task<string> PopularJson(PedidoMercoCampDTO pedido)
         {
             var jsonPedido = new
             {
@@ -83,7 +81,7 @@ namespace TecWi_Web.API.HangFireJobs
                     OBSROM = pedido.ObservacaoRomaneio ?? string.Empty,
                     NUMPEDCLI = !string.IsNullOrEmpty(pedido.NumeroPedidoCliente) ? pedido.NumeroPedidoCliente.Trim() : string.Empty,
                     NUMPEDRCA = !string.IsNullOrEmpty(pedido.NumeroPedidoRCA) ? pedido.NumeroPedidoRCA.Trim() : string.Empty,
-                    VLTOTPED = pedido.ValorTotalPedido,
+                    VLTOTPED = pedido.ValorTotalPedido.ToString(),
                     CGCDEST = pedido.CNPJDestinatario ?? string.Empty,
                     NOMEDEST = !string.IsNullOrEmpty(pedido.NomeDestinatario) ? pedido.NomeDestinatario.Trim() : string.Empty,
                     CEPDEST = !string.IsNullOrEmpty(pedido.CepDestinatario) ? pedido.CepDestinatario.Trim() : string.Empty,
@@ -112,17 +110,17 @@ namespace TecWi_Web.API.HangFireJobs
             };
 
             var optionSerialize = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            return JsonSerializer.Serialize(jsonPedido, optionSerialize);
+            return await Task.FromResult(JsonSerializer.Serialize(jsonPedido, optionSerialize));
         }
 
-        private PedidoMercoCamp PopularPedidoMercoCamp(PedidoMercoCampDTO pedido)
+        private async Task<PedidoMercoCamp> PopularPedidoMercoCamp(PedidoMercoCampDTO pedido)
         {
             var pedidoMercoCamp = new PedidoMercoCamp()
             {
                 DataEnvio = DateTime.Now,
                 NumPedido = Convert.ToInt32(pedido.NumeroPedidoCliente),
-                Peso = decimal.Zero,
-                Volume = 0,
+                Peso = pedido.Itens.Sum(x => x.Peso.GetValueOrDefault(decimal.Zero)),
+                Volume = pedido.Itens.GroupBy(t => t.CodigoProduto).Select(t => t).Distinct().Count(),
                 SeqTransmissao = pedido.SequenciaEnvio,
                 Status = StatusPedidoMercoCamp.Transmitido
             };
@@ -135,13 +133,13 @@ namespace TecWi_Web.API.HangFireJobs
                     NumPedido = Convert.ToInt32(pedido.NumeroPedidoCliente),
                     PedidoMercoCampId = pedidoMercoCamp.IdPedidoMercoCamp,
                     PedidoMercoCamp = pedidoMercoCamp,
-                    Qtd = item.Quantidade,
+                    Qtd = string.IsNullOrEmpty(item.Quantidade) ? decimal.Zero : Convert.ToDecimal(item.Quantidade),
                     QtdSeparado = 0,
-                    SeqTransmissao = item.Sequencia
+                    SeqTransmissao = string.IsNullOrEmpty(item.Sequencia) ? Convert.ToInt16(item.Sequencia) : 0
                 });
             }
 
-            return pedidoMercoCamp;
+            return await Task.FromResult(pedidoMercoCamp);
         }
     }
 }
