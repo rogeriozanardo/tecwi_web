@@ -69,6 +69,31 @@ namespace TecWi_Web.API.HangFireJobs
             await _PedidoSincronizacaoService.AlterarStatusPedidoFaturadoEncerrado();
         }
 
+        public async Task ConsultarConfirmacaoSeparacaoPedidoMercoCamp()
+        {
+            var pedidos = await _PedidoMercoCampService.ListarPedidosSincronizarTransmitidosMercoCamp();
+            string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
+
+            foreach (var pedido in pedidos)
+            {
+                string jsonConfirmacaoPedido = await PopularJsonConfirmacaoPedido(pedido);
+                using (var request = new HttpRequestMessage(HttpMethod.Post, urlBaseMercoCamp))
+                {
+                    using (var content = new StringContent(jsonConfirmacaoPedido, System.Text.Encoding.UTF8, "application/json"))
+                    {
+                        request.Content = content;
+                        var client = _ClientFactory.CreateClient();
+                        var response = await client.SendAsync(request);
+                        response.EnsureSuccessStatusCode();
+                        string responseMessage = await response.Content.ReadAsStringAsync();
+
+                        if (responseMessage.Contains("CORPEM_WS_ERRO"))
+                            throw new Exception(responseMessage);
+                    }
+                }
+            }
+        }
+
         private async Task<string> PopularJson(PedidoMercoCampDTO pedido)
         {
             var jsonPedido = new
@@ -113,6 +138,30 @@ namespace TecWi_Web.API.HangFireJobs
             return await Task.FromResult(JsonSerializer.Serialize(jsonPedido, optionSerialize));
         }
 
+        private async Task<string> PopularJsonConfirmacaoPedido(ConfirmacaoPedidoDTO pedido)
+        {
+            var jsonPedido = new
+            {
+                CORPEM_WMS_CONF_SEP = new
+                {
+                    CGCEMINF = pedido.CNPJEmitente ?? string.Empty,
+                    CGCCLIWMS = pedido.CNPJEmitente ?? string.Empty,
+                    NUMPEDCLI = !string.IsNullOrEmpty(pedido.NumeroPedidoCliente) ? pedido.NumeroPedidoCliente.Trim() : string.Empty,
+                    ESPECIE = string.Empty,
+                    PESOVOL = string.Empty,
+                    M3VOL = string.Empty,
+                    QTVOL = pedido.Itens.Count().ToString(),
+                    CGCTRANSP = string.Empty,
+                    DTFIMCHECK = pedido.Sincronizacao.ToString("dd/MM/yyyy"),
+                    URLRAST = string.Empty,
+                    ITENS = pedido.Itens
+                },
+            };
+
+            var optionSerialize = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            return await Task.FromResult(JsonSerializer.Serialize(jsonPedido, optionSerialize));
+        }
+
         private async Task<PedidoMercoCamp> PopularPedidoMercoCamp(PedidoMercoCampDTO pedido)
         {
             var pedidoMercoCamp = new PedidoMercoCamp()
@@ -122,7 +171,8 @@ namespace TecWi_Web.API.HangFireJobs
                 Peso = pedido.Itens.Sum(x => x.Peso.GetValueOrDefault(decimal.Zero)),
                 Volume = pedido.Itens.GroupBy(t => t.CodigoProduto).Select(t => t).Distinct().Count(),
                 SeqTransmissao = pedido.SequenciaEnvio,
-                Status = StatusPedidoMercoCamp.Transmitido
+                Status = StatusPedidoMercoCamp.Transmitido,
+                CdFilial = pedido.CdFilial
             };
 
             foreach (var item in pedido.Itens)
@@ -135,7 +185,7 @@ namespace TecWi_Web.API.HangFireJobs
                     PedidoMercoCamp = pedidoMercoCamp,
                     Qtd = string.IsNullOrEmpty(item.Quantidade) ? decimal.Zero : Convert.ToDecimal(item.Quantidade),
                     QtdSeparado = 0,
-                    SeqTransmissao = string.IsNullOrEmpty(item.Sequencia) ? Convert.ToInt16(item.Sequencia) : 0
+                    SeqTransmissao = string.IsNullOrEmpty(item.Sequencia) ? 0 : Convert.ToInt32(item.Sequencia)
                 });
             }
 

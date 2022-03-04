@@ -181,10 +181,10 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                     SequenciaEnvio = SEQUENCIA_ENVIO_INICIAL,
                     TelRastro = !string.IsNullOrEmpty(empresa?.Fone1) ? empresa?.Fone1 : empresa?.Fone2,
                     TipoFrete = TIPO_FRETE_CIF,
-                    UFDestinatario = empresa?.UF
+                    UFDestinatario = empresa?.UF,
+                    CdFilial = pedido.cdfilial
                 };
 
-                int sequencia = 1;
                 foreach (var itemPedido in pedido.PedidoItem)
                 {
                     var quantidade = itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero).ToString();
@@ -192,11 +192,9 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                     {
                         CodigoProduto = itemPedido.cdproduto,
                         Quantidade = quantidade.Length > 9 ? quantidade.Substring(0, 9) : quantidade,
-                        Sequencia = sequencia.ToString(),
+                        Sequencia = itemPedido.seq.ToString(),
                         LoteFabricacao = string.Empty
                     });
-
-                    sequencia++;
                 }
 
                 pedidosMercoCampDTO.Add(pedidoMercoCampDTO);

@@ -10,10 +10,12 @@ namespace TecWi_Web.Shared.DTOs
         [JsonPropertyName("CODPROD")]
         public string CodigoProduto { get; set; }
 
-        [JsonPropertyName("QTDPROD")]
+        [JsonPropertyName("QTPROD")]
         public string Quantidade { get; set; }
+        [JsonPropertyName("QTCONF")]
+        public string QuantidadeConferida { get; set; }
 
-        [JsonPropertyName("LOTFAB")]
+        [JsonIgnore()]
         public string LoteFabricacao { get; set; }
         [JsonIgnore()]
         public decimal? Peso { get; set; }

@@ -17,6 +17,7 @@ namespace TecWi_Web.Domain.Entities
         public int Volume { get; set; }
         public decimal Peso { get; set; }
         public int SeqTransmissao { get; set; }
+        public string CdFilial { get; set; }
         public List<PedidoItemMercoCamp> PedidoItens { get; set; }
     }
 }
