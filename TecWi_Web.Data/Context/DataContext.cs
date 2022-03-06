@@ -43,5 +43,7 @@ namespace TecWi_Web.Data.Context
         public DbSet<Transportadora> Transportadora { get; set; }
         public DbSet<Empresa> Empresa { get; set; }
         public DbSet<Vendedor> Vendedor { get; set; }
+        public DbSet<MovimentoFiscal> MovimentoFiscal { get; set; }
+        public DbSet<MovimentoFiscalItem> MovimentoFiscalItem { get; set; }
     }
 }

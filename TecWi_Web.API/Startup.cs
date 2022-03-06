@@ -105,11 +105,17 @@ namespace TecWi_Web.API
             //recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), "*/2 * * * *");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), "*/4 * * * *");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), "*/1 * * * *");
-            recurringJobManager.RemoveIfExists("Enviar_Pedidos_Mercocamp");
+            //recurringJobManager.RemoveIfExists("Enviar_Pedidos_Mercocamp");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
 
-            recurringJobManager.RemoveIfExists("Consultar_Confirmacao_Pedidos_Mercocamp");
-            recurringJobManager.AddOrUpdate<PedidoJobs>("Consultar_Confirmacao_Pedidos_Mercocamp", x => x.ConsultarConfirmacaoSeparacaoPedidoMercoCamp(), "*/2 * * * *");
+            // recurringJobManager.RemoveIfExists("Consultar_Confirmacao_Pedidos_Mercocamp");
+            // recurringJobManager.AddOrUpdate<PedidoJobs>("Consultar_Confirmacao_Pedidos_Mercocamp", x => x.ConsultarConfirmacaoSeparacaoPedidoMercoCamp(), "*/2 * * * *");
+
+            // recurringJobManager.RemoveIfExists("Sincronizar_Notas_Fiscais");
+            // recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Sincronizar_Notas_Fiscais", x => x.Sincronizar(), "*/2 * * * *");
+
+            recurringJobManager.RemoveIfExists("Enviar_Notas_Fiscais");
+            recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Enviar_Notas_Fiscais", x => x.EnviarNotas(), "*/2 * * * *");
         }
     }
 }

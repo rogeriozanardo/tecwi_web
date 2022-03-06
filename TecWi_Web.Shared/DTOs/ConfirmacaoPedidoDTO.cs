@@ -8,14 +8,16 @@ namespace TecWi_Web.Shared.DTOs
     {
         public ConfirmacaoPedidoDTO()
         {
-           
+            Itens = new List<ConfirmacaoPedidoItemDTO>();
         }
 
+        [JsonIgnore()]
+        public int ID { get; set; }
         public string NumeroPedidoCliente { get; set; }
         public string CNPJEmitente { get; set; }
         public DateTime Sincronizacao { get; set; }
 
         [JsonPropertyName("ITENS")]
-        public List<PedidoItemMercoCampDTO> Itens { get; set; }
+        public List<ConfirmacaoPedidoItemDTO> Itens { get; set; }
     }
 }

@@ -14,27 +14,26 @@ using TecWi_Web.Shared.DTOs;
 using System;
 using Microsoft.EntityFrameworkCore;
 using TecWi_Web.Data.ValueObjects;
+using TecWi_Web.Data.Repositories.Utils;
 
 namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 {
-    public class PedidoSincronizacaoRepository : IPedidoSincronizacaoRepository
+    public class PedidoSincronizacaoRepository : HelperRepository, IPedidoSincronizacaoRepository
     {
         private readonly DataContext _DataContext;
-        private readonly IConfiguration _Configuration;
         const string STATUS_FATURADO = "F";
         const string STATUS_ENCERRADO = "E";
         const string CODIGO_FILIAL_01_BAHIA = "BA";
         const string CODIGO_FILIAL_02_ESPIRITO_SANTO = "ES";
         const string CODIGO_MATRIZ = "SP";
         const string TIPO_FRETE_CIF = "C";
-        const string TIPO_FRETE_FOB = "F";
         const int SEQUENCIA_ENVIO_INICIAL = 1;
 
         public PedidoSincronizacaoRepository(DataContext dataContext,
                                              IConfiguration configuration)
+            : base(configuration)
         {
             _DataContext = dataContext;
-            _Configuration = configuration;
         }
 
         public async Task Sincronizar()
@@ -254,20 +253,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
             return sincronizacaoPedidos;
         }
 
-        private string BuscarConnectionStringFilial01()
-        {
-            return _Configuration.GetConnectionString("DbTecwiFilial01");
-        }
-
-        private string BuscarConnectionStringFilial02()
-        {
-            return _Configuration.GetConnectionString("DbTecwiFilial02");
-        }
-
-        private string BuscarConnectionStringMatriz()
-        {
-            return _Configuration.GetConnectionString("DbTecWiMatriz");
-        }
+        
 
         private async Task<List<Pedido>> BuscarPedidosEncerradosPorFilial(string connectionString, string filial, List<Pedido> pedidos)
         {
@@ -327,36 +313,6 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                 if (vendedoresNaoInseridos != null && vendedoresNaoInseridos.Any())
                     vendedores.AddRange(vendedoresNaoInseridos);
             }
-        }
-
-
-        private string RetornarCNPJPorFilial(string filial)
-        {
-            filial = filial ?? string.Empty;
-
-#if DEBUG
-            filial = "HOMOLOGACAO";
-
-#endif
-
-            filial = filial.Trim().ToUpper();
-
-            switch (filial)
-            {
-                case "BA":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial01").Value;
-                case "ES":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial02").Value;
-                case "SP":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Matriz").Value;
-                case "HOMOLOGACAO":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_HOMOLOGACAO_TESTE").Value;
-                default:
-                    break;
-            }
-
-
-            return string.Empty;
         }
 
         #endregion

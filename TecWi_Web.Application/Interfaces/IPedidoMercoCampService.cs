@@ -10,5 +10,7 @@ namespace TecWi_Web.Application.Interfaces
         Task Inserir(PedidoMercoCamp pedidoMercoCamp);
 
         Task<List<ConfirmacaoPedidoDTO>> ListarPedidosSincronizarTransmitidosMercoCamp();
+
+        Task AtualizarStatusPedidosMercoCamp(List<ConfirmacaoPedidoDTO> pedidosDTO);
     }
 }

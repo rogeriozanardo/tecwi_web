@@ -10,6 +10,7 @@ using TecWi_Web.Application.Interfaces.JobsSincronizacao;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace TecWi_Web.API.HangFireJobs
 {
@@ -19,16 +20,19 @@ namespace TecWi_Web.API.HangFireJobs
         private readonly IPedidoMercoCampService _PedidoMercoCampService;
         private readonly IHttpClientFactory _ClientFactory;
         private readonly IConfiguration _Configuration;
+        private readonly ILogger<PedidoJobs> _Logger;
 
         public PedidoJobs(IPedidoSincronizacaoService pedidoSincronizacaoService,
                           IPedidoMercoCampService pedidoMercoCampService,
                           IHttpClientFactory clientFactory,
-                          IConfiguration configuration)
+                          IConfiguration configuration,
+                          ILogger<PedidoJobs> logger)
         {
             _PedidoSincronizacaoService = pedidoSincronizacaoService;
             _ClientFactory = clientFactory;
             _Configuration = configuration;
             _PedidoMercoCampService = pedidoMercoCampService;
+            _Logger = logger;
         }
 
         public async Task SincronizarPedidosAsync()
@@ -73,6 +77,7 @@ namespace TecWi_Web.API.HangFireJobs
         {
             var pedidos = await _PedidoMercoCampService.ListarPedidosSincronizarTransmitidosMercoCamp();
             string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
+            List<ConfirmacaoPedidoDTO> confirmacaoPedidosDTO = new List<ConfirmacaoPedidoDTO>();
 
             foreach (var pedido in pedidos)
             {
@@ -88,11 +93,17 @@ namespace TecWi_Web.API.HangFireJobs
                         string responseMessage = await response.Content.ReadAsStringAsync();
 
                         if (responseMessage.Contains("CORPEM_WS_ERRO"))
-                            throw new Exception(responseMessage);
+                            _Logger.LogError(responseMessage, $"Pedido: {pedido.NumeroPedidoCliente}, ID: {pedido.ID}");
+                        else 
+                            confirmacaoPedidosDTO.Add(pedido);
                     }
                 }
             }
+
+            await _PedidoMercoCampService.AtualizarStatusPedidosMercoCamp(confirmacaoPedidosDTO);
         }
+
+
 
         private async Task<string> PopularJson(PedidoMercoCampDTO pedido)
         {
@@ -147,9 +158,9 @@ namespace TecWi_Web.API.HangFireJobs
                     CGCEMINF = pedido.CNPJEmitente ?? string.Empty,
                     CGCCLIWMS = pedido.CNPJEmitente ?? string.Empty,
                     NUMPEDCLI = !string.IsNullOrEmpty(pedido.NumeroPedidoCliente) ? pedido.NumeroPedidoCliente.Trim() : string.Empty,
-                    ESPECIE = string.Empty,
-                    PESOVOL = string.Empty,
-                    M3VOL = string.Empty,
+                    ESPECIE = "CX",
+                    PESOVOL = "0",
+                    M3VOL = "0",
                     QTVOL = pedido.Itens.Count().ToString(),
                     CGCTRANSP = string.Empty,
                     DTFIMCHECK = pedido.Sincronizacao.ToString("dd/MM/yyyy"),

@@ -5,22 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using TecWi_Web.Data.Context;
 using TecWi_Web.Data.Interfaces;
+using TecWi_Web.Data.Repositories.Utils;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
 using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.Data.Repositories
 {
-    public class PedidoMercoCampRepository : IPedidoMercoCampRepository
+    public class PedidoMercoCampRepository : HelperRepository, IPedidoMercoCampRepository
     {
         private readonly DataContext _DataContext;
-        private readonly IConfiguration _Configuration;
 
         public PedidoMercoCampRepository(DataContext dataContext,
                                          IConfiguration configuration)
+            : base(configuration)
         {
             _DataContext = dataContext;
-            _Configuration = configuration;
         }
 
         public async Task Inserir(PedidoMercoCamp pedidoMercoCamp)
@@ -39,20 +39,20 @@ namespace TecWi_Web.Data.Repositories
                 string cnpjEmitente = RetornarCNPJPorFilial(pedidoMercoCamp.CdFilial);
                 ConfirmacaoPedidoDTO pedidoMercoCampDTO = new ConfirmacaoPedidoDTO
                 { 
+                    ID = pedidoMercoCamp.IdPedidoMercoCamp,
                     NumeroPedidoCliente = pedidoMercoCamp.NumPedido.ToString(),
                     CNPJEmitente = cnpjEmitente,
                     Sincronizacao = pedidoMercoCamp.DataEnvio
                 };
 
-                pedidoMercoCampDTO.Itens = new List<PedidoItemMercoCampDTO>();
+                pedidoMercoCampDTO.Itens = new List<ConfirmacaoPedidoItemDTO>();
                 foreach (var item in pedidoMercoCamp.PedidoItens)
                 {
-                    pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO 
+                    pedidoMercoCampDTO.Itens.Add(new ConfirmacaoPedidoItemDTO
                     { 
                         CodigoProduto = item.CdProduto,
                         Quantidade = item.Qtd.ToString(),
                         Sequencia = item.SeqTransmissao.ToString(),
-                        LoteFabricacao = string.Empty,
                         QuantidadeConferida = item.Qtd.ToString()
                     });
                 }
@@ -63,33 +63,25 @@ namespace TecWi_Web.Data.Repositories
             return pedidosMercoCampDTO;
         }
 
-
-        private string RetornarCNPJPorFilial(string filial)
+        public async Task AtualizarStatusPedidosMercoCamp(List<ConfirmacaoPedidoDTO> pedidosDTO)
         {
-            filial = filial ?? string.Empty;
+            pedidosDTO = pedidosDTO ?? new List<ConfirmacaoPedidoDTO>();
 
-#if DEBUG
-            filial = "HOMOLOGACAO";
-#endif
+            if (!pedidosDTO.Any())
+                return;
 
-            filial = filial.Trim().ToUpper();
-
-            switch (filial)
+            List<PedidoMercoCamp> pedidosMercoCamp = new List<PedidoMercoCamp>();
+            foreach (var pedido in pedidosDTO)
             {
-                case "BA":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial01").Value;
-                case "ES":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial02").Value;
-                case "SP":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Matriz").Value;
-                case "HOMOLOGACAO":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_HOMOLOGACAO_TESTE").Value;
-                default:
-                    break;
+                pedidosMercoCamp.Add(new PedidoMercoCamp
+                { 
+                    IdPedidoMercoCamp = pedido.ID,
+                    Status = StatusPedidoMercoCamp.Separado
+                });
             }
 
-
-            return string.Empty;
+             _DataContext.PedidoMercoCamp.UpdateRange(pedidosMercoCamp);
+            await _DataContext.SaveChangesAsync();
         }
     }
 }
