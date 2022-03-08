@@ -23,6 +23,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
     {
         private readonly IDapper _Dapper;
         private readonly DataContext _DataContext;
+        private const string FILIAL_ESPIRITO_SANTO = "ES";
 
         public MovimentoFiscalRepository(IDapper dapper,
                                          DataContext dataContext,
@@ -84,29 +85,18 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
         public async Task Sincronizar()
         {
             var pedidos = await _DataContext.PedidoMercoCamp.Where(t => t.Status == StatusPedidoMercoCamp.Separado &&
+                                                                        t.CdFilial == FILIAL_ESPIRITO_SANTO &&
                                                                         !(_DataContext.MovimentoFiscal.Any(x => x.NumMovimento == t.NumPedido)))
                                                             .ToListAsync();
             if (pedidos.Count() == 0)
                 return;
 
-            var connectionStringFilial01 = BuscarConnectionStringFilial01();
             var connectionStringFilial02 = BuscarConnectionStringFilial02();
-            var connectionStringMatriz = BuscarConnectionStringMatriz();
-
-            //string codigoPedidos = string.Join(",", pedidos.Select(x => x.NumPedido));
             int[] codigoPedidos = pedidos.Select(x => x.NumPedido).ToArray();
-            var movimentosFiscaisFilial01 = await BuscarMovimentosFiscaisPorEmpresa(connectionStringFilial01, codigoPedidos);
             var movimentosFiscaisFilial02 = await BuscarMovimentosFiscaisPorEmpresa(connectionStringFilial02, codigoPedidos);
-            var movimentosFiscaisMatriz = await BuscarMovimentosFiscaisPorEmpresa(connectionStringMatriz, codigoPedidos);
-
-            if (movimentosFiscaisFilial01.Any())
-                await InserirLoteMovimentosFiscais(movimentosFiscaisFilial01.ToList());
 
             if (movimentosFiscaisFilial02.Any())
                 await InserirLoteMovimentosFiscais(movimentosFiscaisFilial02.ToList());
-
-            if (movimentosFiscaisMatriz.Any())
-                await InserirLoteMovimentosFiscais(movimentosFiscaisMatriz.ToList());
         }
 
         public async Task Atualizar(List<MovimentoFiscal> movimentosFiscais)

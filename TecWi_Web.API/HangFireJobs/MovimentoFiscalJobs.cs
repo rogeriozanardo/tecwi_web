@@ -37,9 +37,13 @@ namespace TecWi_Web.API.HangFireJobs
 
         public async Task EnviarNotas()
         {
-            var movimentosFiscais = await _MovimentoFiscalService.ListarMovimentosFiscaisPendenteTransmissaoMercoCamp();
-            string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
+            var movimentosFiscais = await _MovimentoFiscalService.ListarMovimentosFiscaisPendenteTransmissaoMercoCamp() 
+                                          ?? new List<MovimentoFiscalDTO>();
 
+            if (movimentosFiscais.Any())
+                return;
+
+            string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
             List<MovimentoFiscal> movimentoFiscalTransmitido = new List<MovimentoFiscal>();
             foreach (var notaFiscal in movimentosFiscais)
             {
