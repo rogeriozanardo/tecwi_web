@@ -21,12 +21,7 @@ namespace TecWi_Web.Application.Services
            await _PedidoMercoCampRepository.Inserir(pedidoMercoCamp);
         }
 
-        public async Task<List<ConfirmacaoPedidoDTO>> ListarPedidosSincronizarTransmitidosMercoCamp()
-        {
-            return await _PedidoMercoCampRepository.ListarPedidosSincronizarTransmitidosMercoCamp();
-        }
-
-        public async Task AtualizarStatusPedidosMercoCamp(List<ConfirmacaoPedidoDTO> pedidosDTO)
+        public async Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidosDTO)
         {
             await _PedidoMercoCampRepository.AtualizarStatusPedidosMercoCamp(pedidosDTO);
         }

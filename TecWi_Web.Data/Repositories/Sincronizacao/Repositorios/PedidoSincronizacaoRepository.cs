@@ -145,6 +145,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
             var pedidos = await _DataContext.Pedido
                                 .Include(t => t.PedidoItem)
                                 .Where(t => t.stpendencia == STATUS_FATURADO && 
+                                            t.cdfilial.Trim() == CODIGO_FILIAL_02_ESPIRITO_SANTO &&
                                             !(_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento)))
                                 .ToListAsync();
 

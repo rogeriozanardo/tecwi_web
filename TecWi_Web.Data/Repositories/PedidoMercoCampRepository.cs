@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using TecWi_Web.Data.Interfaces;
 using TecWi_Web.Data.Repositories.Utils;
 using TecWi_Web.Domain.Entities;
 using TecWi_Web.Domain.Enums;
+using TecWi_Web.Domain.Exceptions;
 using TecWi_Web.Shared.DTOs;
 
 namespace TecWi_Web.Data.Repositories
@@ -29,58 +31,29 @@ namespace TecWi_Web.Data.Repositories
            await _DataContext.SaveChangesAsync();
         }
 
-        public async Task<List<ConfirmacaoPedidoDTO>> ListarPedidosSincronizarTransmitidosMercoCamp()
+        public async Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidoDTO)
         {
-            List<ConfirmacaoPedidoDTO> pedidosMercoCampDTO = new List<ConfirmacaoPedidoDTO>();
-            var pedidosTransmitidos = await _DataContext.PedidoMercoCamp.Include(x => x.PedidoItens).Where(x => x.Status == StatusPedidoMercoCamp.Transmitido).ToListAsync();
-
-            foreach (var pedidoMercoCamp in pedidosTransmitidos)
-            {
-                string cnpjEmitente = RetornarCNPJPorFilial(pedidoMercoCamp.CdFilial);
-                ConfirmacaoPedidoDTO pedidoMercoCampDTO = new ConfirmacaoPedidoDTO
-                { 
-                    ID = pedidoMercoCamp.IdPedidoMercoCamp,
-                    NumeroPedidoCliente = pedidoMercoCamp.NumPedido.ToString(),
-                    CNPJEmitente = cnpjEmitente,
-                    Sincronizacao = pedidoMercoCamp.DataEnvio
-                };
-
-                pedidoMercoCampDTO.Itens = new List<ConfirmacaoPedidoItemDTO>();
-                foreach (var item in pedidoMercoCamp.PedidoItens)
-                {
-                    pedidoMercoCampDTO.Itens.Add(new ConfirmacaoPedidoItemDTO
-                    { 
-                        CodigoProduto = item.CdProduto,
-                        Quantidade = item.Qtd.ToString(),
-                        Sequencia = item.SeqTransmissao.ToString(),
-                        QuantidadeConferida = item.Qtd.ToString()
-                    });
-                }
-                
-                pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
-            }
-
-            return pedidosMercoCampDTO;
-        }
-
-        public async Task AtualizarStatusPedidosMercoCamp(List<ConfirmacaoPedidoDTO> pedidosDTO)
-        {
-            pedidosDTO = pedidosDTO ?? new List<ConfirmacaoPedidoDTO>();
-
-            if (!pedidosDTO.Any())
+            if (pedidoDTO == null || string.IsNullOrEmpty(pedidoDTO.NUMPEDCLI))
                 return;
 
-            List<PedidoMercoCamp> pedidosMercoCamp = new List<PedidoMercoCamp>();
-            foreach (var pedido in pedidosDTO)
+            var pedidoMercoCamp = await _DataContext.PedidoMercoCamp
+                                                    .Include(x => x.PedidoItens)
+                                                    .FirstOrDefaultAsync(t => t.CdFilial == "ES" && t.NumPedido == Convert.ToInt32(pedidoDTO.NUMPEDCLI));
+
+            if (pedidoMercoCamp == null)
+                throw new PedidoNaoEncontradoException($"Pedido: {pedidoDTO.NUMPEDCLI} não encontrado no banco de dados para a filial ES");
+
+            foreach (var item in pedidoMercoCamp.PedidoItens)
             {
-                pedidosMercoCamp.Add(new PedidoMercoCamp
-                { 
-                    IdPedidoMercoCamp = pedido.ID,
-                    Status = StatusPedidoMercoCamp.Separado
-                });
+               var itemPedido = pedidoMercoCamp.PedidoItens.FirstOrDefault(t => t.CdProduto == item.CdProduto && t.SeqTransmissao == item.SeqTransmissao);
+                if (itemPedido == null)
+                    continue;
+
+                itemPedido.QtdSeparado = item.QtdSeparado;
             }
 
-             _DataContext.PedidoMercoCamp.UpdateRange(pedidosMercoCamp);
+            bool itensEmAberto = pedidoMercoCamp.PedidoItens.Any(x => x.QtdSeparado > 0 && x.Qtd != x.QtdSeparado);
+            pedidoMercoCamp.Status = itensEmAberto ? StatusPedidoMercoCamp.SeparadoParcial : StatusPedidoMercoCamp.Separado;
             await _DataContext.SaveChangesAsync();
         }
     }

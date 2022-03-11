@@ -85,7 +85,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
         public async Task Sincronizar()
         {
             var pedidos = await _DataContext.PedidoMercoCamp.Where(t => t.Status == StatusPedidoMercoCamp.Separado &&
-                                                                        t.CdFilial == FILIAL_ESPIRITO_SANTO &&
+                                                                        t.CdFilial.Trim() == FILIAL_ESPIRITO_SANTO &&
                                                                         !(_DataContext.MovimentoFiscal.Any(x => x.NumMovimento == t.NumPedido)))
                                                             .ToListAsync();
             if (pedidos.Count() == 0)

@@ -97,7 +97,7 @@ namespace TecWi_Web.API
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), CRON_JOB_TRINTA_MINUTOS);
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), CRON_JOB_QUARENTA_MINUTOS);
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), CRON_JOB_DUAS_HORAS);
-            //recurringJobManager.AddOrUpdate<PedidoJobs>("Consultar_Confirmacao_Pedidos_Mercocamp", x => x.ConsultarConfirmacaoSeparacaoPedidoMercoCamp(), CRON_JOB_UMA_HORA);
+            //recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Enviar_Notas_Fiscais", x => x.EnviarNotas(), "*/2 * * * *");
 
             //#### Usado para teste de 1 e 2 minutos o job do hang fire
             //recurringJobManager.AddOrUpdate<ProdutoJobs>("Sincronizar_Produtos_DataBase", x => x.SincronizarProdutosAsync(), "*/1 * * * *");
@@ -108,14 +108,11 @@ namespace TecWi_Web.API
             //recurringJobManager.RemoveIfExists("Enviar_Pedidos_Mercocamp");
             //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
 
-            // recurringJobManager.RemoveIfExists("Consultar_Confirmacao_Pedidos_Mercocamp");
-            // recurringJobManager.AddOrUpdate<PedidoJobs>("Consultar_Confirmacao_Pedidos_Mercocamp", x => x.ConsultarConfirmacaoSeparacaoPedidoMercoCamp(), "*/2 * * * *");
-
             // recurringJobManager.RemoveIfExists("Sincronizar_Notas_Fiscais");
             // recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Sincronizar_Notas_Fiscais", x => x.Sincronizar(), "*/2 * * * *");
 
-            recurringJobManager.RemoveIfExists("Enviar_Notas_Fiscais");
-            recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Enviar_Notas_Fiscais", x => x.EnviarNotas(), "*/2 * * * *");
+            //recurringJobManager.RemoveIfExists("Enviar_Notas_Fiscais");
+            //recurringJobManager.AddOrUpdate<MovimentoFiscalJobs>("Enviar_Notas_Fiscais", x => x.EnviarNotas(), "*/2 * * * *");
         }
     }
 }

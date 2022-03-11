@@ -73,38 +73,6 @@ namespace TecWi_Web.API.HangFireJobs
             await _PedidoSincronizacaoService.AlterarStatusPedidoFaturadoEncerrado();
         }
 
-        public async Task ConsultarConfirmacaoSeparacaoPedidoMercoCamp()
-        {
-            var pedidos = await _PedidoMercoCampService.ListarPedidosSincronizarTransmitidosMercoCamp();
-            string urlBaseMercoCamp = (string)_Configuration.GetSection("AppSettings").GetValue(typeof(string), "URLBaseMercoCamp");
-            List<ConfirmacaoPedidoDTO> confirmacaoPedidosDTO = new List<ConfirmacaoPedidoDTO>();
-
-            foreach (var pedido in pedidos)
-            {
-                string jsonConfirmacaoPedido = await PopularJsonConfirmacaoPedido(pedido);
-                using (var request = new HttpRequestMessage(HttpMethod.Post, urlBaseMercoCamp))
-                {
-                    using (var content = new StringContent(jsonConfirmacaoPedido, System.Text.Encoding.UTF8, "application/json"))
-                    {
-                        request.Content = content;
-                        var client = _ClientFactory.CreateClient();
-                        var response = await client.SendAsync(request);
-                        response.EnsureSuccessStatusCode();
-                        string responseMessage = await response.Content.ReadAsStringAsync();
-
-                        if (responseMessage.Contains("CORPEM_WS_ERRO"))
-                            _Logger.LogError(responseMessage, $"Pedido: {pedido.NumeroPedidoCliente}, ID: {pedido.ID}");
-                        else 
-                            confirmacaoPedidosDTO.Add(pedido);
-                    }
-                }
-            }
-
-            await _PedidoMercoCampService.AtualizarStatusPedidosMercoCamp(confirmacaoPedidosDTO);
-        }
-
-
-
         private async Task<string> PopularJson(PedidoMercoCampDTO pedido)
         {
             var jsonPedido = new
@@ -141,30 +109,6 @@ namespace TecWi_Web.API.HangFireJobs
                     UF_TRP = !string.IsNullOrEmpty(pedido.UFTransportadora) ? pedido.UFTransportadora.Trim() : string.Empty,
                     PRIORIDADE = string.Empty,
                     ETQCLIZPLBASE64 = string.Empty,
-                    ITENS = pedido.Itens
-                },
-            };
-
-            var optionSerialize = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            return await Task.FromResult(JsonSerializer.Serialize(jsonPedido, optionSerialize));
-        }
-
-        private async Task<string> PopularJsonConfirmacaoPedido(ConfirmacaoPedidoDTO pedido)
-        {
-            var jsonPedido = new
-            {
-                CORPEM_WMS_CONF_SEP = new
-                {
-                    CGCEMINF = pedido.CNPJEmitente ?? string.Empty,
-                    CGCCLIWMS = pedido.CNPJEmitente ?? string.Empty,
-                    NUMPEDCLI = !string.IsNullOrEmpty(pedido.NumeroPedidoCliente) ? pedido.NumeroPedidoCliente.Trim() : string.Empty,
-                    ESPECIE = "CX",
-                    PESOVOL = "0",
-                    M3VOL = "0",
-                    QTVOL = pedido.Itens.Count().ToString(),
-                    CGCTRANSP = string.Empty,
-                    DTFIMCHECK = pedido.Sincronizacao.ToString("dd/MM/yyyy"),
-                    URLRAST = string.Empty,
                     ITENS = pedido.Itens
                 },
             };
