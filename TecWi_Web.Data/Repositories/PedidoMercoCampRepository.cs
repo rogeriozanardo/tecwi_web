@@ -31,7 +31,7 @@ namespace TecWi_Web.Data.Repositories
            await _DataContext.SaveChangesAsync();
         }
 
-        public async Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidoDTO)
+        public async Task AtualizarStatusPedidosMercoCamp(CORPEMWMSCONFSEPDTO pedidoDTO)
         {
             if (pedidoDTO == null || string.IsNullOrEmpty(pedidoDTO.NUMPEDCLI))
                 return;
@@ -43,16 +43,16 @@ namespace TecWi_Web.Data.Repositories
             if (pedidoMercoCamp == null)
                 throw new PedidoNaoEncontradoException($"Pedido: {pedidoDTO.NUMPEDCLI} não encontrado no banco de dados para a filial ES");
 
-            foreach (var item in pedidoMercoCamp.PedidoItens)
+            foreach (var item in pedidoDTO.Itens)
             {
-               var itemPedido = pedidoMercoCamp.PedidoItens.FirstOrDefault(t => t.CdProduto == item.CdProduto && t.SeqTransmissao == item.SeqTransmissao);
+                var itemPedido = pedidoMercoCamp.PedidoItens.FirstOrDefault(t => t.CdProduto == item.CodigoProduto && t.SeqTransmissao == Convert.ToInt32(item.Sequencia));
                 if (itemPedido == null)
                     continue;
 
-                itemPedido.QtdSeparado = item.QtdSeparado;
+                itemPedido.QtdSeparado = Convert.ToDecimal(item.QuantidadeConferida);
             }
 
-            bool itensEmAberto = pedidoMercoCamp.PedidoItens.Any(x => x.QtdSeparado > 0 && x.Qtd != x.QtdSeparado);
+            bool itensEmAberto = pedidoMercoCamp.PedidoItens.Any(x => x.Qtd != x.QtdSeparado);
             pedidoMercoCamp.Status = itensEmAberto ? StatusPedidoMercoCamp.SeparadoParcial : StatusPedidoMercoCamp.Separado;
             await _DataContext.SaveChangesAsync();
         }

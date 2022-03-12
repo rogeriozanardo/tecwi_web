@@ -8,6 +8,6 @@ namespace TecWi_Web.Data.Interfaces
     public interface IPedidoMercoCampRepository
     {
         Task Inserir(PedidoMercoCamp pedidoMercoCamp);
-        Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidosDTO);
+        Task AtualizarStatusPedidosMercoCamp(CORPEMWMSCONFSEPDTO pedidosDTO);
     }
 }

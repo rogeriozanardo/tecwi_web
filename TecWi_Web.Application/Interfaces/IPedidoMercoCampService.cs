@@ -9,6 +9,6 @@ namespace TecWi_Web.Application.Interfaces
     {
         Task Inserir(PedidoMercoCamp pedidoMercoCamp);
 
-        Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidosDTO);
+        Task AtualizarStatusPedidosMercoCamp(CORPEMWMSCONFSEPDTO pedidosDTO);
     }
 }

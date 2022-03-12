@@ -21,7 +21,7 @@ namespace TecWi_Web.Application.Services
            await _PedidoMercoCampRepository.Inserir(pedidoMercoCamp);
         }
 
-        public async Task AtualizarStatusPedidosMercoCamp(CORPEM_WMS_CONF_SEP pedidosDTO)
+        public async Task AtualizarStatusPedidosMercoCamp(CORPEMWMSCONFSEPDTO pedidosDTO)
         {
             await _PedidoMercoCampRepository.AtualizarStatusPedidosMercoCamp(pedidosDTO);
         }

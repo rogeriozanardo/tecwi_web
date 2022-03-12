@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TecWi_Web.Application.Interfaces;
 using TecWi_Web.Domain.Exceptions;
@@ -26,12 +27,12 @@ namespace TecWi_Web.API.Controllers
 
         [HttpPost]
         [Route("enviar-separacao-pedido")]
-        public async Task<IActionResult> ConfirmarSeparacaoPedido(CORPEM_WMS_CONF_SEP confirmacaoPedidoDTO)
+        public async Task<IActionResult> ConfirmarSeparacaoPedido(ConfirmacaoSeparacaoPedidoDTO confirmacaoPedidoDTO)
         {
             try
             {
-                await _PedidoMercoCampService.AtualizarStatusPedidosMercoCamp(confirmacaoPedidoDTO);
-                return Ok("teste");
+                await _PedidoMercoCampService.AtualizarStatusPedidosMercoCamp(confirmacaoPedidoDTO.CORPEMWMSCONFSEP);
+                return Ok();
             }
             catch(PedidoNaoEncontradoException ex)
             {

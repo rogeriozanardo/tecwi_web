@@ -4,13 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace TecWi_Web.Shared.DTOs
 {
-    public class CORPEM_WMS_CONF_SEP
+    public class CORPEMWMSCONFSEPDTO
     {
-        public CORPEM_WMS_CONF_SEP()
-        {
-            Itens = new List<ConfirmacaoPedidoItemDTO>();
-        }
-
         [JsonPropertyName("CGCEMINF")]
         public string CGCEMINF { get; set; }
 
