@@ -21,7 +21,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
     public class PedidoSincronizacaoRepository : HelperRepository, IPedidoSincronizacaoRepository
     {
         private readonly DataContext _DataContext;
-        const string STATUS_FATURADO = "F";
+        const string STATUS_FECHADO = "F";
         const string STATUS_ENCERRADO = "E";
         const string CODIGO_FILIAL_01_BAHIA = "BA";
         const string CODIGO_FILIAL_02_ESPIRITO_SANTO = "ES";
@@ -112,7 +112,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 
         public async Task AlterarStatusPedidoFaturadoEncerrado()
         {
-            var pedidosStatusFaturado = _DataContext.Pedido.Where(t => t.stpendencia == STATUS_FATURADO).ToList();
+            var pedidosStatusFaturado = _DataContext.Pedido.Where(t => t.stpendencia == STATUS_FECHADO).ToList();
             if (pedidosStatusFaturado.Count() == 0)
                 return;
 
@@ -144,7 +144,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
         {
             var pedidos = await _DataContext.Pedido
                                 .Include(t => t.PedidoItem)
-                                .Where(t => t.stpendencia == STATUS_FATURADO && 
+                                .Where(t => t.stpendencia == STATUS_FECHADO && 
                                             t.cdfilial.Trim() == CODIGO_FILIAL_02_ESPIRITO_SANTO &&
                                             !(_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento)))
                                 .ToListAsync();
