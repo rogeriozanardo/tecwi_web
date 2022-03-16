@@ -16,7 +16,6 @@ namespace TecWi_Web.API.Controllers
     public class AtendenteController : ControllerBase
     {
         private readonly IAtendenteService _atendenteService;
-
         public AtendenteController(IAtendenteService atendenteService)
         {
             _atendenteService = atendenteService;
