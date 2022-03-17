@@ -2,20 +2,13 @@
 
 namespace TecWi_Web.Shared.DTOs
 {
-    public class PedidoItemMercoCampDTO
+    public class MovimentoFiscalItemDTO
     {
         [JsonPropertyName("NUMSEQ")]
         public string Sequencia { get; set; }
-
         [JsonPropertyName("CODPROD")]
         public string CodigoProduto { get; set; }
-
         [JsonPropertyName("QTPROD")]
         public string Quantidade { get; set; }
-       
-        [JsonIgnore()]
-        public string LoteFabricacao { get; set; }
-        [JsonIgnore()]
-        public decimal? Peso { get; set; }
     }
 }

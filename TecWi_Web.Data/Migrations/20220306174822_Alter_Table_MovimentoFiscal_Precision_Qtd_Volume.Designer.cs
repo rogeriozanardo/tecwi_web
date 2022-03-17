@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TecWi_Web.Data.Context;
 
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220306174822_Alter_Table_MovimentoFiscal_Precision_Qtd_Volume")]
+    partial class Alter_Table_MovimentoFiscal_Precision_Qtd_Volume
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,9 +303,6 @@ namespace TecWi_Web.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
                         .HasPrecision(19, 8)

@@ -71,6 +71,8 @@ namespace TecWi_Web.Shared.DTOs
         public List<PedidoItemMercoCampDTO> Itens { get; set; }
         [JsonIgnore]
         public int SequenciaEnvio { get; set; }
+        [JsonIgnore]
+        public string CdFilial { get; set; }
 
         public PedidoMercoCampDTO()
         {

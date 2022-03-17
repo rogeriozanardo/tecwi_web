@@ -63,7 +63,7 @@ namespace TecWi_Web.API.HangFireJobs
                         await EnviarProdutosMercoCamp(produtosPaginado, logSincronizacaoProdutomercoCamp, inicioSincronizacao);
                         quantidadeEnviada += produtosPaginado.Count();
 
-                    } while (quantidadeEnviada < quantidadeProdutos);
+                    } while (quantidadeEnviada <= quantidadeProdutos);
                 }
                 else
                     await EnviarProdutosMercoCamp(produtos.ToList(), logSincronizacaoProdutomercoCamp, inicioSincronizacao);

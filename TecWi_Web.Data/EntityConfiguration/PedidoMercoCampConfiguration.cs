@@ -12,6 +12,7 @@ namespace TecWi_Web.Data.EntityConfiguration
             entityTypeBuilder.HasKey(x => x.IdPedidoMercoCamp);
 
             entityTypeBuilder.Property(x => x.Peso).HasPrecision(19,10);
+            entityTypeBuilder.Property(x => x.CdFilial).HasMaxLength(2);
         }
     }
 }

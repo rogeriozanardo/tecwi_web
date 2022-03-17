@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TecWi_Web.Data.Context;
 
 namespace TecWi_Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220303232251_InclusaoColunaCdFilial_PedidoMercoCamp")]
+    partial class InclusaoColunaCdFilial_PedidoMercoCamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,82 +269,6 @@ namespace TecWi_Web.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("LogSincronizacaoProdutoMercoCamp");
-                });
-
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.MovimentoFiscal", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CdFilial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ChaveAcesso")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DataEmissao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumMovimento")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumeroNota")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("QtdVolume")
-                        .HasPrecision(19, 8)
-                        .HasColumnType("decimal(19,8)");
-
-                    b.Property<string>("Serie")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ValorTotal")
-                        .HasPrecision(19, 8)
-                        .HasColumnType("decimal(19,8)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("MovimentoFiscal");
-                });
-
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.MovimentoFiscalItem", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CdProduto")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<int>("IDMovimentoFiscal")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Qtd")
-                        .HasPrecision(19, 8)
-                        .HasColumnType("decimal(19,8)");
-
-                    b.Property<int>("Sequencia")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("IDMovimentoFiscal");
-
-                    b.ToTable("MovimentoFiscalItem");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
@@ -1696,17 +1622,6 @@ namespace TecWi_Web.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.MovimentoFiscalItem", b =>
-                {
-                    b.HasOne("TecWi_Web.Domain.Entities.MovimentoFiscal", "MovimentoFiscal")
-                        .WithMany("ItensMovimentoFiscal")
-                        .HasForeignKey("IDMovimentoFiscal")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("MovimentoFiscal");
-                });
-
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>
                 {
                     b.HasOne("TecWi_Web.Domain.Entities.Cliente", "Cliente")
@@ -1763,11 +1678,6 @@ namespace TecWi_Web.Data.Migrations
             modelBuilder.Entity("TecWi_Web.Domain.Entities.ContatoCobranca", b =>
                 {
                     b.Navigation("ContatoCobrancaLancamento");
-                });
-
-            modelBuilder.Entity("TecWi_Web.Domain.Entities.MovimentoFiscal", b =>
-                {
-                    b.Navigation("ItensMovimentoFiscal");
                 });
 
             modelBuilder.Entity("TecWi_Web.Domain.Entities.PagarReceber", b =>

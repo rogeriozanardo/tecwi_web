@@ -2,7 +2,7 @@
 
 namespace TecWi_Web.Shared.DTOs
 {
-    public class PedidoItemMercoCampDTO
+    public class ConfirmacaoPedidoItemDTO
     {
         [JsonPropertyName("NUMSEQ")]
         public string Sequencia { get; set; }
@@ -12,10 +12,8 @@ namespace TecWi_Web.Shared.DTOs
 
         [JsonPropertyName("QTPROD")]
         public string Quantidade { get; set; }
-       
-        [JsonIgnore()]
-        public string LoteFabricacao { get; set; }
-        [JsonIgnore()]
-        public decimal? Peso { get; set; }
+
+        [JsonPropertyName("QTCONF")]
+        public string QuantidadeConferida { get; set; }
     }
 }

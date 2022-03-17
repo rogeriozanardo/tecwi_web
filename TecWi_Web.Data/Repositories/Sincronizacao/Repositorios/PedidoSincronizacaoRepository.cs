@@ -14,27 +14,26 @@ using TecWi_Web.Shared.DTOs;
 using System;
 using Microsoft.EntityFrameworkCore;
 using TecWi_Web.Data.ValueObjects;
+using TecWi_Web.Data.Repositories.Utils;
 
 namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 {
-    public class PedidoSincronizacaoRepository : IPedidoSincronizacaoRepository
+    public class PedidoSincronizacaoRepository : HelperRepository, IPedidoSincronizacaoRepository
     {
         private readonly DataContext _DataContext;
-        private readonly IConfiguration _Configuration;
-        const string STATUS_FATURADO = "F";
+        const string STATUS_FECHADO = "F";
         const string STATUS_ENCERRADO = "E";
         const string CODIGO_FILIAL_01_BAHIA = "BA";
         const string CODIGO_FILIAL_02_ESPIRITO_SANTO = "ES";
         const string CODIGO_MATRIZ = "SP";
         const string TIPO_FRETE_CIF = "C";
-        const string TIPO_FRETE_FOB = "F";
         const int SEQUENCIA_ENVIO_INICIAL = 1;
 
         public PedidoSincronizacaoRepository(DataContext dataContext,
                                              IConfiguration configuration)
+            : base(configuration)
         {
             _DataContext = dataContext;
-            _Configuration = configuration;
         }
 
         public async Task Sincronizar()
@@ -113,7 +112,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 
         public async Task AlterarStatusPedidoFaturadoEncerrado()
         {
-            var pedidosStatusFaturado = _DataContext.Pedido.Where(t => t.stpendencia == STATUS_FATURADO).ToList();
+            var pedidosStatusFaturado = _DataContext.Pedido.Where(t => t.stpendencia == STATUS_FECHADO).ToList();
             if (pedidosStatusFaturado.Count() == 0)
                 return;
 
@@ -143,68 +142,65 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 
         public async Task<List<PedidoMercoCampDTO>> ListarPedidosNaoEnviadosMercoCamp()
         {
-            try
+            var pedidos = await _DataContext.Pedido
+                                .Include(t => t.PedidoItem)
+                                .Where(t => t.stpendencia == STATUS_FECHADO && 
+                                            t.cdfilial.Trim() == CODIGO_FILIAL_02_ESPIRITO_SANTO &&
+                                            !(_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento)))
+                                .ToListAsync();
+
+            List<PedidoMercoCampDTO> pedidosMercoCampDTO = new List<PedidoMercoCampDTO>();
+            foreach (var pedido in pedidos)
             {
-                var pedidos = await _DataContext.Pedido
-                                    .Include(t => t.PedidoItem)
-                                    .Where(t => !_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento))
-                                    .ToListAsync();
+                var empresa = await _DataContext.Empresa.FirstOrDefaultAsync(x => x.CdCliente == pedido.cdcliente);
+                var transportadora = await _DataContext.Transportadora.FirstOrDefaultAsync(x => x.CdTransportadora == pedido.cdtransportadora);
+                var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.cdvendedor);
 
-                List<PedidoMercoCampDTO> pedidosMercoCampDTO = new List<PedidoMercoCampDTO>();
-                foreach (var pedido in pedidos)
+                string cnpjEmitente = RetornarCNPJPorFilial(pedido.cdfilial);
+                var pedidoMercoCampDTO = new PedidoMercoCampDTO
                 {
-                    var empresa = await _DataContext.Empresa.FirstOrDefaultAsync(x => x.CdCliente == pedido.cdcliente);
-                    var transportadora = await _DataContext.Transportadora.FirstOrDefaultAsync(x => x.CdTransportadora == pedido.cdtransportadora);
-                    var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.cdvendedor);
+                    ID = pedido.ID,
+                    DataInclusaoERP = pedido.dtinicio.GetValueOrDefault(DateTime.Now),
+                    ValorTotalPedido = pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
+                    NumeroPedidoCliente = pedido.nummovimento.ToString(),
+                    BairroDestinatario = empresa?.Bairro,
+                    CepDestinatario = empresa?.Cep,
+                    CNPJDestinatario = empresa?.InscriFed,
+                    CNPJEmitente = cnpjEmitente,
+                    CNPJTransportadora = transportadora?.Inscrifed,
+                    CodigoVendedor = vendedor?.CdVendedor,
+                    NomeVendedor = vendedor?.Apelido,
+                    ComplementoDestinatario = empresa?.Complemento,
+                    DataLiberacaoERP = DateTime.Now,
+                    DataPrevisaoEntradaSite = DateTime.Now,
+                    DDDRastro = empresa?.DDD,
+                    EmailRastro = empresa?.Email,
+                    LogradouroDestinatario = empresa?.Endereco,
+                    MunicipioDestinatario = empresa?.Cidade,
+                    NomeDestinatario = empresa?.Fantasia,
+                    SequenciaEnvio = SEQUENCIA_ENVIO_INICIAL,
+                    TelRastro = !string.IsNullOrEmpty(empresa?.Fone1) ? empresa?.Fone1 : empresa?.Fone2,
+                    TipoFrete = TIPO_FRETE_CIF,
+                    UFDestinatario = empresa?.UF,
+                    CdFilial = pedido.cdfilial
+                };
 
-                    string cnpjEmitente = RetornarCNPJPorFilial(pedido.cdfilial);
-                    var pedidoMercoCampDTO = new PedidoMercoCampDTO
+                foreach (var itemPedido in pedido.PedidoItem)
+                {
+                    var quantidade = itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero).ToString();
+                    pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO
                     {
-                        ID = pedido.ID,
-                        DataInclusaoERP = pedido.dtinicio.GetValueOrDefault(DateTime.Now),
-                        ValorTotalPedido = pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
-                        NumeroPedidoCliente = pedido.nummovimento.ToString(),
-                        BairroDestinatario = empresa?.Bairro,
-                        CepDestinatario = empresa?.Cep,
-                        CNPJDestinatario = empresa?.InscriFed,
-                        CNPJEmitente = cnpjEmitente,
-                        CNPJTransportadora = transportadora?.Inscrifed,
-                        CodigoVendedor = vendedor?.CdVendedor,
-                        NomeVendedor = vendedor?.Apelido,
-                        ComplementoDestinatario = empresa?.Complemento,
-                        DataLiberacaoERP = DateTime.Now,
-                        DataPrevisaoEntradaSite = DateTime.Now,
-                        DDDRastro = empresa?.DDD,
-                        EmailRastro = empresa?.Email,
-                        LogradouroDestinatario = empresa?.Endereco,
-                        MunicipioDestinatario = empresa?.Cidade,
-                        NomeDestinatario = empresa?.Fantasia,
-                        SequenciaEnvio = SEQUENCIA_ENVIO_INICIAL,
-                        TelRastro = !string.IsNullOrEmpty(empresa?.Fone1) ? empresa?.Fone1 : empresa?.Fone2,
-                        TipoFrete = TIPO_FRETE_CIF,
-                        UFDestinatario = empresa?.UF
-                    };
-
-                    foreach (var itemPedido in pedido.PedidoItem)
-                    {
-                        pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO
-                        {
-                            CodigoProduto = itemPedido.cdproduto,
-                            Quantidade = (int)itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero),
-                            Sequencia = itemPedido.seq,
-                            LoteFabricacao = string.Empty
-                        });
-                    }
-
-                    pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
+                        CodigoProduto = itemPedido.cdproduto,
+                        Quantidade = quantidade.Length > 9 ? quantidade.Substring(0, 9) : quantidade,
+                        Sequencia = itemPedido.seq.ToString(),
+                        LoteFabricacao = string.Empty
+                    });
                 }
 
-                return pedidosMercoCampDTO;
+                pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
+
+            return pedidosMercoCampDTO;
         }
 
         #region Helpers
@@ -258,20 +254,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
             return sincronizacaoPedidos;
         }
 
-        private string BuscarConnectionStringFilial01()
-        {
-            return _Configuration.GetConnectionString("DbTecwiFilial01");
-        }
-
-        private string BuscarConnectionStringFilial02()
-        {
-            return _Configuration.GetConnectionString("DbTecwiFilial02");
-        }
-
-        private string BuscarConnectionStringMatriz()
-        {
-            return _Configuration.GetConnectionString("DbTecWiMatriz");
-        }
+        
 
         private async Task<List<Pedido>> BuscarPedidosEncerradosPorFilial(string connectionString, string filial, List<Pedido> pedidos)
         {
@@ -314,7 +297,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
             if (sincronizacaoPedido.Empresas != null && sincronizacaoPedido.Empresas.Any())
             {
                 var empresasNaoInseridas = sincronizacaoPedido.Empresas.Where(t => !(empresas.Any(x => x.CdCliente == t.CdCliente && x.EmpresaId == t.EmpresaId)));
-                if(empresasNaoInseridas != null && empresasNaoInseridas.Any())
+                if (empresasNaoInseridas != null && empresasNaoInseridas.Any())
                     empresas.AddRange(empresasNaoInseridas);
             }
 
@@ -331,36 +314,6 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                 if (vendedoresNaoInseridos != null && vendedoresNaoInseridos.Any())
                     vendedores.AddRange(vendedoresNaoInseridos);
             }
-        }
-
-
-        private string RetornarCNPJPorFilial(string filial)
-        {
-            filial = filial ?? string.Empty;
-
-#if DEBUG
-            filial = "HOMOLOGACAO";
-
-#endif
-
-            filial = filial.Trim().ToUpper();
-
-            switch (filial)
-            {
-                case "BA":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial01").Value;
-                case "ES":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Filial02").Value;
-                case "SP":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_Matriz").Value;
-                case "HOMOLOGACAO":
-                    return _Configuration.GetSection("AppSettings").GetSection("CNPJ_HOMOLOGACAO_TESTE").Value;
-                default:
-                    break;
-            }
-
-
-            return string.Empty;
         }
 
         #endregion

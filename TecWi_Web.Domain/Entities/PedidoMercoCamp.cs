@@ -6,6 +6,10 @@ namespace TecWi_Web.Domain.Entities
 {
     public class PedidoMercoCamp
     {
+        public PedidoMercoCamp()
+        {
+            PedidoItens = new List<PedidoItemMercoCamp>();
+        }
         public int IdPedidoMercoCamp { get; set; }
         public DateTime DataEnvio { get; set; }
         public int NumPedido { get; set; }
@@ -13,6 +17,7 @@ namespace TecWi_Web.Domain.Entities
         public int Volume { get; set; }
         public decimal Peso { get; set; }
         public int SeqTransmissao { get; set; }
+        public string CdFilial { get; set; }
         public List<PedidoItemMercoCamp> PedidoItens { get; set; }
     }
 }
