@@ -96,7 +96,7 @@ namespace TecWi_Web.API
             recurringJobManager.AddOrUpdate<ProdutoJobs>("Enviar_Produtos_Mercocamp", x => x.EnviarProdutosMercocampAsync(), CRON_JOB_TRES_HORAS);
             recurringJobManager.AddOrUpdate<PedidoJobs>("Sincronizar_Pedidos_DataBases", x => x.SincronizarPedidosAsync(), CRON_JOB_VINTE_MINUTOS);
             recurringJobManager.AddOrUpdate<PedidoJobs>("Atualizar_Status_Pedidos_DataBases", x => x.AlterarStatusPedidoFaturadoParaEncerradoAsync(), CRON_JOB_UMA_HORA);
-            //recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), "*/2 * * * *");
+            recurringJobManager.AddOrUpdate<PedidoJobs>("Enviar_Pedidos_Mercocamp", x => x.EnviarPedidosMercoCampAsync(), CRON_JOB_VINTE_MINUTOS);
 
 
             //#### Usado para teste de 1 e 2 minutos o job do hang fire
