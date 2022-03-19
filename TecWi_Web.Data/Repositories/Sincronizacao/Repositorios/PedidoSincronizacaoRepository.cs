@@ -142,26 +142,27 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
 
         public async Task<List<PedidoMercoCampDTO>> ListarPedidosNaoEnviadosMercoCamp()
         {
-            var pedidos = await _DataContext.Pedido
-                                .Include(t => t.PedidoItem)
-                                .Where(t => t.stpendencia == STATUS_FECHADO && 
-                                            t.cdfilial.Trim() == CODIGO_FILIAL_02_ESPIRITO_SANTO &&
+            var pedidos = await _DataContext.PedidoItem
+                                .Include(t => t.Pedido)
+                                .Where(t => (t.uporigem == "ES" || t.uporigem.StartsWith("ES"))
+                                            && t.Pedido.stpendencia == STATUS_FECHADO 
+                                            && t.Pedido.cdfilial.Trim() == CODIGO_FILIAL_02_ESPIRITO_SANTO &&
                                             !(_DataContext.PedidoMercoCamp.Any(x => x.NumPedido == t.nummovimento)))
                                 .ToListAsync();
 
             List<PedidoMercoCampDTO> pedidosMercoCampDTO = new List<PedidoMercoCampDTO>();
             foreach (var pedido in pedidos)
             {
-                var empresa = await _DataContext.Empresa.FirstOrDefaultAsync(x => x.CdCliente == pedido.cdcliente);
-                var transportadora = await _DataContext.Transportadora.FirstOrDefaultAsync(x => x.CdTransportadora == pedido.cdtransportadora);
-                var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.cdvendedor);
+                var empresa = await _DataContext.Empresa.FirstOrDefaultAsync(x => x.CdCliente == pedido.Pedido.cdcliente);
+                var transportadora = await _DataContext.Transportadora.FirstOrDefaultAsync(x => x.CdTransportadora == pedido.Pedido.cdtransportadora);
+                var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.Pedido.cdvendedor);
 
                 string cnpjEmitente = RetornarCNPJPorFilial(pedido.cdfilial);
                 var pedidoMercoCampDTO = new PedidoMercoCampDTO
                 {
                     ID = pedido.ID,
-                    DataInclusaoERP = pedido.dtinicio.GetValueOrDefault(DateTime.Now),
-                    ValorTotalPedido = pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
+                    DataInclusaoERP = pedido.Pedido.dtinicio.GetValueOrDefault(DateTime.Now),
+                    ValorTotalPedido = pedido.Pedido.PedidoItem.Sum(t => t.vlcalculado.GetValueOrDefault(decimal.Zero)),
                     NumeroPedidoCliente = pedido.nummovimento.ToString(),
                     BairroDestinatario = empresa?.Bairro,
                     CepDestinatario = empresa?.Cep,
@@ -185,17 +186,16 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                     CdFilial = pedido.cdfilial
                 };
 
-                foreach (var itemPedido in pedido.PedidoItem)
-                {
-                    var quantidade = itemPedido.qtdsolicitada.GetValueOrDefault(decimal.Zero).ToString();
+             
+                    var quantidade = pedido.qtdsolicitada.GetValueOrDefault(decimal.Zero).ToString();
                     pedidoMercoCampDTO.Itens.Add(new PedidoItemMercoCampDTO
                     {
-                        CodigoProduto = itemPedido.cdproduto,
+                        CodigoProduto = pedido.cdproduto,
                         Quantidade = quantidade.Length > 9 ? quantidade.Substring(0, 9) : quantidade,
-                        Sequencia = itemPedido.seq.ToString(),
+                        Sequencia = pedido.seq.ToString(),
                         LoteFabricacao = string.Empty
                     });
-                }
+                
 
                 pedidosMercoCampDTO.Add(pedidoMercoCampDTO);
             }
