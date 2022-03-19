@@ -25,6 +25,7 @@ namespace TecWi_Web.API
     {
         const string CRON_JOB_UMA_HORA = "0 */1 * * *";
         const string CRON_JOB_DUAS_HORAS = "0 */2 * * *";
+        const string CRON_JOB_TRES_HORAS = "0 */3 * * *";
         const string CRON_JOB_VINTE_MINUTOS = "*/20 * * * *";
         const string CRON_JOB_TRINTA_MINUTOS = "*/30 * * * *";
         const string CRON_JOB_QUARENTA_MINUTOS = "*/40 * * * *";
