@@ -158,6 +158,7 @@ namespace TecWi_Web.Data.Repositories.Sincronizacao.Repositorios
                 var vendedor = await _DataContext.Vendedor.FirstOrDefaultAsync(x => x.CdVendedor == pedido.Pedido.cdvendedor);
 
                 string cnpjEmitente = RetornarCNPJPorFilial(pedido.cdfilial);
+                
                 var pedidoMercoCampDTO = new PedidoMercoCampDTO
                 {
                     ID = pedido.ID,

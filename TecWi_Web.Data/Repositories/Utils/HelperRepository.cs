@@ -30,11 +30,6 @@ namespace TecWi_Web.Data.Repositories.Utils
         {
             filial = filial ?? string.Empty;
 
-#if DEBUG
-            filial = "HOMOLOGACAO";
-
-#endif
-
             filial = filial.Trim().ToUpper();
 
             switch (filial)
